@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import { loginUserApi } from '../apis/api';
 import '../style/login.css';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
+    
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -46,33 +48,35 @@ const Login = () => {
 
     return (
         <>
-            <div class="container">
-                <div class="form login">
-                    <header>Login</header>
-                    <form>
-                        <div class="inputBox">
-                            <i class="fas fa-envelope"></i>
-                            <input type="text" required />
-                            <label>Email</label>
-                        </div>
-                        <div class="inputBox">
-                            <i class="fas fa-lock"></i>
-                            <input type="password" maxlength="26" required />
-                            <label>Password</label>
-                        </div>
-                        <div class="link">
-                            <a href="#">Forgot Password</a>
-                        </div>
-                        <button>Login</button>
-                        <div class="link">
-                            <p>Don't have an account? <a href="#">Signup</a></p>
-                        </div>
-                        <div class="line"></div>
-                        <div class="social-login">
-                            <a href="#" class="apple"><i class="fab fa-apple"></i> <span>Login with apple</span></a>
-                            <a href="#" class="facebook"><i class="fab fa-facebook"></i> <span>Login with facebook</span></a>
-                        </div>
-                    </form>
+            <div className='secondBody'>
+                <div class="container">
+                    <div class="form login">
+                        <header>Login</header>
+                        <form>
+                            <div class="inputBox">
+                                <i class="fas fa-envelope"></i>
+                                <input onChange={changeEmail} type="text" required />
+                                <label>Email</label>
+                            </div>
+                            <div class="inputBox">
+                                <i class="fas fa-lock"></i>
+                                <input onChange={changePassword} type="password" maxlength="26" required />
+                                <label>Password</label>
+                            </div>
+                            <div class="link">
+                                <a href="#">Forgot Password</a>
+                            </div>
+                            <button onClick={handleSubmit}>Login</button>
+                            <div class="link">
+                                <p>Don't have an account? <Link to={"/register"}>Signup</Link></p>
+                            </div>
+                            <div class="line"></div>
+                            <div class="social-login">
+                                <a href="#" class="apple"><i class="fab fa-apple"></i> <span>Login with apple</span></a>
+                                <a href="#" class="facebook"><i class="fab fa-facebook"></i> <span>Login with facebook</span></a>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
 

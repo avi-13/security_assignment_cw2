@@ -1,4 +1,5 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 import Navbar from "./components/Navbars";
@@ -11,6 +12,7 @@ function App() {
   return (
     <Router>
       <Navbar />
+      <ToastContainer />
       <Routes>
         <Route path="/admin/Dashboard" element={<AdminDasboard />}></Route>
         <Route path="/home" element={<HomePage />}></Route>
