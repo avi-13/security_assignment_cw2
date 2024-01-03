@@ -1,4 +1,4 @@
-const User = require("../model/userModel");
+const User = require("../model/user/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -77,7 +77,10 @@ const loginUser = async (req, res) => {
       });
     }
 
-    const token = jwt.sign({ id: findUser._id }, process.env.JWT_TOKEN_SECRET);
+    const token = jwt.sign(
+      { id: findUser._id, isAdmin: findUser.isAdmin },
+      process.env.JWT_TOKEN_SECRET
+    );
 
     res.status(200).json({
       success: true,
@@ -90,39 +93,12 @@ const loginUser = async (req, res) => {
   }
 };
 
+const beAdonor = () => {
+  const {gender, dob,bloodgroup, noPreviousDonation} = req.body;
+
+}
+
 module.exports = {
   createUser,
   loginUser,
 };
-
-// else if (!fullName) {
-//   return res.json({
-//     success: false,
-//     message: "fullName cannot be empty",
-//   });
-// }else if (!email) {
-//   return res.json({
-//     success: false,
-//     message: "Email cannot be empty",
-//   });
-// } else if (!number) {
-//   return res.json({
-//     success: false,
-//     message: "Number cannot be empty",
-//   });
-// } else if (!currentAddress) {
-//   return res.json({
-//     success: false,
-//     message: "Address cannot be empty",
-//   });
-// } else if (!password) {22
-//   return res.json({
-//     success: false,
-//     message: "Password cannot be empty",
-//   });
-// } else if (password != confirmPassword) {
-//   return res.json({
-//     success: false,
-//     message: "Password donot match",
-//   });
-// }

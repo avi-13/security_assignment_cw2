@@ -2,23 +2,33 @@ import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
-import Navbar from "./components/Navbars";
+import { default as Navbars } from "./components/Navbars";
 import HomePage from "./pages/HomePage";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import AdminDasboard from "./pages/admin/AdminDasboard";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminRoutes from "./protected/AdminRoutes";
+import UserRoutes from "./protected/UserRoutes";
 
 function App() {
+  const user = JSON.parse(localStorage.getItem("user"));
+
   return (
     <Router>
-      <Navbar />
+      {user.isAdmin ? null : <Navbars />}
       <ToastContainer />
       <Routes>
-        <Route path="/admin/Dashboard" element={<AdminDasboard />}></Route>
-        <Route path="/home" element={<HomePage />}></Route>
-        <Route path="/" element={<HomePage />}></Route>
-        <Route path="/login" element={<Login />}></Route>
-        <Route path="/register" element={<Register />}></Route>
+        <Route element={<AdminRoutes />}>
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        </Route>
+        <Route path="/home" element={<HomePage />} />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+
+        <Route element={<UserRoutes />}>
+          <Route path="/profile" element={<h1>profile</h1>} />
+        </Route>
       </Routes>
     </Router>
   );

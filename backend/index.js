@@ -25,6 +25,7 @@ app.use(cors(corsPolicy));
 
 // user routes
 app.use("/api/user", require("./routes/userRoutes"));
+// app.use("/api/admin", require("./routes/"))
 
 module.exports = {
   connectDB,

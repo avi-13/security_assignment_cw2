@@ -1,5 +1,6 @@
 import { React } from 'react'
 import '../../src/style/homepage.css'
+import '../../src/style/navbar.css'
 const HomePage = () => {
   return (
     <>

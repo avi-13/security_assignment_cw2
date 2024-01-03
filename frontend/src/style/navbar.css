@@ -3,10 +3,8 @@
   margin:0;
   padding:0;
   box-sizing: border-box;
-  list-style:none;
-}
-body {
   font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  list-style:none;
 }
 nav {
   height:80px;
@@ -34,18 +32,37 @@ nav ul li {
 nav ul li a {
   text-decoration:none;
   text-transform:uppercase;
-  font-size: 20px;
+  font-size: 1rem;
   color: red;
   padding:7px 13px;
   border-radius:3px;
   font-weight: 900;
 }
 a.active,a:hover {
+  width: 100%;
   background: red;
   transition:0.5s;
   color: white;
-
 }
+.dropdown{
+  background-color: white;
+  color: black;
+}
+
+.dropdown-item{
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  color: red;
+}
+
+.dropdown-item:hover{
+  background-color: red;
+  color: white;
+  transition:0 !important;
+}
+
+
 .checkbtn {
   font-size:30px;
   color:white;

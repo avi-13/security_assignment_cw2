@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import '../../src/style/login.css';
+import '../../src/style/navbar.css';
 import { loginUserApi } from '../apis/api';
-import '../style/login.css';
-import { Link } from 'react-router-dom';
 
 const Login = () => {
-    
+    const navigate = useNavigate();
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -34,9 +36,14 @@ const Login = () => {
             } else {
                 toast.success(res.data.message)
                 localStorage.setItem('token', res.data.userData);
-
                 const jsonDecode = JSON.stringify(res.data.userData)
-                localStorage.setItem('users', jsonDecode);
+                localStorage.setItem('user', jsonDecode);
+                const userAdmin = res.data.userData;
+                if (userAdmin.isAdmin == false) {
+                    navigate('/home');
+                    return
+                }
+                navigate('/admin/dashboard')
 
             }
 
@@ -66,7 +73,7 @@ const Login = () => {
                             <div class="link">
                                 <a href="#">Forgot Password</a>
                             </div>
-                            <button onClick={handleSubmit}>Login</button>
+                            <button className='btn btn-dark text-white border-0 btn-outline-danger' onClick={handleSubmit}>Login</button>
                             <div class="link">
                                 <p>Don't have an account? <Link to={"/register"}>Signup</Link></p>
                             </div>

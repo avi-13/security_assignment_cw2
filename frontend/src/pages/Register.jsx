@@ -2,6 +2,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import '../../src/style/login.css';
+import '../../src/style/navbar.css';
 import { createUserApi } from "../apis/api";
 
 const Register = () => {
@@ -74,10 +76,10 @@ const Register = () => {
   return (
     <>
       <div className="secondBody">
-        <div className="container" style={{ marginTop: "5rem" }}>
-          <div className="form login">
-            <header>Signup</header>
-            <form className="form-control">
+        <div className="container" style={{ marginTop: "4rem", width: "40rem" }}>
+          <div>
+            <header style={{ fontSize:"2rem" }}>Signup</header>
+            <form className="form-control" style={{ marginTop: "0.3rem" , fontSize:"0.8em", alignItems:"center"}}>
               <div className="inputBox">
                 <i className="fas fa-user"></i>
                 <input onChange={changeFullName} type="text" required />
@@ -106,7 +108,7 @@ const Register = () => {
                 <label>Confirm your Password</label>
               </div>
 
-              <button className="btn btn-dark b-0 text-white btn-outline-danger" onClick={handleSubmit}>Signup</button>
+              <button className="btn btn-dark text-white border-0 btn-outline-danger" onClick={handleSubmit}>Signup</button>
               <div className="link">
                 <p>Already have an account? <Link to={'/login'}>Login</Link></p>
               </div>
