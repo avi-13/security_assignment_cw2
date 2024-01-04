@@ -56,16 +56,16 @@ const Login = () => {
     return (
         <>
             <div className='secondBody'>
-                <div class="container">
-                    <div class="form login">
+                <div class="loginContainer">
+                    <div class="loginForm">
                         <header>Login</header>
                         <form>
-                            <div class="inputBox">
+                            <div class="loginInputBox">
                                 <i class="fas fa-envelope"></i>
                                 <input onChange={changeEmail} type="text" required />
                                 <label>Email</label>
                             </div>
-                            <div class="inputBox">
+                            <div class="loginInputBox">
                                 <i class="fas fa-lock"></i>
                                 <input onChange={changePassword} type="password" maxlength="26" required />
                                 <label>Password</label>

@@ -93,12 +93,86 @@ const loginUser = async (req, res) => {
   }
 };
 
-const beAdonor = () => {
-  const {gender, dob,bloodgroup, noPreviousDonation} = req.body;
+const beAdonor = async (req, res) => {
+  const { gender, dob, bloodGroup, noPreviousDonation, emergencyNumber } =
+    req.body;
 
-}
+  const userId = req.params.id;
+
+  if (
+    !gender ||
+    !dob ||
+    !bloodGroup ||
+    !noPreviousDonation ||
+    !emergencyNumber
+  ) {
+    res.status(400).json({
+      success: false,
+      message: "Please Enter all the fields",
+    });
+  }
+
+  try {
+    const updatedDonor = {
+      gender: gender,
+      dob: dob,
+      bloodGroup: bloodGroup,
+      noPreviousDonation: noPreviousDonation,
+      emergencyNumber: emergencyNumber,
+    };
+    await User.findByIdAndUpdate(userId, updatedDonor);
+
+    res.status(200).json({
+      success: true,
+      message: "You have been register as a donor",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error,
+    });
+  }
+};
+
+//  fetching all the users
+const getAllUsers = async (req, res) => {
+  try {
+    const userList = await User.find();
+    res.json({
+      success: true,
+      users: userList,
+    });
+  } catch (error) {
+    res.json(error);
+  }
+};
+
+const getSingleUser = async (req, res) => {
+  const userId = req.params.id;
+
+  if (!userId) {
+    return res.json({
+      success: false,
+      message: "",
+    });
+  }
+  try {
+    const singleUser = await User.findById(userId);
+    res.json({
+      success: true,
+      message: "",
+      user: singleUser,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(error);
+  }
+};
 
 module.exports = {
   createUser,
   loginUser,
+  beAdonor,
+  getAllUsers,
+  getSingleUser,
 };

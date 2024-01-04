@@ -6,7 +6,7 @@ import { default as Navbars } from "./components/Navbars";
 import HomePage from "./pages/HomePage";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminPanel from "./pages/admin/AdminPanel";
 import AdminRoutes from "./protected/AdminRoutes";
 import UserRoutes from "./protected/UserRoutes";
 
@@ -15,11 +15,11 @@ function App() {
 
   return (
     <Router>
-      {user.isAdmin ? null : <Navbars />}
+      {user && user.isAdmin ? null : <Navbars />}
       <ToastContainer />
       <Routes>
         <Route element={<AdminRoutes />}>
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/dashboard" element={<AdminPanel />} />
         </Route>
         <Route path="/home" element={<HomePage />} />
         <Route path="/" element={<HomePage />} />

@@ -10,6 +10,14 @@ const Navbars = () => {
     localStorage.clear();
     navigate('/login');
   }
+
+  const loginPage = (e) => {
+    navigate('/login')
+  }
+
+  const registerPage = (e) => {
+    navigate('/register')
+  }
   return (
     <>
       <nav style={{ position: "fixed", zIndex: "99", top: "0", left: "0" }}>
@@ -31,7 +39,7 @@ const Navbars = () => {
                 <div class="dropdown bg-white">
                   <a class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="fab fa-user"></i>
-                    Welcome{"" +users.fullName}
+                    Welcome{"" + users.fullName}
                   </a>
                   <ul class="dropdown-menu">
                     <Link class="dropdown-item" to="/profile">Profile</Link>
@@ -41,8 +49,8 @@ const Navbars = () => {
                 </div>
               </>
                 : <>
-                  <button className='btn btn-dark rounded m-2'>Register</button>
-                  <button className='btn btn-dark rounded m-2'>Login</button>
+                  <button onClick={registerPage} className='btn btn-dark rounded m-2'>Register</button>
+                  <button onClick={loginPage} className='btn btn-dark rounded m-2'>Login</button>
                 </>
             }
           </li>

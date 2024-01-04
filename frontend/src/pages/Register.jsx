@@ -2,8 +2,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import '../../src/style/login.css';
 import '../../src/style/navbar.css';
+import '../../src/style/register.css';
 import { createUserApi } from "../apis/api";
 
 const Register = () => {
@@ -76,44 +76,42 @@ const Register = () => {
   return (
     <>
       <div className="secondBody">
-        <div className="container" style={{ marginTop: "4rem", width: "40rem" }}>
-          <div>
-            <header style={{ fontSize:"2rem" }}>Signup</header>
-            <form className="form-control" style={{ marginTop: "0.3rem" , fontSize:"0.8em", alignItems:"center"}}>
-              <div className="inputBox">
-                <i className="fas fa-user"></i>
-                <input onChange={changeFullName} type="text" required />
-                <label>Enter Your Fullname</label>
-              </div>
-              <div className="inputBox">
-                <i className="fas fa-envelope"></i>
-                <input onChange={changeEmail} type="text" maxlength="26" required />
-                <label>Enter Your Email</label>
-              </div>
-              <div className="inputBox">
-                <i className="fas fa-phone"></i>
-                <input onChange={changeContact} type="text" maxlength="10" required />
-                <label>Enter Your Contact No.</label>
-              </div>            <div className="inputBox">
-                <i className="fas fa-map"></i>
-                <input onChange={changeCurrentAddress} type="text" maxlength="26" required />
-                <label>Enter Your Current Address</label>
-              </div>
-              <div className="inputBox">
-                <input onChange={changePassword} type="password" maxlength="26" required />
-                <label>Enter Your Password</label>
-              </div>
-              <div className="inputBox">
-                <input type="password" maxlength="26" required />
-                <label>Confirm your Password</label>
-              </div>
+        <div className="registerContainer">
+          <header>Signup</header>
+          <form className="form-control">
+            <div className="registerInputBox">
+              <i className="fas fa-user"></i>
+              <input onChange={changeFullName} type="text" required />
+              <label>Enter Your Fullname</label>
+            </div>
+            <div className="registerInputBox">
+              <i className="fas fa-envelope"></i>
+              <input onChange={changeEmail} type="text" maxlength="26" required />
+              <label>Enter Your Email</label>
+            </div>
+            <div className="registerInputBox">
+              <i className="fas fa-phone"></i>
+              <input onChange={changeContact} type="text" maxlength="10" required />
+              <label>Enter Your Contact No.</label>
+            </div>            <div className="registerInputBox">
+              <i className="fas fa-map"></i>
+              <input onChange={changeCurrentAddress} type="text" maxlength="26" required />
+              <label>Enter Your Current Address</label>
+            </div>
+            <div className="registerInputBox">
+              <input onChange={changePassword} type="password" maxlength="26" required />
+              <label>Enter Your Password</label>
+            </div>
+            <div className="registerInputBox">
+              <input type="password" maxlength="26" required />
+              <label>Confirm your Password</label>
+            </div>
 
-              <button className="btn btn-dark text-white border-0 btn-outline-danger" onClick={handleSubmit}>Signup</button>
-              <div className="link">
-                <p>Already have an account? <Link to={'/login'}>Login</Link></p>
-              </div>
-            </form>
-          </div>
+            <button className="btn btn-dark text-white border-0 btn-outline-danger" onClick={handleSubmit}>Signup</button>
+            <div className="link">
+              <p>Already have an account? <Link to={'/login'}>Login</Link></p>
+            </div>
+          </form>
         </div>
       </div>
     </>

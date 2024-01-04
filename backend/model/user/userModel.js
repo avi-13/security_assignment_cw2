@@ -5,6 +5,14 @@ const userSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  email: {
+    type: String,
+    required: true,
+  },
+  number: {
+    type: Number,
+    required: true,
+  },
   currentAddress: {
     type: String,
     required: true,
@@ -47,15 +55,6 @@ const userSchema = mongoose.Schema({
   emergencyNumber: {
     type: Number,
     required: false,
-  },
-
-  email: {
-    type: String,
-    required: true,
-  },
-  number: {
-    type: Number,
-    required: true,
   },
 });
 

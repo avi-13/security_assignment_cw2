@@ -1,4 +1,4 @@
-export default function AddBloodBanks() {
+export default function AdminDashboard() {
   return (
     <>
       <div className="container">

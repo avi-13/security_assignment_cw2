@@ -11,64 +11,64 @@
 }
 
 
-.loginContainer{
-    width: 33rem;
+.registerContainer{
+    width: 35rem;
+    margin-top: 3rem;
     background: transparent;
     border: 2px solid rgba(255,255,255,.5);
     border-radius: 10px;
     backdrop-filter: blur(20px);
     box-shadow: 0 0 30px rgba(0,0,0,.5);
-    padding: 20px;
-    overflow-x: hidden;
+    padding: 0.8rem;
 }
 header{
-    font-size: 50px;
+    font-size: 2rem;
     font-weight: 600;
     color: red;
     text-align: center;
 }
 form{
-    margin-top: 20px;
+    margin-top: 0.2rem;
 }
-form .loginInputBox{
+form .registerInputBox{
     display: flex;
     height: 50px;
     width: 100%;
-    margin-top: 35px;
+    margin-top: 20px;
     border-bottom: 2px solid #162938;
     position: relative;
     align-items: center;
 }
-form .loginInputBox input{
+form .registerInputBox input{
     width: 100%;
-    height: 100%;
+    height: 50%;
     background: transparent;
-    font-size: 20px;
+    font-size: 1rem;
     border: none;
     outline: none;
     color: #162938;
     padding: 0 10px;
     font-weight: 600;
 }
-form .loginInputBox i{
+form .registerInputBox i{
     position: absolute;
     right: 8px;
-    font-size: 1.6em;
+    font-size: 1rem;
     color: #162938;
 }
-form .loginInputBox label{
+form .registerInputBox label{
     position: absolute;
-    top: 90%;
+    top: 60%;
     left: 2px;
-    transform: translateY(-80%);
-    font-size: 22px;
+    transform: translateY(-20%);
+    font-size: 1rem;
     color: #162938;
     pointer-events: none;
     font-weight: 500;
     transition: .3s;
 }
-form .loginInputBox input:focus~label,
-form .loginInputBox input:valid~label{
+form .registerInputBox input:focus~label,
+form .registerInputBox input:valid~label{
     top: -5px;
 }
 form button{
@@ -115,12 +115,12 @@ form .link a{
     padding: 0 15px;
     font-weight: 600;
 }
-.social-login{
+.social-register{
     display: flex;
     text-align: center;
     flex-direction: column;
 }
-.social-login a{
+.social-register a{
     width: 100%;
     height: 35px;
     line-height: 35px;
