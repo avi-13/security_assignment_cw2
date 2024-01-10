@@ -32,12 +32,14 @@ body {
 
 .adminWrapper{
   display: flex;
+  height: 89vh;
 }
 
 .adminUl {
+  padding-left: 0 !important;
   position: static;
   width: 20rem;
-  height: 80vh;
+  height: inherit;
   backdrop-filter: blur(20px);
   box-shadow: 0 35px 30px rgba(0,0,0,.5);
 }
@@ -75,10 +77,16 @@ main {
 }
 
 @media (max-width:1470px) {
+
+  .adminWrapper{
+    display: flex;
+    height: 75vh;
+  }
+  
   .adminUl {
     position: static;
     display: flex;
-    height: auto;
+    height: 89vh;
   }
   
   .adminLi {

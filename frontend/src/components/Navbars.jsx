@@ -1,22 +1,60 @@
-import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import '../style/navbar.css';
 const Navbars = () => {
-
+  const [activeItem, setActiveItem] = useState(null);
   const users = JSON.parse(localStorage.getItem('user'))
   const navigate = useNavigate();
+  const location = useLocation();
+
   const handleLogout = (e) => {
     e.preventDefault();
     localStorage.clear();
     navigate('/login');
+    window.location.reload();
+
+  }
+  useEffect(() => {
+    const pathname = location.pathname;
+    switch (pathname) {
+      case '/':
+        setActiveItem(0);
+        break;
+      case '/be-a-donor':
+        setActiveItem(1);
+        break;
+      case '/blood_requests':
+        setActiveItem(2);
+        break;
+      case '/contact-us':
+        setActiveItem(3);
+        break;
+      case '/our-services':
+        setActiveItem(4);
+        break;
+      case '/about-us':
+        setActiveItem(5);
+        break;
+
+      default:
+        setActiveItem(0);
+        break;
+    }
+  }, [location]);
+
+  if (activeItem === null) {
+    return null;
   }
 
   const loginPage = (e) => {
     navigate('/login')
+    window.location.reload();
   }
 
   const registerPage = (e) => {
     navigate('/register')
+    window.location.reload();
+
   }
   return (
     <>
@@ -27,12 +65,12 @@ const Navbars = () => {
         </label>
         <label for="" className="logo text-danger">BloodBank</label>
         <ul>
-          <li><a href="#" className="active">Home</a></li>
-          <li><a href="#">Donate Blood</a></li>
-          <li><a href="#">Our Services</a></li>
-          <li><a href="#">About Us</a></li>
-          <li><a href="#">Contact Us</a></li>
-          <li><a href="#">Be a Donor</a></li>
+          <li><Link to={'/'} className={activeItem === 0 ? "active" : ""}>Home</Link></li>
+          <li><Link to={'/be-a-donor'} className={activeItem === 1 ? "active" : ""}  >Be A Donor</Link></li>
+          <li><Link to={'/blood_requests'} className={activeItem === 2 ? "active" : ""}>View Blood Requests</Link></li>
+          <li><Link to={''} className={activeItem === 3 ? "active" : ""} >Our Services</Link></li>
+          <li><Link to={''} className={activeItem === 4 ? "active" : ""}>About Us</Link></li>
+          <li><Link to={''} className={activeItem === 5 ? "active" : ""}>Contact Us</Link></li>
           <li id="btn1">
             {
               users ? <>

@@ -2,3 +2,69 @@
     width: 100%;
     margin-top: 7rem;
 }
+
+.homeStats {
+    display: flex;
+    justify-content: space-around;
+    gap: 8rem;
+    width: 100%;
+    align-items: center;
+    background-color: white;
+    padding: 4rem;
+  }
+  
+  .hmstats {
+    display: grid;
+    width: 20rem;
+    border-radius: 2rem;
+    padding: 3rem;
+    background-color: black;
+    text-align: center;
+    color: white;
+    transition: 0.5s all ease-in-out;
+  }
+  
+  .hmstats:hover{
+    cursor: pointer;
+    background-color: red;
+    color: white;
+    transform: scale(1.2);
+    animation-duration: 0.8ms;
+  }
+  .hmstats i {
+    font-size: 4rem;
+    margin-bottom: 10px;
+  }
+  
+  .hmstats p {
+    margin: 0;
+    font-size: 14px;
+  }
+  
+  .count {
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  .hmMob{
+    display: flex;
+    padding: 2rem;
+  }
+  
+.image-container {
+  position: relative;
+}
+
+.full-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.overlapping-image {
+  position: absolute;
+  top: -3rem; 
+  z-index: 1; 
+  width: 25rem; 
+  height: 32rem;
+}

@@ -26,20 +26,23 @@ const userSchema = mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  // optionals
 
   isAvailable: {
     type: Boolean,
     default: true,
   },
 
-  // optionals
-
+  isADonor: {
+    type: Boolean,
+    default: false,
+  },
   gender: {
     type: String,
     required: false,
   },
   dob: {
-    type: Date,
+    type: String,
     required: false,
   },
   bloodGroup: {

@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const BloodBankSchema = mongoose.Schema({
+const bloodBankSchema = mongoose.Schema({
   bbName: {
     required: true,
     type: String,
@@ -13,7 +13,7 @@ const BloodBankSchema = mongoose.Schema({
 
   bbContact: {
     required: true,
-    type: String,
+    type: Number,
   },
 
   operatingHours: {
@@ -22,25 +22,14 @@ const BloodBankSchema = mongoose.Schema({
   },
 
   availableBloodGroups: {
-    required: false,
+    required: true,
     type: String,
   },
   socialMediaLinks: {
-    required: false,
+    required: true,
     type: String,
-  },
-  location: {
-    latitude: {
-      required: true,
-      type: String,
-    },
-
-    longitude: {
-      required: true,
-      type: String,
-    },
   },
 });
 
-const BloodBanks = mongoose.Schema('bloodbanks', BloodBankSchema);
-module.exports = BloodBanks ;
+const BloodBanks = mongoose.model("bloodbanks", bloodBankSchema);
+module.exports = BloodBanks;

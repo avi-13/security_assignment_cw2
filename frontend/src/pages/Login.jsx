@@ -20,7 +20,6 @@ const Login = () => {
         setPassword(e.target.value)
     }
 
-
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(email, password);
@@ -41,9 +40,12 @@ const Login = () => {
                 const userAdmin = res.data.userData;
                 if (userAdmin.isAdmin == false) {
                     navigate('/home');
+                    window.location.reload();
                     return
                 }
                 navigate('/admin/dashboard')
+                window.location.reload();
+
 
             }
 
@@ -52,10 +54,9 @@ const Login = () => {
             console.log(err.message)
         })
     }
-
     return (
         <>
-            <div className='secondBody'>
+            <div className='loginSecondBody'>
                 <div class="loginContainer">
                     <div class="loginForm">
                         <header>Login</header>
@@ -86,8 +87,6 @@ const Login = () => {
                     </div>
                 </div>
             </div>
-
-
         </>
     )
 }

@@ -1,12 +1,12 @@
-
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import '../../src/style/navbar.css';
 import '../../src/style/register.css';
 import { createUserApi } from "../apis/api";
 
 const Register = () => {
+  const navigate = useNavigate();
   // useState (setting input value)
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
@@ -17,21 +17,21 @@ const Register = () => {
 
   // function for changing input value
 
-  const changeFullName = (e) => { // e is event that is typed by the user
+  const changeFullName = (e) => {
     setFullName(e.target.value)
   }
 
-  const changeEmail = (e) => { // e is event that is typed by the user
+  const changeEmail = (e) => {
     setEmail(e.target.value)
   }
-  const changeContact = (e) => { // e is event that is typed by the user
+  const changeContact = (e) => {
     setContact(e.target.value)
   }
-  const changeCurrentAddress = (e) => { // e is event that is typed by the user
+  const changeCurrentAddress = (e) => {
     setCurrentAddress(e.target.value)
   }
 
-  const changePassword = (e) => { // e is event that is typed by the user
+  const changePassword = (e) => {
     setPassword(e.target.value)
   }
 
@@ -39,16 +39,8 @@ const Register = () => {
 
   // function for button 
   const handleSubmit = (e) => {
-    e.preventDefault(); // prevents browser to reload
+    e.preventDefault();
     console.log(fullName, email, password, currentAddress, number, password);
-
-    // making json data object
-    // const formData = new FormData();
-    // formData.append('fullName', fullName)
-    // formData.append('email', email)
-    // formData.append('number', contact)
-    // formData.append('currentAddress', currentAddress)
-    // formData.append('password', password)
 
     const data = {
       fullName: fullName,
@@ -64,9 +56,9 @@ const Register = () => {
       if (res.data.success == false) {
         toast.error(res.data.message)
       } else {
+        navigate('/login')
         toast.success(res.data.message)
       }
-
     }).catch((err) => {
       toast.error("Server Error")
       console.log(err.message)
@@ -75,7 +67,7 @@ const Register = () => {
 
   return (
     <>
-      <div className="secondBody">
+      <div className="registerSecondBody">
         <div className="registerContainer">
           <header>Signup</header>
           <form className="form-control">
@@ -91,7 +83,7 @@ const Register = () => {
             </div>
             <div className="registerInputBox">
               <i className="fas fa-phone"></i>
-              <input onChange={changeContact} type="text" maxlength="10" required />
+              <input onChange={changeContact} type="number" maxlength="10" required />
               <label>Enter Your Contact No.</label>
             </div>            <div className="registerInputBox">
               <i className="fas fa-map"></i>

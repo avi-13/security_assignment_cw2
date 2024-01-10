@@ -36,7 +36,7 @@ const createUser = async (req, res) => {
 
     await newUser.save();
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "Your account has been created",
     });
@@ -82,11 +82,11 @@ const loginUser = async (req, res) => {
       process.env.JWT_TOKEN_SECRET
     );
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       token: token,
       userData: findUser,
-      message: "User Logged In successfully",
+      message: "Logged In successfully",
     });
   } catch (error) {
     res.json("Server Error \n Please try again");
@@ -94,11 +94,17 @@ const loginUser = async (req, res) => {
 };
 
 const beAdonor = async (req, res) => {
+  if (!userId) {
+    return res.json({
+      success: false,
+      message: "Product ID is required",
+    });
+  }
   const { gender, dob, bloodGroup, noPreviousDonation, emergencyNumber } =
-    req.body;
-
+  req.body;
+  
   const userId = req.params.id;
-
+  
   if (
     !gender ||
     !dob ||
@@ -106,30 +112,43 @@ const beAdonor = async (req, res) => {
     !noPreviousDonation ||
     !emergencyNumber
   ) {
-    res.status(400).json({
+    return res.json({
       success: false,
-      message: "Please Enter all the fields",
+      message: "Please provide all the required fields with valid data types.",
     });
   }
 
   try {
+    // Update donor information
     const updatedDonor = {
       gender: gender,
       dob: dob,
       bloodGroup: bloodGroup,
       noPreviousDonation: noPreviousDonation,
       emergencyNumber: emergencyNumber,
+      isADonor: true,
     };
-    await User.findByIdAndUpdate(userId, updatedDonor);
+    const updatedUser = await User.findByIdAndUpdate(userId, updatedDonor, {
+      new: true,
+    });
 
-    res.status(200).json({
+    if (!updatedUser) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found or update failed.",
+      });
+    }
+
+    return res.status(200).json({
       success: true,
-      message: "You have been register as a donor",
+      message: "You have been registered as a donor.",
+      updatedUser,
     });
   } catch (error) {
-    res.status(500).json({
+    console.error("Error:", error);
+    return res.status(500).json({
       success: false,
-      message: error,
+      message: "Internal server error occurred.",
     });
   }
 };
@@ -169,10 +188,92 @@ const getSingleUser = async (req, res) => {
   }
 };
 
+const updateUser = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const user = await User.findById(userId);
+    console.log(user.isADonor);
+
+    if (user.isADonor == false) {
+      const { fullName, email, number, password, currentAddress } = req.body;
+
+      if (!fullName || !email || !number || !password || !currentAddress) {
+        return res.status(400).json({
+          success: false,
+          message: "Please Enter all the fields",
+        });
+      }
+      const updatedUser = {
+        fullName: fullName,
+        email: email,
+        number: number,
+        password: password,
+        currentAddress: currentAddress,
+      };
+      await User.findByIdAndUpdate(userId, updatedUser);
+
+      return res.status(200).json({
+        success: true,
+        message: "You have been register as a donor",
+      });
+    } else {
+      const {
+        fullName,
+        email,
+        number,
+        password,
+        currentAddress,
+        gender,
+        dob,
+        bloodGroup,
+        noPreviousDonation,
+        emergencyNumber,
+      } = req.body;
+      if (
+        !gender ||
+        !dob ||
+        !bloodGroup ||
+        !noPreviousDonation ||
+        !emergencyNumber
+      ) {
+        return res.status(400).json({
+          success: false,
+          message: "Please Enter all the fields",
+        });
+      }
+      const updatedDonor = {
+        fullName: fullName,
+        email: email,
+        number: number,
+        password: password,
+        currentAddress: currentAddress,
+        gender: gender,
+        dob: dob,
+        bloodGroup: bloodGroup,
+        noPreviousDonation: noPreviousDonation,
+        emergencyNumber: emergencyNumber,
+      };
+      await User.findByIdAndUpdate(userId, updatedDonor);
+
+      return res.status(200).json({
+        success: true,
+        message: "You Account has been successfully Updated ",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(508).json({
+      success: false,
+      message: "UserDoesnot exists",
+    });
+  }
+};
+
 module.exports = {
   createUser,
   loginUser,
   beAdonor,
   getAllUsers,
   getSingleUser,
+  updateUser,
 };

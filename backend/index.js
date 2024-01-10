@@ -27,6 +27,12 @@ app.use(cors(corsPolicy));
 app.use("/api/user", require("./routes/userRoutes"));
 // app.use("/api/admin", require("./routes/"))
 
+// bloodBank routes
+app.use("/api/bloodbank", require("./routes/bloodBankRoutes"));
+
+// bloodBank routes
+app.use("/api/hospital", require("./routes/hospitalRoutes"));
+
 module.exports = {
   connectDB,
 };

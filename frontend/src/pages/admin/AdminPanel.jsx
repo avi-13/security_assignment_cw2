@@ -1,12 +1,12 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../../style/AdminPanel.css';
 import AdminDashboard from './admin_dashboard/AdminDashboard';
-import AddDonors from '../donors/AddDonors';
 import AddBloodBanks from './bloodbanks/AddBloodbanks';
 import AddHospitals from './hospitals/AddHospitals';
 import AddNews from './news/AddNews';
+import ViewDonors from './donors/Donors';
 function AdminPanel() {
   const users = JSON.parse(localStorage.getItem('user'))
   const navigate = useNavigate();
@@ -14,6 +14,7 @@ function AdminPanel() {
     e.preventDefault();
     localStorage.clear();
     navigate('/login');
+    window.location.reload();
   }
   const [currentPage, setCurrentPage] = React.useState('Dashboard');
 
@@ -23,7 +24,7 @@ function AdminPanel() {
       content = <AdminDashboard />;
       break;
     case 'Donors':
-      content = <AddDonors />;
+      content = <ViewDonors />;
       break;
     case 'AddBloodBanks':
       content = <AddBloodBanks />;
@@ -37,6 +38,9 @@ function AdminPanel() {
     default:
       content = <AdminDashboard />;
   }
+  useEffect(() => {
+    localStorage.setItem('currentPage', currentPage);
+  }, [currentPage]);
 
   return (
     <>
