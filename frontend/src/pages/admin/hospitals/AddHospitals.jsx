@@ -155,7 +155,7 @@ export default function AddHospitals() {
                       <div className="w-10 h-10">
                         <img
                           className="w-full h-full"
-                          src="/../assets/images/2.png"
+                          src="/../assets/images/logo.png"
                           alt="Thumbnail Image"
                         />
                       </div>
@@ -218,7 +218,7 @@ export default function AddHospitals() {
               </span>
               <img
                 className="w-full h-auto"
-                src="/../assets/images/2.png"
+                src="../assets/images/3.png"
                 alt="Modal Image"
               />
             </div>
@@ -328,7 +328,7 @@ export default function AddHospitals() {
                   {imagePreview && (
                     <div className="mt-4">
                       <img
-                        src={imagePreview}
+                        src="../assets/images/3.png"
                         className="w-full rounded-md"
                       />
                     </div>

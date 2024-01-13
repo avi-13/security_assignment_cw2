@@ -94,17 +94,11 @@ const loginUser = async (req, res) => {
 };
 
 const beAdonor = async (req, res) => {
-  if (!userId) {
-    return res.json({
-      success: false,
-      message: "Product ID is required",
-    });
-  }
   const { gender, dob, bloodGroup, noPreviousDonation, emergencyNumber } =
-  req.body;
-  
-  const userId = req.params.id;
-  
+    req.body;
+
+  const id = req.params.id;
+
   if (
     !gender ||
     !dob ||
@@ -128,12 +122,12 @@ const beAdonor = async (req, res) => {
       emergencyNumber: emergencyNumber,
       isADonor: true,
     };
-    const updatedUser = await User.findByIdAndUpdate(userId, updatedDonor, {
+    const updatedUser = await User.findByIdAndUpdate(id, updatedDonor, {
       new: true,
     });
 
     if (!updatedUser) {
-      return res.status(404).json({
+      return res.json({
         success: false,
         message: "User not found or update failed.",
       });
@@ -167,17 +161,17 @@ const getAllUsers = async (req, res) => {
 };
 
 const getSingleUser = async (req, res) => {
-  const userId = req.params.id;
+  const id = req.params.id;
 
-  if (!userId) {
+  if (!id) {
     return res.json({
       success: false,
       message: "",
     });
   }
   try {
-    const singleUser = await User.findById(userId);
-    res.json({
+    const singleUser = await User.findById(id);
+    res.status(200).json({
       success: true,
       message: "",
       user: singleUser,
@@ -190,15 +184,15 @@ const getSingleUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
-    const userId = req.params.id;
-    const user = await User.findById(userId);
+    const id = req.params.id;
+    const user = await User.findById(id);
     console.log(user.isADonor);
 
     if (user.isADonor == false) {
-      const { fullName, email, number, password, currentAddress } = req.body;
+      const { fullName, email, number, currentAddress } = req.body;
 
-      if (!fullName || !email || !number || !password || !currentAddress) {
-        return res.status(400).json({
+      if (!fullName || !email || !number || !currentAddress) {
+        return res.json({
           success: false,
           message: "Please Enter all the fields",
         });
@@ -207,10 +201,9 @@ const updateUser = async (req, res) => {
         fullName: fullName,
         email: email,
         number: number,
-        password: password,
         currentAddress: currentAddress,
       };
-      await User.findByIdAndUpdate(userId, updatedUser);
+      await User.findByIdAndUpdate(id, updatedUser);
 
       return res.status(200).json({
         success: true,
@@ -221,22 +214,27 @@ const updateUser = async (req, res) => {
         fullName,
         email,
         number,
-        password,
         currentAddress,
         gender,
         dob,
+        isAvailable,
         bloodGroup,
         noPreviousDonation,
         emergencyNumber,
       } = req.body;
       if (
+        !fullName ||
+        !email ||
+        !number ||
+        !currentAddress ||
+        !fullName ||
         !gender ||
         !dob ||
         !bloodGroup ||
         !noPreviousDonation ||
         !emergencyNumber
       ) {
-        return res.status(400).json({
+        return res.json({
           success: false,
           message: "Please Enter all the fields",
         });
@@ -245,15 +243,15 @@ const updateUser = async (req, res) => {
         fullName: fullName,
         email: email,
         number: number,
-        password: password,
         currentAddress: currentAddress,
         gender: gender,
         dob: dob,
         bloodGroup: bloodGroup,
         noPreviousDonation: noPreviousDonation,
         emergencyNumber: emergencyNumber,
+        isAvailable: isAvailable,
       };
-      await User.findByIdAndUpdate(userId, updatedDonor);
+      await User.findByIdAndUpdate(id, updatedDonor);
 
       return res.status(200).json({
         success: true,
@@ -262,7 +260,7 @@ const updateUser = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    return res.status(508).json({
+    return res.status(500).json({
       success: false,
       message: "UserDoesnot exists",
     });

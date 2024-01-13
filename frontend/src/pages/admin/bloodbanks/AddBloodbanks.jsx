@@ -61,7 +61,10 @@ export default function AddBloodBanks() {
     formData.append('bgavailable', availableBloodGroups)
     formData.append('socialLinks', socialMediaLinks)
 
+
     createBloodBankApi(formData).then((res) => {
+    console.log(res.data)
+
       if (res.data.success == false) {
         toast.error(res.data.message)
       } else {
@@ -151,7 +154,7 @@ export default function AddBloodBanks() {
                       <div className="w-10 h-10">
                         <img
                           className="w-full h-full"
-                          src="/../assets/images/2.png"
+                          src="/../assets/images/logo.png"
                           alt="Thumbnail Image"
                         />
                       </div>

@@ -1,18 +1,4 @@
-/* Variables */
-:root {
-    --primary-color: #fff;
-    --cursor: pointer;
-  }
-  
-  /* Reset styles */
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  /* Body styles */
-  .body {
+  .donorBody {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     background-color:white;
     display: grid;

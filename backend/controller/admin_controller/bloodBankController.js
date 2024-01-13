@@ -12,7 +12,7 @@ const addBloodBanks = async (req, res) => {
     !bgavailable ||
     !socialLinks
   ) {
-    return res.status(400).json({
+    return res.json({
       success: false,
       message: "Please Enter all fields ",
     });
@@ -68,7 +68,7 @@ const updateBloodBank = async (req, res) => {
     !bgavailable ||
     !socialLinks
   ) {
-    return res.status(400).json({
+    return res.json({
       success: false,
       message: "Cannot be empty",
     });
@@ -102,7 +102,7 @@ const deleteBloodBank = async (req, res) => {
   try {
     const deletedBloodBank = await BloodBanks.findByIdAndDelete(req.params.id);
     if (!deletedBloodBank) {
-      return res.status(400).json({
+      return res.json({
         success: false,
         message: "Hospital Not Found",
       });

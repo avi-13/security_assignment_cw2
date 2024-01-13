@@ -1,4 +1,4 @@
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { Route, BrowserRouter as Router, Routes, Switch ,useHistory} from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
@@ -10,14 +10,16 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Services from "./pages/Services";
 import AdminPanel from "./pages/admin/AdminPanel";
+import AddBloodRequests from "./pages/users/blood_request/AddBloodRequests";
 import ViewBloodRequest from "./pages/users/blood_request/ViewBloodRequest";
 import BeADonor from "./pages/users/donor/BeADonor";
 import Profile from "./pages/users/profile/Profile";
 import AdminRoutes from "./protected/AdminRoutes";
 import UserRoutes from "./protected/UserRoutes";
-import AddBloodRequests from "./pages/users/blood_request/AddBloodRequests";
 
 function App() {
+
+  const history = useHistory();
   const user = JSON.parse(localStorage.getItem("user"));
 
   return (
@@ -33,7 +35,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/be-a-donor" element={<BeADonor />} />
+        <Route path="/be-a-donor/:id" element={<BeADonor />} />
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/about-us" element={<AboutUs />} />
         <Route path="/services" element={<Services />} />
@@ -41,7 +43,7 @@ function App() {
         <Route path="/add_blood_requests" element={<AddBloodRequests />} />
 
         <Route element={<UserRoutes />}>
-          <Route path="/user-profile" element={<Profile />} />
+          <Route path="/profile/:id" element={<Profile />} />
         </Route>
       </Routes>
     </Router>

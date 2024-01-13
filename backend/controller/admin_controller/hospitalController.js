@@ -16,7 +16,7 @@ const addHospitals = async (req, res) => {
     !hospitalType ||
     !hospitalServices
   ) {
-    return res.status(400).json({
+    return res.json({
       success: false,
       message: "Please Enter all fields ",
     });
@@ -108,7 +108,7 @@ const deleteHospital = async (req, res) => {
   try {
     const deletedHospital = await Hospital.findByIdAndDelete(req.params.id);
     if (!deletedHospital) {
-      return res.status(400).json({
+      return res.json({
         success: false,
         message: "Hospital Not Found",
       });

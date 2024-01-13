@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { beADonorApi, getSingleUserApi } from "../../../apis/api";
 import '../../../style/BeDonor.css';
@@ -7,9 +7,13 @@ import '../../../style/BeDonor.css';
 const BeADonor = () => {
   const { id } = useParams()
 
+  // const navigate = useNavigate();
 
-  const navigate = useNavigate();
   // useState (setting input value)
+  const [fullName, setFullName] = useState('')
+  const [email, setEmail] = useState('')
+  const [number, setNumber] = useState('')
+  const [currentAddress, setCurrentAddress] = useState('')
   const [gender, setGender] = useState('')
   const [dob, setDOb] = useState('')
   const [bloodGroup, setBloodGroup] = useState('')
@@ -17,18 +21,17 @@ const BeADonor = () => {
   const [emergencyNumber, setEmergencyNumber] = useState('')
 
 
-  // // use effect to fetch product details 
-  // useEffect(() => {
-  //   //API call
-  //   getSingleUserApi(id).then((res) => {
-  //     console.log(res.data)
-  //     // s(res.data.product.productName)
-  //     // setProductPrice(res.data.product.productPrice)
-  //     // setProductCategory(res.data.product.productCategory)
-  //     // setProductDescription(res.data.product.productDescription)
-  //     // setOldImage(res.data.product.productImageUrl)
-  //   })
-  // }, [id])
+  // use effect to fetch product details 
+  useEffect(() => {
+    //API call
+    getSingleUserApi(id).then((res) => {
+      console.log(res.data)
+      setFullName(res.data.user.fullName)
+      setEmail(res.data.user.email)
+      setNumber(res.data.user.number)
+      setCurrentAddress(res.data.user.currentAddress)
+    })
+  }, [id])
 
   // function for changing input value
 
@@ -50,32 +53,28 @@ const BeADonor = () => {
     setEmergencyNumber(e.target.value)
   }
 
-
-
-  // function for button 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // making logical form data
-    const formData = new FormData();
-    formData.append("gender", gender);
-    formData.append("emergencyNumber", emergencyNumber);
-    formData.append("dob", dob);
-    formData.append("bloodGroup", bloodGroup);
-    formData.append("noPreviousDonation", noPreviousDonation);
+    const data = {
+      gender: gender,
+      dob: dob,
+      bloodGroup: bloodGroup,
+      noPreviousDonation: noPreviousDonation,
+      emergencyNumber: emergencyNumber,
+      isADonor: true
+    }
 
     // making API call
-    beADonorApi(formData).then((res) => {
-      console.log(formData)
+    beADonorApi(data).then((res) => {
+      console.log(data)
       if (res.data.success == false) {
         toast.error(res.data.message)
       } else {
         toast.success(res.data.message)
-        navigate('/login')
         window.location.reload();
 
       }
-
     }).catch((err) => {
       toast.error("Server Error")
       console.log(err.message)
@@ -84,7 +83,7 @@ const BeADonor = () => {
 
   return (
     <>
-      <div className="body">
+      <div className="donorBody">
         <div class="donor-container">
           <div className="donor-image">
             <img
@@ -94,18 +93,18 @@ const BeADonor = () => {
           <div class="donor-container-text">
 
             <form style={{ border: " grey solid 0.2rem", padding: "2rem" }}>
-              <h1 className="">Register as Donor</h1>
-              <input type="text" disabled placeholder="Full Name" />
-              <input type="email" disabled placeholder="Email address" />
-              <input type="text" disabled placeholder="Number" />
-              <input type="text" disabled placeholder="Current Address" />
+              <h1 className="text-center">Register as Donor</h1>
+              <input type="text" disabled placeholder={`${fullName}`} />
+              <input type="email" disabled placeholder={`${email}`} />
+              <input type="text" disabled placeholder={`${number}`} />
+              <input type="text" disabled placeholder={`${currentAddress}`} />
               <select onChange={changeGender} type="text" required >
                 <option value="" disabled selected>Select your option</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
                 <option value="Other">Other</option>
               </select>
-              <input onChange={changeDob} type="date" placeholder="Date Of Birth" />
+              <input onChange={changeDob} type="text" placeholder="Date Of Birth" />
               <select onChange={changeBg} type="text" required >
                 <option value="" disabled selected>Select Blood Group</option>
                 <option value="A+">A+</option>

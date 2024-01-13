@@ -15,12 +15,13 @@ export const createUserApi = (data) => Api.post("/api/user/register", data);
 
 export const loginUserApi = (data) => Api.post("/api/user/login", data);
 
+export const updateUser = (id, data) =>
+  Api.put(`/api/user/updateUser/${id}`, data);
+
 export const fetchAllUsersApi = (data) =>
   Api.get("/api/user/getAllUsers", data);
 
-
-  export const getSingleUserApi = (userId) =>
-  Api.get(`/api/user/single_user/${userId}`);
+export const getSingleUserApi = (id) => Api.get(`/api/user/single_user/${id}`);
 
 // ======================================> Hospitals api <===============================
 
@@ -50,9 +51,7 @@ export const deleteBloodBankApi = (id) =>
 export const updateBloodBankApi = (id, formData) =>
   Api.put(`/api/bloodbank/updatebloodbank/${id}`, formData);
 
-
 // ======================================> BloodBank api <===============================
 
-export const beADonorApi = (userId, formData) =>
-  Api.put(`/api/user/beadonor/${userId}`, formData);
-
+export const beADonorApi = (id, data) =>
+  Api.put(`/api/user/beadonor/${id}`, data);
