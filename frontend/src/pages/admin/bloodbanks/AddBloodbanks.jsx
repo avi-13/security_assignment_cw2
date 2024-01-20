@@ -2,96 +2,97 @@ import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { createBloodBankApi, deleteBloodBankApi, getallBloodBankApi } from "../../../apis/api";
+import {
+  createBloodBankApi,
+  deleteBloodBankApi,
+  getallBloodBankApi,
+} from "../../../apis/api";
 
 export default function AddBloodBanks() {
-
   // useEffect for fetching all the products and showing in table
-  const [bloodBank, setBloodBank] = useState([])
+  const [bloodBank, setBloodBank] = useState([]);
   useEffect(() => {
     getallBloodBankApi().then((res) => {
       console.log(res.data);
       setBloodBank(res.data.bloodbanks);
-    })
-  }, [])
+    });
+  }, []);
 
-
-
-  const [bbName, setbbName] = useState('');
-  const [bbAddress, setbbAddress] = useState('');
-  const [bbContact, setbbContact] = useState('');
-  const [operatingHours, setOperatingHours] = useState('');
-  const [availableBloodGroups, setAvailableBloodGroups] = useState('');
-  const [socialMediaLinks, setSocialMediaLinks] = useState('');
+  const [bbName, setbbName] = useState("");
+  const [bbAddress, setbbAddress] = useState("");
+  const [bbContact, setbbContact] = useState("");
+  const [operatingHours, setOperatingHours] = useState("");
+  const [availableBloodGroups, setAvailableBloodGroups] = useState("");
+  const [socialMediaLinks, setSocialMediaLinks] = useState("");
 
   const changebbName = (e) => {
-    setbbName(e.target.value)
-  }
+    setbbName(e.target.value);
+  };
 
   const changebbAddress = (e) => {
-    setbbAddress(e.target.value)
-  }
+    setbbAddress(e.target.value);
+  };
 
   const changebbContact = (e) => {
-    setbbContact(e.target.value)
-  }
+    setbbContact(e.target.value);
+  };
 
   const changeOperatingHours = (e) => {
-    setOperatingHours(e.target.value)
-
-  }
+    setOperatingHours(e.target.value);
+  };
   const changeAvailableBloodGroups = (e) => {
-    setAvailableBloodGroups(e.target.value)
-
-  }
+    setAvailableBloodGroups(e.target.value);
+  };
   const changeSocialMediaLinks = (e) => {
-    setSocialMediaLinks(e.target.value)
-
-  }
+    setSocialMediaLinks(e.target.value);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const formData = new FormData();
 
-    formData.append('bName', bbName)
-    formData.append('bAddress', bbAddress)
-    formData.append('bContact', bbContact)
-    formData.append('oHours', operatingHours)
-    formData.append('bgavailable', availableBloodGroups)
-    formData.append('socialLinks', socialMediaLinks)
+    formData.append("bName", bbName);
+    formData.append("bAddress", bbAddress);
+    formData.append("bContact", bbContact);
+    formData.append("oHours", operatingHours);
+    formData.append("bgavailable", availableBloodGroups);
+    formData.append("socialLinks", socialMediaLinks);
 
+    createBloodBankApi(formData)
+      .then((res) => {
+        console.log(res.data);
 
-    createBloodBankApi(formData).then((res) => {
-    console.log(res.data)
-
-      if (res.data.success == false) {
-        toast.error(res.data.message)
-      } else {
-        toast.success(res.data.message)
-      }
-    }).catch(e => {
-      toast.error(e.message);
-      console.log(e);
-    });
-  }
+        if (res.data.success == false) {
+          toast.error(res.data.message);
+        } else {
+          toast.success(res.data.message);
+        }
+      })
+      .catch((e) => {
+        toast.error(e.message);
+        console.log(e);
+      });
+  };
 
   // delete
   const handleDelete = (id) => {
-    const confirmDialog = window.confirm("Are you sure you want to delete this Product?")
+    const confirmDialog = window.confirm(
+      "Are you sure you want to delete this Product?"
+    );
     if (!confirmDialog) {
     } else {
       // make Api call
       deleteBloodBankApi(id).then((res) => {
         if (res.data.success == true) {
-          toast.success(res.data.message)
-          window.location.reload()
+          toast.success(res.data.message);
+          window.location.reload();
         } else {
-          toast.error(res.data.message)
+          toast.error(res.data.message);
         }
-      })
+      });
     }
-  }
+  };
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isimageModalOpen, setimageIsModalOpen] = useState(false);
@@ -101,6 +102,9 @@ export default function AddBloodBanks() {
   const closeModal = () => setIsModalOpen(false);
   const openimageModal = () => setimageIsModalOpen(true);
   const closeimageModal = () => setimageIsModalOpen(false);
+  const [isdeleteModalOpen, setdeleteIsModalOpen] = useState(false);
+  const opendeleteModal = () => setdeleteIsModalOpen(true);
+  const closedeleteModal = () => setdeleteIsModalOpen(false);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -126,7 +130,9 @@ export default function AddBloodBanks() {
             </p>
             <div>
               <button
-                className="inline-flex sm:ml-3 mt-4 sm:mt-0 items-start justify-start px-6 py-3 bg-[#0D98BA] hover:bg-cyan-400 text-white focus:outline-none rounded" onClick={openModal} >
+                className="inline-flex sm:ml-3 mt-4 sm:mt-0 items-start justify-start px-6 py-3 bg-[#0D98BA] hover:bg-cyan-400 text-white focus:outline-none rounded"
+                onClick={openModal}
+              >
                 Add BloodBanks
               </button>
             </div>
@@ -136,13 +142,23 @@ export default function AddBloodBanks() {
           <table className="w-full whitespace-nowrap">
             <thead>
               <tr className="h-16 w-full text-sm leading-none text-gray-800">
-                <th className="font-normal text-left pl-4">BloodBank Image Yet to be added</th>
+                <th className="font-normal text-left pl-4">
+                  BloodBank Image Yet to be added
+                </th>
                 <th className="font-normal text-left pl-4">BloodBank Name</th>
-                <th className="font-normal text-left pl-12">BloodBank Address</th>
-                <th className="font-normal text-left pl-12">BloodBank Contact</th>
-                <th className="font-normal text-left pl-20">BLoodGroups Available</th>
+                <th className="font-normal text-left pl-12">
+                  BloodBank Address
+                </th>
+                <th className="font-normal text-left pl-12">
+                  BloodBank Contact
+                </th>
+                <th className="font-normal text-left pl-20">
+                  BLoodGroups Available
+                </th>
                 <th className="font-normal text-left pl-20">Operating Hours</th>
-                <th className="font-normal text-left pl-20">SocialMedia Links</th>
+                <th className="font-normal text-left pl-20">
+                  SocialMedia Links
+                </th>
                 <th className="font-normal text-left pl-16">Action</th>
               </tr>
             </thead>
@@ -173,7 +189,6 @@ export default function AddBloodBanks() {
                   </td>
                   <td className="pl-20">
                     <p className="font-medium">{item.operatingHours}</p>
-
                   </td>
                   <td className="pl-20">
                     <p className="font-medium">{item.availableBloodGroups}</p>
@@ -193,15 +208,45 @@ export default function AddBloodBanks() {
                     </button>
 
                     {/* Delete Button */}
-                    <button
-                      className="focus:outline-none ml-2 ">
+                    <button className="focus:outline-none ml-2 ">
                       <FontAwesomeIcon
                         icon={faTrash}
                         className="text-red-500 hover:text-red-700 cursor-pointer "
                       />
                     </button>
+
+                    {isdeleteModalOpen && (
+                      <div
+                        className="fixed inset-0 flex items-center justify-center bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full"
+                        id="my-modal"
+                      >
+                        <div className="relative mx-auto p-5 border w-1/4 shadow-lg rounded-md bg-white space-y-8 justify-center items-center flex flex-col">
+                          <i className="fa-solid fa-triangle-exclamation text-red-500 fa-5x"></i>
+                          <h1 className="font-medium w-3/4 mx-auto text-center">
+                            Are you sure you want to Delete?
+                          </h1>
+
+                          <div className="flex flex-wrap items-center justify-between mx-auto w-full">
+                            <button
+                              type="submit"
+                              className="w-1/3 text-white bg-red-500 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm text-center py-2.5"
+                            >
+                              Delete
+                            </button>
+                            <button
+                              type="submit"
+                              className="w-1/3 text-white bg-gray-500 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm py-2.5"
+                              onClick={closedeleteModal}
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </td>
-                </tr>))}
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
@@ -249,9 +294,7 @@ export default function AddBloodBanks() {
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                   <div>
-                    <label
-                      className="block text-sm font-medium text-gray-900"
-                    >
+                    <label className="block text-sm font-medium text-gray-900">
                       BloodBank Name
                     </label>
                     <input
@@ -262,10 +305,8 @@ export default function AddBloodBanks() {
                     />
                   </div>
                   <div>
-                    <label
-                      className="block text-sm font-medium text-gray-900"
-                    >
-                     BloodBank Address
+                    <label className="block text-sm font-medium text-gray-900">
+                      BloodBank Address
                     </label>
                     <input
                       onChange={changebbAddress}
@@ -275,9 +316,7 @@ export default function AddBloodBanks() {
                     />
                   </div>
                   <div>
-                    <label
-                      className="block text-sm font-medium text-gray-900"
-                    >
+                    <label className="block text-sm font-medium text-gray-900">
                       BLood Bank Contact
                     </label>
                     <input
@@ -288,9 +327,7 @@ export default function AddBloodBanks() {
                     />
                   </div>
                   <div>
-                    <label
-                      className="block text-sm font-medium text-gray-900"
-                    >
+                    <label className="block text-sm font-medium text-gray-900">
                       Blood Groups
                     </label>
                     <select
@@ -310,9 +347,7 @@ export default function AddBloodBanks() {
                     </select>
                   </div>
                   <div>
-                    <label
-                      className="block text-sm font-medium text-gray-900"
-                    >
+                    <label className="block text-sm font-medium text-gray-900">
                       BloodBank Operating Hours
                     </label>
                     <textarea
@@ -323,9 +358,7 @@ export default function AddBloodBanks() {
                     ></textarea>
                   </div>
                   <div>
-                    <label
-                      className="block text-sm font-medium text-gray-900"
-                    >
+                    <label className="block text-sm font-medium text-gray-900">
                       SocialMedia Links
                     </label>
                     <input
@@ -352,11 +385,7 @@ export default function AddBloodBanks() {
                   />
                   {imagePreview && (
                     <div className="mt-4">
-                      <img
-                        src={imagePreview}
-                        className="w-full rounded-md"
-                      />
-
+                      <img src={imagePreview} className="w-full rounded-md" />
                     </div>
                   )}
                 </div>

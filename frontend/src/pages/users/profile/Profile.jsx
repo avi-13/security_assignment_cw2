@@ -98,7 +98,7 @@ const Profile = () => {
               >
                 <img
                   class="img-account-profile  rounded-circle mb-2"
-                  src="http://bootdey.com/img/Content/avatar/avatar1.png"
+                  src="https://www.pngall.com/wp-content/uploads/12/Avatar-Profile-Vector-PNG-File.png"
                   alt=""
                 />
                 <button class="btn btn-primary" type="button">

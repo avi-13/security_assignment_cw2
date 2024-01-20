@@ -10,10 +10,10 @@
    min-height: 100vh;
 }
 .addbloodrequestcontainer {  
-   max-width: 800px;
+   margin-top: 3rem;
    background: #fff;
    width: 850px;
-   padding: 25px 40px 10px 40px;
+   padding: 10px 40px 10px 40px;
    box-shadow: 0px 0px 10px 5px #adb5bd;
 }
 
@@ -43,9 +43,7 @@ select:visited{
    -webkit-background-clip: text;
    -webkit-text-fill-color: transparent;
 }
-.addbloodrequestcontainer form {
-   padding: 30px 0 0 0;
-}
+
 .addbloodrequestcontainer form .form-row {
    display: flex;
    margin: 32px 0;
@@ -54,7 +52,7 @@ select:visited{
 form .form-row .input-data {
    width: 100%;
    height: 40px;
-   margin: 0 20px;
+   margin: 0 5px;
    position: relative;
 }
 form .form-row .textarea {

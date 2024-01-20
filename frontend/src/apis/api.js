@@ -1,5 +1,5 @@
 import axios from "axios";
-
+ 
 const Api = axios.create({
   baseURL: "http://localhost:5000",
   withCredentials: true,
@@ -55,3 +55,13 @@ export const updateBloodBankApi = (id, formData) =>
 
 export const beADonorApi = (id, data) =>
   Api.put(`/api/user/beadonor/${id}`, data);
+
+// ======================================> Request Blood API <===============================
+export const addRequestAPI = (data) =>
+  Api.post("/api/blood_request/add_request", data);
+
+export const viewRequestApi = (data) =>
+  Api.get("/api/blood_request/all_requests", data);
+
+export const getSingleRequestApi = (id) =>
+  Api.get(`/api/blood_request/request/${id}`);

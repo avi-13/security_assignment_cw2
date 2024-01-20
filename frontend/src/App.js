@@ -1,4 +1,4 @@
-import { Route, BrowserRouter as Router, Routes, Switch ,useHistory} from "react-router-dom";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
@@ -16,10 +16,9 @@ import BeADonor from "./pages/users/donor/BeADonor";
 import Profile from "./pages/users/profile/Profile";
 import AdminRoutes from "./protected/AdminRoutes";
 import UserRoutes from "./protected/UserRoutes";
+import SingleBloodRequest from "./pages/users/blood_request/SingleBloodRequest";
 
 function App() {
-
-  const history = useHistory();
   const user = JSON.parse(localStorage.getItem("user"));
 
   return (
@@ -35,14 +34,16 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/be-a-donor/:id" element={<BeADonor />} />
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/about-us" element={<AboutUs />} />
         <Route path="/services" element={<Services />} />
+        <Route path="/view_request/:id" element={<SingleBloodRequest />} />
         <Route path="/blood_requests" element={<ViewBloodRequest />} />
-        <Route path="/add_blood_requests" element={<AddBloodRequests />} />
+        <Route path="/services" element={<Services />} />
 
         <Route element={<UserRoutes />}>
+          <Route path="/be-a-donor/:id" element={<BeADonor />} />
+          <Route path="/add_blood_requests" element={<AddBloodRequests />} />
           <Route path="/profile/:id" element={<Profile />} />
         </Route>
       </Routes>

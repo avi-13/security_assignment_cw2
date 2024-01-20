@@ -33,6 +33,9 @@ app.use("/api/bloodbank", require("./routes/bloodBankRoutes"));
 // bloodBank routes
 app.use("/api/hospital", require("./routes/hospitalRoutes"));
 
+// add request server
+app.use("/api/blood_request", require("./routes/bloodRequestRoute"));
+
 module.exports = {
   connectDB,
 };

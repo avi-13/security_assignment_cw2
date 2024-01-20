@@ -6,6 +6,11 @@ const Navbars = () => {
   const users = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
   const location = useLocation();
+  const [isDropdownOpen, setDropdownOpen] = useState(false);
+
+  const handleToggleDropdown = () => {
+    setDropdownOpen(!isDropdownOpen);
+  };
 
   const handleLogout = (e) => {
     e.preventDefault();
@@ -26,13 +31,18 @@ const Navbars = () => {
         setActiveItem(2);
         break;
       case "/contact-us":
+        setActiveItem(5);
+        break;
+      case "/services":
         setActiveItem(3);
         break;
-      case "/our-services":
+
+      case "/about-us":
         setActiveItem(4);
         break;
-      case "/about-us":
-        setActiveItem(5);
+
+      case "/contact-us":
+        setActiveItem(4);
         break;
 
       default:
@@ -91,17 +101,20 @@ const Navbars = () => {
             </Link>
           </li>
           <li>
-            <Link to={""} className={activeItem === 3 ? "active" : ""}>
+            <Link to={"/services"} className={activeItem === 3 ? "active" : ""}>
               Our Services
             </Link>
           </li>
           <li>
-            <Link to={""} className={activeItem === 4 ? "active" : ""}>
+            <Link to={"/about-us"} className={activeItem === 4 ? "active" : ""}>
               About Us
             </Link>
           </li>
           <li>
-            <Link to={""} className={activeItem === 5 ? "active" : ""}>
+            <Link
+              to={"/contact-us"}
+              className={activeItem === 5 ? "active" : ""}
+            >
               Contact Us
             </Link>
           </li>
@@ -112,35 +125,44 @@ const Navbars = () => {
             <div className="profileImg">
               <img
                 class="img-account-profile  rounded-circle mb-2"
-                src="http://bootdey.com/img/Content/avatar/avatar1.png"
+                src="https://www.pngall.com/wp-content/uploads/12/Avatar-Profile-Vector-PNG-File.png"
                 style={{ height: "4rem" }}
                 alt=""
               />
 
-              <div class="dropdown bg-white">
-                <a
-                  class="dropdown-toggle"
+              <div
+                className={`dropdown ${isDropdownOpen ? "show" : ""} bg-white`}
+              >
+                <button
+                  className="dropdown-toggle"
                   type="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
+                  onClick={handleToggleDropdown}
                 >
-                  <i class="fab fa-user"></i>
-                  Welcome{"" + users.fullName}
-                </a>
-                <ul class="dropdown-menu">
-                  <Link class="dropdown-item" to={`/profile/${users._id}`}>
-                    Profile
-                  </Link>
-                  <Link class="dropdown-item" to="/change">
-                    Change Password
-                  </Link>
-                  <Link
-                    class="dropdown-item"
-                    onClick={handleLogout}
-                    to="/logout"
-                  >
-                    Logout
-                  </Link>
+                  Welcome {users.fullName}
+                </button>
+                <ul className={`dropdown-menu ${isDropdownOpen ? "show" : ""}`}>
+                  <li style={{ width: "100%" }}>
+                    <Link
+                      className="dropdown-item"
+                      to={`/profile/${users._id}`}
+                    >
+                      Profile
+                    </Link>
+                  </li>
+                  <li style={{ width: "100%" }}>
+                    <Link className="dropdown-item" to="/change">
+                      Change Password
+                    </Link>
+                  </li>
+                  <li style={{ width: "100%" }}>
+                    <Link
+                      className="dropdown-item"
+                      onClick={handleLogout}
+                      to="/logout"
+                    >
+                      Logout
+                    </Link>
+                  </li>
                 </ul>
               </div>
             </div>

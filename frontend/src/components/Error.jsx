@@ -19,7 +19,7 @@ const Error = () => {
           Looks like you've found the doorway to the great nothing
         </h1>
         <p class="py-4 text-base text-gray-800 dark:text-white">
-          The content youa re looking for doesnot exist. Either it was removed,
+          The content you’re looking for doesn’t exist. Either it was removed,
           or you mistyped the link.
         </p>
         <p class="py-2 text-base text-gray-800 dark:text-white">

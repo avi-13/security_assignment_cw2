@@ -7,7 +7,7 @@ const HomePage = () => {
       <div id="carouselExampleControlsNoTouching" className="carousel slide" data-bs-touch="true">
         <div className="carousel-inner">
           <div className="carousel-item active">
-            <img src="../assets/images/after.png" className="d-block w-100" alt="..." />
+            <img src="../assets/images/donation.png" className="d-block w-100" alt="..." />
           </div>
           <div className="carousel-item">
             <img src="../assets/images/after.png" className="d-block w-100" alt="..." />
