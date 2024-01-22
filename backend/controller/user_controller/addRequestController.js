@@ -68,11 +68,40 @@ const addRequests = async (req, res) => {
 
 const getAllRequest = async (req, res) => {
   try {
-    const requestList = await Request.find();
+    const requestList = await Request.find().sort({ createdAt: -1 });
+
+    const categorizedData = {
+      critical: [],
+      urgent: [],
+      normal: [],
+    };
+
+    requestList.forEach((request) => {
+      switch (request.urgency) {
+        case "Critical":
+          if (categorizedData.critical.length < 5) {
+            categorizedData.critical.push(request);
+          }
+          break;
+        case "Urgent":
+          if (categorizedData.urgent.length < 5) {
+            categorizedData.urgent.push(request);
+          }
+          break;
+        case "Normal":
+          if (categorizedData.normal.length < 5) {
+            categorizedData.normal.push(request);
+          }
+          break;
+      }
+    });
+
     res.json({
       success: true,
-      requestblood: requestList,
+      categorizedData: categorizedData,
     });
+
+    console.log(categorizedData);
   } catch (error) {
     res.json(error);
   }

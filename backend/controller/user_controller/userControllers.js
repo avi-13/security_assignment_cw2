@@ -96,6 +96,7 @@ const loginUser = async (req, res) => {
 const beAdonor = async (req, res) => {
   const { gender, dob, bloodGroup, noPreviousDonation, emergencyNumber } =
     req.body;
+  console.log(gender, dob, bloodGroup, noPreviousDonation, emergencyNumber);
 
   const id = req.params.id;
 
@@ -262,7 +263,7 @@ const updateUser = async (req, res) => {
     console.log(error);
     return res.status(500).json({
       success: false,
-      message: "UserDoesnot exists",
+      message: "User Doesnot exists",
     });
   }
 };

@@ -41,8 +41,8 @@ const Navbars = () => {
         setActiveItem(4);
         break;
 
-      case "/contact-us":
-        setActiveItem(4);
+      case "/add_blood_requests":
+        setActiveItem(6);
         break;
 
       default:
@@ -74,14 +74,14 @@ const Navbars = () => {
         <label for="" className="logo text-danger">
           BloodBank
         </label>
-        <ul>
-          <li>
+        <ul className="nav-ul">
+          <li className= "nav-li">
             <Link to={"/"} className={activeItem === 0 ? "active" : ""}>
               Home
             </Link>
           </li>
           {users && !users.isADonor ? (
-            <li>
+            <li className= "nav-li">
               <Link
                 to={`/be-a-donor/${users._id}`}
                 className={activeItem === 1 ? "active" : ""}
@@ -92,7 +92,15 @@ const Navbars = () => {
           ) : (
             <Outlet />
           )}
-          <li>
+          <li className= "nav-li">
+            <Link
+              to={"/add_blood_requests"}
+              className={activeItem === 6 ? "active" : ""}
+            >
+              Add Blood Requests
+            </Link>
+          </li>
+          <li className= "nav-li">
             <Link
               to={"/blood_requests"}
               className={activeItem === 2 ? "active" : ""}
@@ -100,17 +108,17 @@ const Navbars = () => {
               View Blood Requests
             </Link>
           </li>
-          <li>
+          <li className= "nav-li">
             <Link to={"/services"} className={activeItem === 3 ? "active" : ""}>
               Our Services
             </Link>
           </li>
-          <li>
+          <li className= "nav-li">
             <Link to={"/about-us"} className={activeItem === 4 ? "active" : ""}>
               About Us
             </Link>
           </li>
-          <li>
+          <li className= "nav-li">
             <Link
               to={"/contact-us"}
               className={activeItem === 5 ? "active" : ""}

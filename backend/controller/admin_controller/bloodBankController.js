@@ -36,7 +36,7 @@ const addBloodBanks = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message,
     });
   }
 };
@@ -120,9 +120,56 @@ const deleteBloodBank = async (req, res) => {
   }
 };
 
+const filterBloodBank = async (req, res) => {
+  try {
+    const { location, bloodType } = req.query;
+    const filter = {};
+    if (location) filter.location = location;
+    if (bloodType) filter.bloodType = bloodType;
+    const bloodBanks = await BloodBanks.find(filter);
+    res.json({ success: true, bloodBanks: bloodBanks });
+  } catch (error) {
+    console.error("Error filtering blood banks:", error);
+    res.status(500).json({ success: false, error: "Internal Server Error" });
+  }
+};
+
+const bloodBankPagination = async (req, res) => {
+  const requestedPage = request.query.page;
+
+  const resultPerPage = 6;
+
+  try {
+    const bRequests = await BloodBanks.find({})
+      .skip((requestedPage - 1) * resultPerPage)
+      .limit(resultPerPage);
+
+    // if there is no products
+    if (bRequests.length == 0) {
+      return res.json({
+        success: false,
+        message: "No Blood Requests Right Now",
+      });
+    }
+
+    res.json({
+      success: true,
+      products: products,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "error",
+    });
+  }
+};
+
 module.exports = {
   getAllBloodBanks,
   addBloodBanks,
   updateBloodBank,
   deleteBloodBank,
+  filterBloodBank,
+  bloodBankPagination,
 };

@@ -53,8 +53,8 @@ export const updateBloodBankApi = (id, formData) =>
 
 // ======================================> BloodBank api <===============================
 
-export const beADonorApi = (id, data) =>
-  Api.put(`/api/user/beadonor/${id}`, data);
+export const beADonorApi = (id, formData) =>
+  Api.put(`/api/user/beadonor/${id}`, formData);
 
 // ======================================> Request Blood API <===============================
 export const addRequestAPI = (data) =>
