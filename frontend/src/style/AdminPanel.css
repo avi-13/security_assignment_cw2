@@ -6,8 +6,8 @@ body {
   min-height: 100vh;
 }
 
-.adminMainContainer{
-   height: auto;
+.adminMainContainer {
+  height: auto;
 }
 
 .adminHeader {
@@ -20,7 +20,7 @@ body {
   align-items: center;
   justify-content: space-between;
   backdrop-filter: blur(20px);
-  box-shadow: 0 0 30px rgba(0,0,0,.5);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
 .dropdown-menu {
@@ -30,18 +30,18 @@ body {
   transition: 0 !important;
 }
 
-.adminWrapper{
+.adminWrapper {
   display: flex;
-  height: 89vh;
+  height: 87vh;
 }
 
 .adminUl {
   padding-left: 0 !important;
   position: static;
-  width: 20rem;
   height: inherit;
-  backdrop-filter: blur(20px);
-  box-shadow: 0 35px 30px rgba(0,0,0,.5);
+  margin: 0;
+  width: 20rem;
+  box-shadow: 0 0px 4px 0px rgba(0, 0, 0, 0.5);
 }
 
 .adminLi {
@@ -65,31 +65,42 @@ body {
   color: whitesmoke;
 }
 
-.active{
+.active {
   background-color: red;
   color: whitesmoke;
 }
 
 main {
-  flex: 1; 
-  padding: 20px;
+  flex: 1;
+  padding-top:20px;
   overflow-y: auto;
 }
 
-@media (max-width:1470px) {
+@media (max-width: 670px) {
+  .adminHeader {
+    height: 20px;
+  }
 
-  .adminWrapper{
+  .adminHeader h1{
+    font-size: 0.6em;
+  }
+  .adminHeader .dropdown a{
+    font-size: 0.5em !important;
+  }
+
+
+  .adminWrapper {
     display: flex;
     height: 75vh;
   }
-  
+
   .adminUl {
     position: static;
-    display: flex;
+    /* display: flex; */
     height: 89vh;
   }
-  
-  .adminLi {
+  /*   
+  .adminLi button:hover {
     height: 5rem;
     font-size: 1.5rem;
     width: 100%;
@@ -100,6 +111,5 @@ main {
     background-color: #d9534f;
     color: whitesmoke;
   }
-  
-
+   */
 }

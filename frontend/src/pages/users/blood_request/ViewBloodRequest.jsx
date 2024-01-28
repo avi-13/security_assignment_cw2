@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { viewRequestApi } from "../../../apis/api";
 import "../../../style/viewrequests.css";
 
@@ -63,16 +64,21 @@ const ViewBloodRequest = () => {
                     >
                       <div className="card__header-text">
                         <h3 className="card__title text-white">
-                          Jessica Parker
+                          <strong>Person To Contact:</strong>{" "}
+                          {item.contactPerson}
                         </h3>
                         <span className="card__status text-white">
                           1 hour ago
                         </span>
                       </div>
                     </div>
-                    <p className="card__description text-white">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Asperiores, blanditiis?
+                    <p className="card__description d-flex justify-content-between gap-2 text-white">
+                      <Link className="btn btn-primary w-50" to={""}>
+                        Share
+                      </Link>
+                      <Link className="btn btn-success w-50" to={""}>
+                        Accept Request
+                      </Link>
                     </p>
                   </div>
                 </a>
@@ -138,9 +144,13 @@ const ViewBloodRequest = () => {
                         </span>
                       </div>
                     </div>
-                    <p className="card__description text-white">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Asperiores, blanditiis?
+                    <p className="card__description d-flex justify-content-between gap-2 text-white">
+                      <Link className="btn btn-primary w-50" to={""}>
+                        Share
+                      </Link>
+                      <Link className="btn btn-success w-50" to={""}>
+                        Accept Request
+                      </Link>
                     </p>
                   </div>
                 </a>
@@ -205,9 +215,13 @@ const ViewBloodRequest = () => {
                         </span>
                       </div>
                     </div>
-                    <p className="card__description text-white">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Asperiores, blanditiis?
+                    <p className="card__description d-flex justify-content-between gap-2 text-white">
+                      <Link className="btn btn-primary w-50" to={""}>
+                        Share
+                      </Link>
+                      <Link className="btn btn-success w-50" to={""}>
+                        Accept Request
+                      </Link>
                     </p>
                   </div>
                 </a>

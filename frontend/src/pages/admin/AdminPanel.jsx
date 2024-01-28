@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../../style/AdminPanel.css';
 import AdminDashboard from './admin_dashboard/AdminDashboard';
@@ -8,15 +8,21 @@ import AddHospitals from './hospitals/AddHospitals';
 import AddNews from './news/AddNews';
 import ViewDonors from './donors/Donors';
 function AdminPanel() {
+  const storedPage = localStorage.getItem('currentPage');
+  // Initialize the current page with the stored value or the default value
+  const initialPage = storedPage || 'Dashboard';
+
   const users = JSON.parse(localStorage.getItem('user'))
   const navigate = useNavigate();
+  
   const handleLogout = (e) => {
     e.preventDefault();
     localStorage.clear();
     navigate('/login');
     window.location.reload();
   }
-  const [currentPage, setCurrentPage] = React.useState('Dashboard');
+   // Use state to keep track of the current page
+   const [currentPage, setCurrentPage] = useState(initialPage);
 
   let content;
   switch (currentPage) {

@@ -9,20 +9,42 @@ import {
 } from "../../../apis/api";
 
 export default function AddHospitals() {
-  // useEffect for fetching all the products and showing in table
-  const [hospitals, sethospitals] = useState([]);
+  const [hospitals, setHospitals] = useState([]);
+
+  const [searchInput, setSearchInput] = useState("");
+  const [sortBy, setSortBy] = useState("createdAt");
+  const [sortOrder, setSortOrder] = useState("desc");
+
+  const fetchHospitals = async () => {
+    try {
+      const response = await getallhospitalsApi(searchInput, sortBy, sortOrder);
+      setHospitals(response.data.hospital);
+    } catch (error) {
+      console.error("Error fetching hospitals:", error);
+    }
+  };
+
   useEffect(() => {
-    getallhospitalsApi().then((res) => {
-      console.log(res.data);
-      sethospitals(res.data.hospital);
-    });
-  }, []);
+    fetchHospitals();
+  }, [searchInput, sortBy, sortOrder]);
+
+  const handleSort = (column) => {
+    setSortBy(column);
+    setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+  };
+
+  const handleSearch = (e) => {
+    setSearchInput(e.target.value);
+  };
 
   const [hospitalName, setHospitalName] = useState("");
   const [hospitalAddress, setHospitalAddress] = useState("");
   const [hospitalContactNumber, setHospitalContactNumber] = useState("");
   const [hospitalType, setHospitalType] = useState("");
   const [hospitalServices, setHospitalServices] = useState("");
+  const [isdeleteModalOpen, setdeleteIsModalOpen] = useState(false);
+  const opendeleteModal = () => setdeleteIsModalOpen(true);
+  const closedeleteModal = () => setdeleteIsModalOpen(false);
 
   const changeHospitalName = (e) => {
     setHospitalName(e.target.value);
@@ -71,21 +93,15 @@ export default function AddHospitals() {
 
   // delete
   const handleDelete = (id) => {
-    const confirmDialog = window.confirm(
-      "Are you sure you want to delete this Product?"
-    );
-    if (!confirmDialog) {
-    } else {
-      // make Api call
-      deletehospitalApi(id).then((res) => {
-        if (res.data.success == true) {
-          toast.success(res.data.message);
-          window.location.reload();
-        } else {
-          toast.error(res.data.message);
-        }
-      });
-    }
+    // make Api call
+    deletehospitalApi(id).then((res) => {
+      if (res.data.success == true) {
+        toast.success(res.data.message);
+        window.location.reload();
+      } else {
+        toast.error(res.data.message);
+      }
+    });
   };
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -116,10 +132,20 @@ export default function AddHospitals() {
     <>
       <div className="w-full sm:px-6">
         <div className="px-4 md:px-10 py-4 md:py-7 bg-gray-100 rounded-tl-lg rounded-tr-lg">
-          <div className="sm:flex items-center justify-between">
-            <p className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold leading-normal text-gray-800">
+          <div className="sm:flex flex-row items-center justify-between">
+            <p className="inline-flex sm:ml-3 mt-4 sm:mt-0 items-start justify-start px-6 py-3  text-black focus:outline-none rounded">
               Hospitals
             </p>
+            <div>
+              <input
+                className="inline-flex sm:ml-3 mt-4 sm:mt-0 items-start justify-start px-6 py-3  text-black focus:outline-none rounded"
+
+                type="text"
+                placeholder="Search hospitals..."
+                value={searchInput}
+                onChange={handleSearch}
+              />
+            </div>
             <div>
               <button
                 className="inline-flex sm:ml-3 mt-4 sm:mt-0 items-start justify-start px-6 py-3 bg-[#0D98BA] hover:bg-cyan-400 text-white focus:outline-none rounded"
@@ -140,10 +166,23 @@ export default function AddHospitals() {
                 <th className="font-normal text-left pl-4">Hospital Name</th>
                 <th className="font-normal text-left pl-12">Location</th>
                 <th className="font-normal text-left pl-12">Contact</th>
+                <th className="font-normal text-left pl-20">Hospital Type</th>
                 <th className="font-normal text-left pl-20">
-                  BLoodGroups Available
+                  Hospital Service
                 </th>
-                <th className="font-normal text-left pl-20">Description</th>
+                <th className="font-normal text-left pl-12">
+                  <button
+                    onClick={() => handleSort("createdAt")}
+                    className="focus:outline-none"
+                  >
+                    Created Date
+                    {sortBy === "createdAt" && (
+                      <span className="ml-1">
+                        {sortOrder === "asc" ? "▲" : "▼"}
+                      </span>
+                    )}
+                  </button>
+                </th>
                 <th className="font-normal text-left pl-16">Action</th>
               </tr>
             </thead>
@@ -173,10 +212,13 @@ export default function AddHospitals() {
                     <p className="font-medium">{item.hospitalContactNumber}</p>
                   </td>
                   <td className="pl-20">
+                    <p className="font-medium">{item.hospitalType}</p>
+                  </td>
+                  <td className="pl-20 overflow-y max-w-[200px] truncate">
                     <p className="font-medium">{item.hospitalServices}</p>
                   </td>
-                  <td className="pl-20">
-                    <p className="font-medium">{item.hospitalType}</p>
+                  <td className="pl-20 overflow-y max-w-[200px] truncate">
+                    <p className="font-medium">{item.createdAt}</p>
                   </td>
                   <td className="px-7 2xl:px-0">
                     {/* Edit Button */}
@@ -189,7 +231,7 @@ export default function AddHospitals() {
 
                     {/* Delete Button */}
                     <button
-                      onClick={() => handleDelete(item._id)}
+                      onClick={opendeleteModal}
                       className="focus:outline-none ml-2 "
                     >
                       <FontAwesomeIcon
@@ -197,6 +239,36 @@ export default function AddHospitals() {
                         className="text-red-500 hover:text-red-700 cursor-pointer "
                       />
                     </button>
+
+                    {isdeleteModalOpen && (
+                      <div
+                        className="fixed inset-0 flex items-center justify-center bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full"
+                        id="my-modal"
+                      >
+                        <div className="relative mx-auto p-5 border w-1/4 shadow-lg rounded-md bg-white space-y-8 justify-center items-center flex flex-col">
+                          <i className="fa-solid fa-triangle-exclamation text-red-500 fa-5x"></i>
+                          <h1 className="font-medium w-3/4 mx-auto text-center">
+                            Are you sure you want to Delete?
+                          </h1>
+
+                          <div className="flex flex-wrap items-center justify-between mx-auto w-full">
+                            <button
+                              onClick={() => handleDelete(item._id)}
+                              className="w-1/3 text-white bg-red-500 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm text-center py-2.5"
+                            >
+                              Delete
+                            </button>
+                            <button
+                              type="submit"
+                              className="w-1/3 text-white bg-gray-500 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm py-2.5"
+                              onClick={closedeleteModal}
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </td>
                 </tr>
               ))}
@@ -247,9 +319,7 @@ export default function AddHospitals() {
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                   <div>
-                    <label
-                      className="block text-sm font-medium text-gray-900"
-                    >
+                    <label className="block text-sm font-medium text-gray-900">
                       Hospital Name
                     </label>
                     <input
@@ -260,22 +330,17 @@ export default function AddHospitals() {
                     />
                   </div>
                   <div>
-                    <label
-                      className="block text-sm font-medium text-gray-900"
-                    >
+                    <label className="block text-sm font-medium text-gray-900">
                       Address
                     </label>
                     <input
                       onChange={changeHospitalAddress}
-                      type="number"
                       className="mt-1 block w-full  border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
                       required
                     />
                   </div>
                   <div>
-                    <label
-                      className="block text-sm font-medium text-gray-900"
-                    >
+                    <label className="block text-sm font-medium text-gray-900">
                       Contact
                     </label>
                     <input
@@ -286,9 +351,7 @@ export default function AddHospitals() {
                     />
                   </div>
                   <div>
-                    <label
-                      className="block text-sm font-medium text-gray-900"
-                    >
+                    <label className="block text-sm font-medium text-gray-900">
                       Hospital Type
                     </label>
                     <input
@@ -299,9 +362,7 @@ export default function AddHospitals() {
                     />
                   </div>
                   <div>
-                    <label
-                      className="block text-sm font-medium text-gray-900"
-                    >
+                    <label className="block text-sm font-medium text-gray-900">
                       Hospital Description
                     </label>
                     <textarea
@@ -313,9 +374,7 @@ export default function AddHospitals() {
                   </div>
                 </div>
                 <div>
-                  <label
-                    className="block text-sm font-medium  text-gray-900"
-                  >
+                  <label className="block text-sm font-medium  text-gray-900">
                     Hospital Image
                   </label>
                   <input

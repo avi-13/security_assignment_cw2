@@ -41,7 +41,7 @@ const Navbars = () => {
         setActiveItem(4);
         break;
 
-      case "/add_blood_requests":
+      case !users == null && "/add_blood_requests":
         setActiveItem(6);
         break;
 
@@ -75,13 +75,13 @@ const Navbars = () => {
           BloodBank
         </label>
         <ul className="nav-ul">
-          <li className= "nav-li">
+          <li className="nav-li">
             <Link to={"/"} className={activeItem === 0 ? "active" : ""}>
               Home
             </Link>
           </li>
           {users && !users.isADonor ? (
-            <li className= "nav-li">
+            <li className="nav-li">
               <Link
                 to={`/be-a-donor/${users._id}`}
                 className={activeItem === 1 ? "active" : ""}
@@ -92,15 +92,17 @@ const Navbars = () => {
           ) : (
             <Outlet />
           )}
-          <li className= "nav-li">
-            <Link
-              to={"/add_blood_requests"}
-              className={activeItem === 6 ? "active" : ""}
-            >
-              Add Blood Requests
-            </Link>
-          </li>
-          <li className= "nav-li">
+          {users ? (
+            <li className="nav-li">
+              <Link
+                to={"/add_blood_requests"}
+                className={activeItem === 6 ? "active" : ""}
+              >
+                Add Blood Requests
+              </Link>
+            </li>
+          ) : null}
+          <li className="nav-li">
             <Link
               to={"/blood_requests"}
               className={activeItem === 2 ? "active" : ""}
@@ -108,17 +110,17 @@ const Navbars = () => {
               View Blood Requests
             </Link>
           </li>
-          <li className= "nav-li">
+          <li className="nav-li">
             <Link to={"/services"} className={activeItem === 3 ? "active" : ""}>
               Our Services
             </Link>
           </li>
-          <li className= "nav-li">
+          <li className="nav-li">
             <Link to={"/about-us"} className={activeItem === 4 ? "active" : ""}>
               About Us
             </Link>
           </li>
-          <li className= "nav-li">
+          <li className="nav-li">
             <Link
               to={"/contact-us"}
               className={activeItem === 5 ? "active" : ""}

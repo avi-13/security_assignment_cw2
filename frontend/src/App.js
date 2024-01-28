@@ -11,12 +11,12 @@ import Register from "./pages/Register";
 import Services from "./pages/Services";
 import AdminPanel from "./pages/admin/AdminPanel";
 import AddBloodRequests from "./pages/users/blood_request/AddBloodRequests";
+import SingleBloodRequest from "./pages/users/blood_request/SingleBloodRequest";
 import ViewBloodRequest from "./pages/users/blood_request/ViewBloodRequest";
 import BeADonor from "./pages/users/donor/BeADonor";
 import Profile from "./pages/users/profile/Profile";
 import AdminRoutes from "./protected/AdminRoutes";
 import UserRoutes from "./protected/UserRoutes";
-import SingleBloodRequest from "./pages/users/blood_request/SingleBloodRequest";
 
 function App() {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -24,7 +24,7 @@ function App() {
   return (
     <Router>
       <ToastContainer />
-      {user && user.isAdmin ? null : <Navbars />}
+      {!user || (user && !user.isAdmin) ? <Navbars /> : null}
       <Routes>
         <Route element={<AdminRoutes />}>
           <Route path="/admin/dashboard" element={<AdminPanel />} />

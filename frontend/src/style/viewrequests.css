@@ -53,7 +53,7 @@
   gap: 2em;
   padding: 2em;
   border-radius: 12px;
-  transform: translateY(-100%);
+  transform: translateY(-10%);
   transition: 0.2s ease-in-out;
 }
 
@@ -102,12 +102,5 @@
 }
 
 .card__description {
-  padding: 0 2em 2em;
-  margin: 0;
-  color: #d7bdca;
-  font-family: "MockFlowFont";
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
-  overflow: hidden;
+  padding: 0 0.5em 0.5em;
 }

@@ -58,6 +58,7 @@ const authGuardAdmin = (req, res, next) => {
   try {
     const decodeUser = jwt.verify(token, process.env.JWT_TOKEN_SECRET);
     req.user = decodeUser;
+    console.log(req.user.isAdmin);
 
     if (!req.user.isAdmin) {
       return res.json({

@@ -77,21 +77,15 @@ export default function AddBloodBanks() {
 
   // delete
   const handleDelete = (id) => {
-    const confirmDialog = window.confirm(
-      "Are you sure you want to delete this Product?"
-    );
-    if (!confirmDialog) {
-    } else {
-      // make Api call
-      deleteBloodBankApi(id).then((res) => {
-        if (res.data.success == true) {
-          toast.success(res.data.message);
-          window.location.reload();
-        } else {
-          toast.error(res.data.message);
-        }
-      });
-    }
+    // make Api call
+    deleteBloodBankApi(id).then((res) => {
+      if (res.data.success == true) {
+        toast.success(res.data.message);
+        window.location.reload();
+      } else {
+        toast.error(res.data.message);
+      }
+    });
   };
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -208,7 +202,10 @@ export default function AddBloodBanks() {
                     </button>
 
                     {/* Delete Button */}
-                    <button className="focus:outline-none ml-2 ">
+                    <button
+                      className="focus:outline-none ml-2"
+                      onClick={opendeleteModal}
+                    >
                       <FontAwesomeIcon
                         icon={faTrash}
                         className="text-red-500 hover:text-red-700 cursor-pointer "
@@ -228,7 +225,7 @@ export default function AddBloodBanks() {
 
                           <div className="flex flex-wrap items-center justify-between mx-auto w-full">
                             <button
-                              type="submit"
+                              onClick={() => handleDelete(item._id)}
                               className="w-1/3 text-white bg-red-500 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm text-center py-2.5"
                             >
                               Delete

@@ -46,7 +46,17 @@ const addHospitals = async (req, res) => {
 
 const getAllHospitals = async (req, res) => {
   try {
-    const hospitalList = await Hospital.find();
+    const search = req.query.search || "";
+    const sortBy = req.query.sortBy || "createdAt";
+    const sortOrder = req.query.sortOrder === "desc" ? -1 : 1;
+
+    console.log("Sorting Params:", sortBy, sortOrder);
+
+    const hospitalList = await Hospital.find({
+      hospitalName: { $regex: new RegExp(search, "i") },
+    }).sort({ [sortBy]: sortOrder });
+    console.log("Hospital List:", hospitalList);
+
     res.json({
       success: true,
       hospital: hospitalList,

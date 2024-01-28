@@ -1,5 +1,5 @@
 import axios from "axios";
- 
+
 const Api = axios.create({
   baseURL: "http://localhost:5000",
   withCredentials: true,
@@ -28,8 +28,14 @@ export const getSingleUserApi = (id) => Api.get(`/api/user/single_user/${id}`);
 export const createHospitalApi = (data) =>
   Api.post("/api/hospital/addHospital", data);
 
-export const getallhospitalsApi = (data) =>
-  Api.get("/api/hospital/getallhospitals", data);
+export const getallhospitalsApi = (search, sortBy, sortOrder) =>
+  Api.get("/api/hospital/getallhospitals", {
+    params: {
+      search,
+      sortBy,
+      sortOrder,
+    },
+  });
 
 export const deletehospitalApi = (id) =>
   Api.delete(`/api/hospital/deletehospital/${id}`);

@@ -47,6 +47,7 @@ const getAllBloodBanks = async (req, res) => {
     return res.status(200).json({
       success: true,
       bloodbanks: bloodBankList,
+      message: "Fetched"
     });
   } catch (error) {
     return res.status(500).json(error);
@@ -104,12 +105,12 @@ const deleteBloodBank = async (req, res) => {
     if (!deletedBloodBank) {
       return res.json({
         success: false,
-        message: "Hospital Not Found",
+        message: "BloodBank Not Found",
       });
     }
     return res.status(200).json({
       success: true,
-      message: "Hospital Deleted Successfully",
+      message: "BloodBank Deleted Successfully",
     });
   } catch (error) {
     console.log(error);
@@ -144,7 +145,7 @@ const bloodBankPagination = async (req, res) => {
       .skip((requestedPage - 1) * resultPerPage)
       .limit(resultPerPage);
 
-    // if there is no products
+    // if there is no bloodbanks
     if (bRequests.length == 0) {
       return res.json({
         success: false,
@@ -154,7 +155,7 @@ const bloodBankPagination = async (req, res) => {
 
     res.json({
       success: true,
-      products: products,
+      bloodbanks: bloodbanks,
     });
   } catch (error) {
     console.log(error);
@@ -165,6 +166,26 @@ const bloodBankPagination = async (req, res) => {
   }
 };
 
+const searchBloodbanks = async (req, res, next) => {
+  try {
+    const { q } = req.query;
+    const bloodbanks = await Product.find({
+      name: { $regex: q, $options: "i" },
+    });
+
+    if (bloodbanks.length < 1)
+      throw new ErrorHandler(404, "No BloodBanks found");
+
+    res.status(201).json({
+      status: "success",
+      message: "Found",
+      bloodbanks,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getAllBloodBanks,
   addBloodBanks,
@@ -172,4 +193,5 @@ module.exports = {
   deleteBloodBank,
   filterBloodBank,
   bloodBankPagination,
+  searchBloodbanks,
 };
