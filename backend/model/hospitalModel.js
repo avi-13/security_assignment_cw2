@@ -26,6 +26,14 @@ const hospitalSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    latitude: {
+      required: true,
+      type: Number,
+    },
+    longitude: {
+      required: true,
+      type: Number,
+    },
   },
   {
     timestamps: true,

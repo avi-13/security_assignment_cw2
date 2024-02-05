@@ -1,8 +1,16 @@
-const BloodBanks = require("../../model/blood_banks/bloodBankModel.js");
+const BloodBanks = require("../../model/bloodBankModel.js");
 
 const addBloodBanks = async (req, res) => {
-  const { bName, bAddress, bContact, oHours, bgavailable, socialLinks } =
-    req.body;
+  const {
+    bName,
+    bAddress,
+    bContact,
+    oHours,
+    bgavailable,
+    socialLinks,
+    latitude,
+    longitude,
+  } = req.body;
 
   if (
     !bName ||
@@ -10,7 +18,9 @@ const addBloodBanks = async (req, res) => {
     !bContact ||
     !oHours ||
     !bgavailable ||
-    !socialLinks
+    !socialLinks ||
+    !latitude ||
+    !longitude
   ) {
     return res.json({
       success: false,
@@ -26,6 +36,8 @@ const addBloodBanks = async (req, res) => {
       operatingHours: oHours,
       availableBloodGroups: bgavailable,
       socialMediaLinks: socialLinks,
+      latitude: latitude,
+      longitude: longitude,
     });
 
     await newBloodBank.save();
@@ -43,20 +55,69 @@ const addBloodBanks = async (req, res) => {
 
 const getAllBloodBanks = async (req, res) => {
   try {
-    const bloodBankList = await BloodBanks.find();
-    return res.status(200).json({
+    const {
+      bbAddressSearch = "",
+      bloodGroupsSearch = "",
+      bloodbankSearch = "",
+    } = req.query;
+    const sortBy = req.query.sortBy || "createdAt";
+    const sortOrder = req.query.sortOrder === "desc" ? -1 : 1;
+
+    // Reset search values to empty strings if they are "All"
+    const normalizedBbAddressSearch =
+      bbAddressSearch.toLowerCase() === "all" ? "" : bbAddressSearch;
+    const normalizedBloodGroupsSearch =
+      bloodGroupsSearch.toLowerCase() === "all" ? "" : bloodGroupsSearch;
+    const normalizedBloodbankSearch =
+      bloodbankSearch.toLowerCase() === "all" ? "" : bloodbankSearch;
+    console.log("Sorting Params:", sortBy, sortOrder);
+
+    const query = {};
+
+    if (normalizedBbAddressSearch) {
+      query.bbAddress = {
+        $regex: new RegExp(`^${normalizedBbAddressSearch}`, "i"),
+      };
+    }
+
+    if (normalizedBloodGroupsSearch) {
+      query.availableBloodGroups = {
+        $regex: new RegExp(`${normalizedBloodGroupsSearch}`, "i"),
+      };
+    }
+
+    if (normalizedBloodbankSearch) {
+      query.bbName = {
+        $regex: new RegExp(`^${normalizedBloodbankSearch}`, "i"),
+      };
+    }
+
+    const bloodBankList = await BloodBanks.find(query).sort({
+      [sortBy]: sortOrder,
+    });
+
+    console.log("BloodBanks List:", bloodBankList);
+
+    res.json({
       success: true,
-      bloodbanks: bloodBankList,
-      message: "Fetched"
+      bloodBanks: bloodBankList,
     });
   } catch (error) {
-    return res.status(500).json(error);
+    res.json(error);
   }
 };
 
 const updateBloodBank = async (req, res) => {
-  const { bName, bAddress, bContact, oHours, bgavailable, socialLinks } =
-    req.body;
+  const {
+    bName,
+    bAddress,
+    bContact,
+    oHours,
+    bgavailable,
+    socialLinks,
+    latitude,
+    longitude,
+  } = req.body;
 
   const id = req.params.id;
 
@@ -67,7 +128,9 @@ const updateBloodBank = async (req, res) => {
     !bContact ||
     !oHours ||
     !bgavailable ||
-    !socialLinks
+    !socialLinks ||
+    !latitude ||
+    !longitude
   ) {
     return res.json({
       success: false,
@@ -83,6 +146,8 @@ const updateBloodBank = async (req, res) => {
       oHours: oHours,
       bgavailable: bgavailable,
       socialLinks: socialLinks,
+      latitude: latitude,
+      longitude: longitude,
     };
     await BloodBanks.findByIdAndUpdate(id, updatedBloodBanks);
     res.status(200).json({
@@ -118,20 +183,6 @@ const deleteBloodBank = async (req, res) => {
       success: false,
       message: "Server Error",
     });
-  }
-};
-
-const filterBloodBank = async (req, res) => {
-  try {
-    const { location, bloodType } = req.query;
-    const filter = {};
-    if (location) filter.location = location;
-    if (bloodType) filter.bloodType = bloodType;
-    const bloodBanks = await BloodBanks.find(filter);
-    res.json({ success: true, bloodBanks: bloodBanks });
-  } catch (error) {
-    console.error("Error filtering blood banks:", error);
-    res.status(500).json({ success: false, error: "Internal Server Error" });
   }
 };
 
@@ -191,7 +242,6 @@ module.exports = {
   addBloodBanks,
   updateBloodBank,
   deleteBloodBank,
-  filterBloodBank,
   bloodBankPagination,
   searchBloodbanks,
 };

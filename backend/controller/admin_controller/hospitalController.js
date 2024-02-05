@@ -1,4 +1,4 @@
-const Hospital = require("../../model/hospital/hospitalModel.js");
+const Hospital = require("../../model/hospitalModel.js");
 
 const addHospitals = async (req, res) => {
   const {
@@ -7,6 +7,8 @@ const addHospitals = async (req, res) => {
     hospitalContactNumber,
     hospitalType,
     hospitalServices,
+    latitude,
+    longitude,
   } = req.body;
 
   if (
@@ -14,7 +16,9 @@ const addHospitals = async (req, res) => {
     !hospitalAddress ||
     !hospitalContactNumber ||
     !hospitalType ||
-    !hospitalServices
+    !hospitalServices ||
+    !latitude ||
+    !longitude
   ) {
     return res.json({
       success: false,
@@ -29,6 +33,8 @@ const addHospitals = async (req, res) => {
       hospitalContactNumber: hospitalContactNumber,
       hospitalType: hospitalType,
       hospitalServices: hospitalServices,
+      latitude: latitude,
+      longitude: longitude,
     });
 
     await newHospital.save();
@@ -46,20 +52,52 @@ const addHospitals = async (req, res) => {
 
 const getAllHospitals = async (req, res) => {
   try {
-    const search = req.query.search || "";
+    const {
+      addressSearch = "",
+      bloodGroupsSearch = "",
+      hospitalSearch = "",
+    } = req.query;
     const sortBy = req.query.sortBy || "createdAt";
     const sortOrder = req.query.sortOrder === "desc" ? -1 : 1;
 
+    // Reset search values if they are "All"
+    const normalizedaddressSearch =
+      addressSearch.toLowerCase() === "all" ? "" : addressSearch;
+    const normalizedBloodGroupsSearch =
+      bloodGroupsSearch.toLowerCase() === "all" ? "" : bloodGroupsSearch;
+    const normalizedhospitalSearch =
+      hospitalSearch.toLowerCase() === "all" ? "" : hospitalSearch;
     console.log("Sorting Params:", sortBy, sortOrder);
 
-    const hospitalList = await Hospital.find({
-      hospitalName: { $regex: new RegExp(search, "i") },
-    }).sort({ [sortBy]: sortOrder });
-    console.log("Hospital List:", hospitalList);
+    const query = {};
+
+    if (normalizedaddressSearch) {
+      query.hospitalAddress = {
+        $regex: new RegExp(`^${normalizedaddressSearch}`, "i"),
+      };
+    }
+
+    if (normalizedBloodGroupsSearch) {
+      query.hospitalServices = {
+        $regex: new RegExp(`${normalizedBloodGroupsSearch}`, "i"),
+      };
+    }
+
+    if (normalizedhospitalSearch) {
+      query.hospitalName = {
+        $regex: new RegExp(`^${normalizedhospitalSearch}`, "i"),
+      };
+    }
+
+    const hospitalLists = await Hospital.find(query).sort({
+      [sortBy]: sortOrder,
+    });
+
+    console.log("Hospital List:", hospitalLists);
 
     res.json({
       success: true,
-      hospital: hospitalList,
+      hospital: hospitalLists,
     });
   } catch (error) {
     res.json(error);
@@ -73,6 +111,8 @@ const updateHospital = async (req, res) => {
     hospitalContactNumber,
     hospitalType,
     hospitalServices,
+    latitude,
+    longitude,
   } = req.body;
 
   const id = req.params.id;
@@ -83,7 +123,9 @@ const updateHospital = async (req, res) => {
     !hospitalAddress ||
     !hospitalContactNumber ||
     !hospitalType ||
-    !hospitalServices
+    !hospitalServices ||
+    !latitude ||
+    !longitude
   ) {
     return res.json({
       success: false,
@@ -98,6 +140,8 @@ const updateHospital = async (req, res) => {
       hospitalContactNumber: hospitalContactNumber,
       hospitalType: hospitalType,
       hospitalServices: hospitalServices,
+      latitude: latitude,
+      longitude: longitude,
     };
     await Hospital.findByIdAndUpdate(id, updatedHospital);
     res.json({

@@ -1,7 +1,8 @@
-const Request = require("../../model/request_blood/RequestBloodModel");
+const Request = require("../../model/RequestBloodModel");
 
 const addRequests = async (req, res) => {
   const {
+    userId,
     patientName,
     patientAge,
     patientBloodType,
@@ -18,7 +19,10 @@ const addRequests = async (req, res) => {
     contactPerson,
   } = req.body;
 
+  console.log(req.body);
+
   if (
+    !userId ||
     !patientName ||
     !patientBloodType ||
     !phoneNumber ||
@@ -51,9 +55,10 @@ const addRequests = async (req, res) => {
       instruction: instruction,
       anyPrecautions: anyPrecautions,
       contactPerson: contactPerson,
+      userId: userId,
     });
-
     await newRequest.save();
+    console.log(newRequest);
     res.status(200).json({
       success: true,
       message: "Your Request has been added",
