@@ -7,8 +7,6 @@ const addHospitals = async (req, res) => {
     hospitalContactNumber,
     hospitalType,
     hospitalServices,
-    latitude,
-    longitude,
   } = req.body;
 
   if (
@@ -16,9 +14,7 @@ const addHospitals = async (req, res) => {
     !hospitalAddress ||
     !hospitalContactNumber ||
     !hospitalType ||
-    !hospitalServices ||
-    !latitude ||
-    !longitude
+    !hospitalServices
   ) {
     return res.json({
       success: false,
@@ -33,8 +29,6 @@ const addHospitals = async (req, res) => {
       hospitalContactNumber: hospitalContactNumber,
       hospitalType: hospitalType,
       hospitalServices: hospitalServices,
-      latitude: latitude,
-      longitude: longitude,
     });
 
     await newHospital.save();
@@ -111,8 +105,6 @@ const updateHospital = async (req, res) => {
     hospitalContactNumber,
     hospitalType,
     hospitalServices,
-    latitude,
-    longitude,
   } = req.body;
 
   const id = req.params.id;
@@ -123,9 +115,7 @@ const updateHospital = async (req, res) => {
     !hospitalAddress ||
     !hospitalContactNumber ||
     !hospitalType ||
-    !hospitalServices ||
-    !latitude ||
-    !longitude
+    !hospitalServices
   ) {
     return res.json({
       success: false,
@@ -140,8 +130,6 @@ const updateHospital = async (req, res) => {
       hospitalContactNumber: hospitalContactNumber,
       hospitalType: hospitalType,
       hospitalServices: hospitalServices,
-      latitude: latitude,
-      longitude: longitude,
     };
     await Hospital.findByIdAndUpdate(id, updatedHospital);
     res.json({

@@ -7,16 +7,49 @@ import {
   deleteBloodBankApi,
   getallBloodBankApi,
 } from "../../../apis/api";
+import BloodGroupLists from "../../../components/BloodGroupsList";
+import DistrictList from "../../../components/DistrictsList";
 
 export default function AddBloodBanks() {
   // useEffect for fetching all the products and showing in table
   const [bloodBank, setBloodBank] = useState([]);
+
+  const [bbAddressSearch, setbbAddressSearch] = useState("");
+  const [bloodGroupsSearch, setBGsearch] = useState("");
+  const [bbNameSearch, setBBNameSearch] = useState("");
+  const [sortBy, setSortBy] = useState("createdAt");
+  const [sortOrder, setSortOrder] = useState("desc");
+
+  const fetchBloodBanks = async () => {
+    try {
+      console.log(
+        "API Request Parameters:",
+        bbAddressSearch,
+        bloodGroupsSearch,
+        bbNameSearch,
+        sortBy,
+        sortOrder
+      );
+
+      const response = await getallBloodBankApi(
+        bbAddressSearch,
+        bloodGroupsSearch,
+        bbNameSearch,
+        sortBy,
+        sortOrder
+      );
+
+      console.log("API Response:", response.data);
+
+      setBloodBank(response.data.bloodBanks);
+    } catch (error) {
+      console.error("Error Fetching BloodBanks", error);
+    }
+  };
+
   useEffect(() => {
-    getallBloodBankApi().then((res) => {
-      console.log(res.data);
-      setBloodBank(res.data.bloodbanks);
-    });
-  }, []);
+    fetchBloodBanks();
+  }, [bbAddressSearch, bbNameSearch, bloodGroupsSearch, sortBy, sortOrder]);
 
   const [bbName, setbbName] = useState("");
   const [bbAddress, setbbAddress] = useState("");
@@ -24,6 +57,15 @@ export default function AddBloodBanks() {
   const [operatingHours, setOperatingHours] = useState("");
   const [availableBloodGroups, setAvailableBloodGroups] = useState("");
   const [socialMediaLinks, setSocialMediaLinks] = useState("");
+
+  const handleSort = (column) => {
+    setSortBy(column);
+    setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+  };
+
+  const searchbyname = (e) => {
+    setBBNameSearch(e.target.value);
+  };
 
   const changebbName = (e) => {
     setbbName(e.target.value);
@@ -117,14 +159,14 @@ export default function AddBloodBanks() {
   return (
     <>
       <div className="w-full sm:px-6">
-        <div className="px-4 md:px-10 py-4 md:py-7 bg-gray-100 rounded-tl-lg rounded-tr-lg">
-          <div className="sm:flex items-center justify-between">
-            <p className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold leading-normal text-gray-800">
+        <div className="px-4 md:px-10 py-2 md:py-7 bg-gray-100 rounded-tl-lg rounded-tr-lg">
+          <div className="sm:flex flex-row items-center justify-between">
+            <p className="inline-flex sm:ml-3  sm:mt-0 items-start justify-start px-6 py-3  text-black focus:outline-none rounded">
               BloodBanks
             </p>
             <div>
               <button
-                className="inline-flex sm:ml-3 mt-4 sm:mt-0 items-start justify-start px-6 py-3 bg-[#0D98BA] hover:bg-cyan-400 text-white focus:outline-none rounded"
+                className="inline-flex sm:ml-3 mt-1 sm:mt-0 items-start justify-start px-6 py-3 bg-[#111111] hover:bg-[#ff0000] text-white focus:outline-none rounded"
                 onClick={openModal}
               >
                 Add BloodBanks
@@ -133,6 +175,34 @@ export default function AddBloodBanks() {
           </div>
         </div>
         <div className="bg-white shadow px-4 md:px-10 pt-4 md:pt-7 pb-5 overflow-y-auto">
+          <div className="flex flex-col items-center justify-center md:flex-row md:items-start md:justify-between md:gap-4 mb-4 w-full">
+            <div className="w-full md:w-1/3">
+              <BloodGroupLists
+                onChange={(e) => setBGsearch(e.target.value)}
+                value={bloodGroupsSearch}
+              />
+            </div>
+            <div className="w-full md:w-1/3 md:mt-0">
+              <DistrictList
+                onChange={(e) => setbbAddressSearch(e.target.value)}
+              />
+            </div>
+            <div className="w-full md:w-1/3 md:mt-0">
+              <label
+                htmlFor="filterSelect"
+                className="block text-sm font-medium my-1 text-gray-700"
+              >
+                Blood Bank Name
+              </label>
+              <input
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300"
+                type="text"
+                placeholder="Search Blood Banks..."
+                onChange={searchbyname}
+              />
+            </div>
+          </div>
+
           <table className="w-full whitespace-nowrap">
             <thead>
               <tr className="h-16 w-full text-sm leading-none text-gray-800">
@@ -146,12 +216,25 @@ export default function AddBloodBanks() {
                 <th className="font-normal text-left pl-12">
                   BloodBank Contact
                 </th>
+                <th className="font-normal text-left pl-20">Operating Hours</th>
                 <th className="font-normal text-left pl-20">
                   BLoodGroups Available
                 </th>
-                <th className="font-normal text-left pl-20">Operating Hours</th>
                 <th className="font-normal text-left pl-20">
                   SocialMedia Links
+                </th>
+                <th className="font-normal text-left pl-12">
+                  <button
+                    onClick={() => handleSort("createdAt")}
+                    className="focus:outline-none"
+                  >
+                    Created Date
+                    {sortBy === "createdAt" && (
+                      <span className="ml-1">
+                        {sortOrder === "asc" ? "▲" : "▼"}
+                      </span>
+                    )}
+                  </button>
                 </th>
                 <th className="font-normal text-left pl-16">Action</th>
               </tr>
@@ -190,6 +273,12 @@ export default function AddBloodBanks() {
 
                   <td className="pl-20">
                     <p className="font-medium">{item.socialMediaLinks}</p>
+                  </td>
+                  <td className="pl-20 overflow-y max-w-[200px] truncate">
+                    <p className="font-medium">
+                      {
+                        new Date(item.createdAt).toLocaleDateString()}
+                    </p>
                   </td>
 
                   <td className="px-7 2xl:px-0">
@@ -302,15 +391,7 @@ export default function AddBloodBanks() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-900">
-                      BloodBank Address
-                    </label>
-                    <input
-                      onChange={changebbAddress}
-                      type="text"
-                      className="mt-1 block w-full  border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
-                      required
-                    />
+                    <DistrictList onChange={changebbAddress} />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-900">
@@ -324,24 +405,7 @@ export default function AddBloodBanks() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-900">
-                      Blood Groups
-                    </label>
-                    <select
-                      onChange={changeAvailableBloodGroups}
-                      type="text"
-                      className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
-                      required
-                    >
-                      <option value="A+">A+</option>
-                      <option value="A+">B+</option>
-                      <option value="A+">AB+</option>
-                      <option value="A+">O+</option>
-                      <option value="A+">A-</option>
-                      <option value="A+">AB-</option>
-                      <option value="A+">B-</option>
-                      <option value="A+">O-</option>
-                    </select>
+                    <BloodGroupLists onChange={changeAvailableBloodGroups} />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-900">

@@ -1,9 +1,10 @@
 .loginSecondBody{
-    margin-top: 7rem;
+    margin-top: 1.5rem;
     overflow-x: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
+    min-height: 97vh;
     background: url(../../public/assets/images/3.png) no-repeat;
     background-position: center;
     background-size: cover;

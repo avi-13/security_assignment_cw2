@@ -28,10 +28,18 @@ export const getSingleUserApi = (id) => Api.get(`/api/user/single_user/${id}`);
 export const createHospitalApi = (data) =>
   Api.post("/api/hospital/addHospital", data);
 
-export const getallhospitalsApi = (search, sortBy, sortOrder) =>
+export const getallhospitalsApi = (
+  addressSearch,
+  bloodGroupsSearch,
+  hospitalSearch,
+  sortBy,
+  sortOrder
+) =>
   Api.get("/api/hospital/getallhospitals", {
     params: {
-      search,
+      addressSearch,
+      bloodGroupsSearch,
+      hospitalSearch,
       sortBy,
       sortOrder,
     },
@@ -48,8 +56,22 @@ export const updatehospitalApi = (id, formData) =>
 export const createBloodBankApi = (data) =>
   Api.post("/api/bloodbank/addbloodbank", data);
 
-export const getallBloodBankApi = (data) =>
-  Api.get("/api/bloodbank/getallbloodbank", data);
+export const getallBloodBankApi = (
+  bbAddressSearch,
+  bloodGroupsSearch,
+  bloodbankSearch,
+  sortBy,
+  sortOrder
+) =>
+  Api.get("/api/bloodbank/getallbloodbank", {
+    params: {
+      bbAddressSearch,
+      bloodGroupsSearch,
+      bloodbankSearch,
+      sortBy,
+      sortOrder,
+    },
+  });
 
 export const deleteBloodBankApi = (id) =>
   Api.delete(`/api/bloodbank/deletebloodbank/${id}`);

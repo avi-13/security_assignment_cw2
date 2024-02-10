@@ -4,6 +4,8 @@ import { addRequestAPI } from "../../../apis/api";
 import "../../../style/AddBloodRequests.css";
 
 const AddBloodRequests = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
+
   const [patientName, setPatientName] = useState("");
   const [patientAge, setPatientAge] = useState("");
   const [patientBloodType, setPatientBloodType] = useState("");
@@ -38,6 +40,7 @@ const AddBloodRequests = () => {
     formData.append("instruction", instruction);
     formData.append("anyPrecautions", anyPrecautions);
     formData.append("contactPerson", contactPerson);
+    formData.append("userId", user._id);
 
     addRequestAPI(formData)
       .then((res) => {
@@ -250,7 +253,11 @@ const AddBloodRequests = () => {
                 <br />
               </div>
             </div>
-            <button className="w-25 btn-center" onClick={handleSubmit}> Sumbit Request</button>
+            <div className="d-flex justify-content-center">
+              <button className="sm-btn w-50" onClick={handleSubmit}>
+                Submit Request
+              </button>
+            </div>
           </form>
         </div>
       </div>

@@ -96,23 +96,27 @@ select {
 section {
   transform: scale(1);
 }
-.submit-btn .input-data {
+.sm-btn {
   overflow: hidden;
   height: 45px !important;
   width: 25% !important;
 }
-.submit-btn .input-data .inner {
+.sm-btn {
   height: 100%;
   width: 300%;
-  position: absolute;
-  left: -100%;
-  background: -webkit-linear-gradient(left, red, black, red, black);
+  background: -webkit-linear-gradient(
+    right,
+    rgb(30, 2, 2),
+    rgb(249, 13, 13),
+    rgb(182, 10, 10),
+    rgb(13, 1, 1)
+  ) !important;
   transition: all 0.4s;
 }
-.submit-btn .input-data:hover .inner {
+.submit-btn {
   left: 0;
 }
-.submit-btn .input-data input {
+.sm-btn {
   background: none;
   border: none;
   color: #fff;
@@ -137,7 +141,7 @@ section {
   form .form-row .input-data {
     margin: 35px 0 !important;
   }
-  .submit-btn .input-data {
+  .sm-btn {
     width: 40% !important;
   }
 }

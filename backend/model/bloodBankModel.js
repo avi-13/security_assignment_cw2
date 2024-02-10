@@ -30,14 +30,6 @@ const bloodBankSchema = mongoose.Schema(
       required: true,
       type: String,
     },
-    latitude: {
-      required: true,
-      type: Number,
-    },
-    longitude: {
-      required: true,
-      type: Number,
-    },
   },
   {
     timestamps: true,

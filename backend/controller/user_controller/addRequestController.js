@@ -55,7 +55,7 @@ const addRequests = async (req, res) => {
       instruction: instruction,
       anyPrecautions: anyPrecautions,
       contactPerson: contactPerson,
-      userId: userId,
+      userId : userId
     });
     await newRequest.save();
     console.log(newRequest);

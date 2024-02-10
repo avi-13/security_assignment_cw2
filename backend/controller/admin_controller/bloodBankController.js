@@ -1,16 +1,8 @@
 const BloodBanks = require("../../model/bloodBankModel.js");
 
 const addBloodBanks = async (req, res) => {
-  const {
-    bName,
-    bAddress,
-    bContact,
-    oHours,
-    bgavailable,
-    socialLinks,
-    latitude,
-    longitude,
-  } = req.body;
+  const { bName, bAddress, bContact, oHours, bgavailable, socialLinks } =
+    req.body;
 
   if (
     !bName ||
@@ -18,9 +10,7 @@ const addBloodBanks = async (req, res) => {
     !bContact ||
     !oHours ||
     !bgavailable ||
-    !socialLinks ||
-    !latitude ||
-    !longitude
+    !socialLinks
   ) {
     return res.json({
       success: false,
@@ -36,8 +26,6 @@ const addBloodBanks = async (req, res) => {
       operatingHours: oHours,
       availableBloodGroups: bgavailable,
       socialMediaLinks: socialLinks,
-      latitude: latitude,
-      longitude: longitude,
     });
 
     await newBloodBank.save();
@@ -108,16 +96,8 @@ const getAllBloodBanks = async (req, res) => {
 };
 
 const updateBloodBank = async (req, res) => {
-  const {
-    bName,
-    bAddress,
-    bContact,
-    oHours,
-    bgavailable,
-    socialLinks,
-    latitude,
-    longitude,
-  } = req.body;
+  const { bName, bAddress, bContact, oHours, bgavailable, socialLinks } =
+    req.body;
 
   const id = req.params.id;
 
@@ -128,9 +108,7 @@ const updateBloodBank = async (req, res) => {
     !bContact ||
     !oHours ||
     !bgavailable ||
-    !socialLinks ||
-    !latitude ||
-    !longitude
+    !socialLinks
   ) {
     return res.json({
       success: false,
@@ -146,8 +124,6 @@ const updateBloodBank = async (req, res) => {
       oHours: oHours,
       bgavailable: bgavailable,
       socialLinks: socialLinks,
-      latitude: latitude,
-      longitude: longitude,
     };
     await BloodBanks.findByIdAndUpdate(id, updatedBloodBanks);
     res.status(200).json({

@@ -7,34 +7,40 @@ import {
   deletehospitalApi,
   getallhospitalsApi,
 } from "../../../apis/api";
+import BloodGroupLists from "../../../components/BloodGroupsList";
+import DistrictList from "../../../components/DistrictsList";
 
 export default function AddHospitals() {
   const [hospitals, setHospitals] = useState([]);
 
-  const [searchInput, setSearchInput] = useState("");
+  const [addressSearch, setAddressSearch] = useState("");
+  const [bloodGroupsSearch, setBloodGroupsSearch] = useState("");
+  const [hospitalSearch, sethospitalSearch] = useState("");
   const [sortBy, setSortBy] = useState("createdAt");
   const [sortOrder, setSortOrder] = useState("desc");
 
   const fetchHospitals = async () => {
     try {
-      const response = await getallhospitalsApi(searchInput, sortBy, sortOrder);
+      const response = await getallhospitalsApi(
+        addressSearch,
+        bloodGroupsSearch,
+        hospitalSearch,
+        sortBy,
+        sortOrder
+      );
       setHospitals(response.data.hospital);
     } catch (error) {
-      console.error("Error fetching hospitals:", error);
+      console.error("Error Fetching BloodBanks", error);
     }
   };
 
   useEffect(() => {
     fetchHospitals();
-  }, [searchInput, sortBy, sortOrder]);
+  }, [addressSearch, bloodGroupsSearch, hospitalSearch, sortBy, sortOrder]);
 
   const handleSort = (column) => {
     setSortBy(column);
     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-  };
-
-  const handleSearch = (e) => {
-    setSearchInput(e.target.value);
   };
 
   const [hospitalName, setHospitalName] = useState("");
@@ -131,32 +137,50 @@ export default function AddHospitals() {
   return (
     <>
       <div className="w-full sm:px-6">
-        <div className="px-4 md:px-10 py-4 md:py-7 bg-gray-100 rounded-tl-lg rounded-tr-lg">
+        <div className="px-4 md:px-10 py-2 md:py-7 bg-gray-100 rounded-tl-lg rounded-tr-lg">
           <div className="sm:flex flex-row items-center justify-between">
-            <p className="inline-flex sm:ml-3 mt-4 sm:mt-0 items-start justify-start px-6 py-3  text-black focus:outline-none rounded">
+            <p className="inline-flex sm:ml-3  sm:mt-0 items-start justify-start px-6 py-3  text-black focus:outline-none rounded">
               Hospitals
             </p>
             <div>
-              <input
-                className="inline-flex sm:ml-3 mt-4 sm:mt-0 items-start justify-start px-6 py-3  text-black focus:outline-none rounded"
-
-                type="text"
-                placeholder="Search hospitals..."
-                value={searchInput}
-                onChange={handleSearch}
-              />
-            </div>
-            <div>
               <button
-                className="inline-flex sm:ml-3 mt-4 sm:mt-0 items-start justify-start px-6 py-3 bg-[#0D98BA] hover:bg-cyan-400 text-white focus:outline-none rounded"
+                className="inline-flex sm:ml-3 mt-1 sm:mt-0 items-start justify-start px-6 py-3 bg-[#111111] hover:bg-[#ff0000] text-white focus:outline-none rounded"
                 onClick={openModal}
               >
-                Add Hospital
+                Add Hospitals
               </button>
             </div>
           </div>
         </div>
         <div className="bg-white shadow px-4 md:px-10 pt-4 md:pt-7 pb-5 overflow-y-auto">
+          <div className="flex flex-col items-center justify-center md:flex-row md:items-start md:justify-between md:gap-4 mb-4 w-full">
+            <div className="w-full md:w-1/3">
+              <BloodGroupLists
+                onChange={(e) => setBloodGroupsSearch(e.target.value)}
+                value={bloodGroupsSearch}
+              />
+            </div>
+            <div className="w-full md:w-1/3 md:mt-0">
+              <DistrictList
+                onChange={(e) => setAddressSearch(e.target.value)}
+              />
+            </div>
+            <div className="w-full md:w-1/3 md:mt-0">
+              <label
+                htmlFor="filterSelect"
+                className="block text-sm font-medium my-1 text-gray-700"
+              >
+                Blood Bank Name
+              </label>
+              <input
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300"
+                type="text"
+                placeholder="Search Blood Banks..."
+                onChange={(e) => sethospitalSearch(e.target.value)}
+              />
+            </div>
+          </div>
+
           <table className="w-full whitespace-nowrap">
             <thead>
               <tr className="h-16 w-full text-sm leading-none text-gray-800">
@@ -218,7 +242,9 @@ export default function AddHospitals() {
                     <p className="font-medium">{item.hospitalServices}</p>
                   </td>
                   <td className="pl-20 overflow-y max-w-[200px] truncate">
-                    <p className="font-medium">{item.createdAt}</p>
+                    <p className="font-medium">
+                      {new Date(item.createdAt).toLocaleDateString()}
+                    </p>
                   </td>
                   <td className="px-7 2xl:px-0">
                     {/* Edit Button */}
