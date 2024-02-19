@@ -59,16 +59,16 @@ const BeADonor = () => {
     formData.append("noPreviousDonation", noPreviousDonation);
     formData.append("emergencyNumber", emergencyNumber);
 
-    console.log("Form Data:", Object.fromEntries(formData));
+    // console.log("Form Data:", Object.fromEntries(formData));
     // making API call
     beADonorApi(id, formData)
       .then((res) => {
-        console.log("API Response:", res.data);
+        // console.log("API Response:", res.data);
         if (res.data.success == false) {
           toast.error(res.data.message);
         } else {
-          toast.success(res.data.message);
           window.location.reload();
+          toast.success(res.data.message);
         }
       })
       .catch((err) => {
@@ -128,7 +128,7 @@ const BeADonor = () => {
                 value={dob}
                 onChange={(e) => setDOb(e.target.value)}
                 type="text"
-                placeholder="Date of Request"
+                placeholder="Date of Birth"
                 onFocus={(e) => (e.target.type = "date")}
                 onBlur={(e) => (e.target.type = "text")}
               />

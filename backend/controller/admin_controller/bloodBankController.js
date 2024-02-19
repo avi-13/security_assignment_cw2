@@ -1,16 +1,33 @@
 const BloodBanks = require("../../model/bloodBankModel.js");
 
 const addBloodBanks = async (req, res) => {
-  const { bName, bAddress, bContact, oHours, bgavailable, socialLinks } =
-    req.body;
+  const {
+    bName,
+    bAddress,
+    bContact,
+    oHours,
+    bgavailable,
+    serviceOffered,
+    specialInstructions,
+    additionalNotes,
+    socialLinks,
+    latitude,
+    longitude,
+  } = req.body;
 
+  console.log(req.body);
   if (
     !bName ||
     !bAddress ||
     !bContact ||
     !oHours ||
     !bgavailable ||
-    !socialLinks
+    !serviceOffered ||
+    !specialInstructions ||
+    !additionalNotes ||
+    !socialLinks ||
+    !latitude ||
+    !longitude
   ) {
     return res.json({
       success: false,
@@ -24,8 +41,13 @@ const addBloodBanks = async (req, res) => {
       bbAddress: bAddress,
       bbContact: bContact,
       operatingHours: oHours,
+      serviceOffered: serviceOffered,
+      specialInstructions: specialInstructions,
+      additionalNotes: additionalNotes,
       availableBloodGroups: bgavailable,
       socialMediaLinks: socialLinks,
+      latitude: latitude,
+      longitude: longitude,
     });
 
     await newBloodBank.save();
@@ -84,20 +106,61 @@ const getAllBloodBanks = async (req, res) => {
       [sortBy]: sortOrder,
     });
 
+    const mobbank = await BloodBanks.find();
+    const fewBloodBanks = bloodBankList.slice(0, 5);
+
     console.log("BloodBanks List:", bloodBankList);
 
     res.json({
       success: true,
+      bloodBank: bloodBankList,
       bloodBanks: bloodBankList,
+      fewBloodBanks: fewBloodBanks,
+      mobbank: mobbank,
     });
   } catch (error) {
     res.json(error);
   }
 };
 
+const getBloodbankbyId = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const bloodBanks = await BloodBanks.findById(id);
+
+    if (!bloodBanks) {
+      return res.status(404).json({
+        success: false,
+        message: "BloodBank not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      bloodbank: bloodBanks,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 const updateBloodBank = async (req, res) => {
-  const { bName, bAddress, bContact, oHours, bgavailable, socialLinks } =
-    req.body;
+  const {
+    bName,
+    bAddress,
+    bContact,
+    oHours,
+    bgavailable,
+    serviceOffered,
+    specialInstructions,
+    additionalNotes,
+    socialLinks,
+    latitude,
+    longitude,
+  } = req.body;
 
   const id = req.params.id;
 
@@ -108,7 +171,12 @@ const updateBloodBank = async (req, res) => {
     !bContact ||
     !oHours ||
     !bgavailable ||
-    !socialLinks
+    !serviceOffered ||
+    !specialInstructions ||
+    !additionalNotes ||
+    !socialLinks ||
+    !latitude ||
+    !longitude
   ) {
     return res.json({
       success: false,
@@ -123,12 +191,17 @@ const updateBloodBank = async (req, res) => {
       bContact: bContact,
       oHours: oHours,
       bgavailable: bgavailable,
+      serviceOffered: serviceOffered,
+      specialInstructions: specialInstructions,
+      additionalNotes: additionalNotes,
       socialLinks: socialLinks,
+      latitude: latitude,
+      longitude: longitude,
     };
     await BloodBanks.findByIdAndUpdate(id, updatedBloodBanks);
     res.status(200).json({
       success: true,
-      message: "Hospital Updated Successfully",
+      message: "bloodBanks Updated Successfully",
       bloodbanks: updatedBloodBanks,
     });
   } catch (error) {
@@ -220,4 +293,5 @@ module.exports = {
   deleteBloodBank,
   bloodBankPagination,
   searchBloodbanks,
+  getBloodbankbyId,
 };

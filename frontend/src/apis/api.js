@@ -45,6 +45,13 @@ export const getallhospitalsApi = (
     },
   });
 
+export const fetchSingleHospitalApi = (id) =>
+  Api.get(`/api/hospital/single-hospital/${id}`);
+
+// for users side
+export const fetchHospitalsApi = (data) =>
+  Api.get("/api/hospital/getallhospitals", data);
+
 export const deletehospitalApi = (id) =>
   Api.delete(`/api/hospital/deletehospital/${id}`);
 
@@ -73,6 +80,9 @@ export const getallBloodBankApi = (
     },
   });
 
+export const fetchSingleBloodBankApi = (id) =>
+  Api.get(`/api/bloodbank/single-bloodbank/${id}`);
+
 export const deleteBloodBankApi = (id) =>
   Api.delete(`/api/bloodbank/deletebloodbank/${id}`);
 
@@ -93,3 +103,11 @@ export const viewRequestApi = (data) =>
 
 export const getSingleRequestApi = (id) =>
   Api.get(`/api/blood_request/request/${id}`);
+
+// ======================================> Contact US API <===============================
+
+export const sendMessageApi = (data) =>
+  Api.post("/api/contact/send-message", data);
+
+export const getContactUsApi = (data) =>
+  Api.get("/api/contact/getallcontact", data);

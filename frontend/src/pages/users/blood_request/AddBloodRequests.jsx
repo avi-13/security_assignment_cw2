@@ -20,6 +20,8 @@ const AddBloodRequests = () => {
   const [instruction, setInstruction] = useState("");
   const [anyPrecautions, setPrecautions] = useState("");
   const [contactPerson, setContactPerson] = useState("");
+  const [latitude, setLatitude] = useState("");
+  const [longitude, setLongitude] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -40,36 +42,34 @@ const AddBloodRequests = () => {
     formData.append("instruction", instruction);
     formData.append("anyPrecautions", anyPrecautions);
     formData.append("contactPerson", contactPerson);
+    formData.append("latitude", latitude);
+    formData.append("longitude", longitude);
     formData.append("userId", user._id);
 
-    addRequestAPI(formData)
-      .then((res) => {
-        console.log(res.data);
-        if (res.data.success == false) {
-          toast.error(res.data.message);
-        } else {
-          toast.success(res.data.message);
+    addRequestAPI(formData).then((res) => {
+      if (res.data.success == false) {
+        toast.error(res.data.message);
+      } else {
+        toast.success(res.data.message);
 
-          setContactPerson("");
-          setPrecautions("");
-          setInstruction("");
-          setDate("");
-          setReason("");
-          setUrgency("");
-          setQuantity("");
-          setComponents("");
-          setHospitalAddress("");
-          sethospitalName("");
-          setPhoneNumber("");
-          setPatientBloodType("");
-          setPatientAge("");
-          setPatientName("");
-        }
-      })
-      .catch((e) => {
-        toast.error(e.message);
-        console.log(e);
-      });
+        setContactPerson("");
+        setPrecautions("");
+        setInstruction("");
+        setDate("");
+        setReason("");
+        setUrgency("");
+        setQuantity("");
+        setComponents("");
+        setHospitalAddress("");
+        sethospitalName("");
+        setPhoneNumber("");
+        setPatientBloodType("");
+        setPatientAge("");
+        setPatientName("");
+        setLongitude("");
+        setLatitude("");
+      }
+    });
   };
 
   return (
@@ -193,7 +193,6 @@ const AddBloodRequests = () => {
                 />
               </div>
             </div>
-
             <div class="form-row">
               <div class="input-data">
                 <input
@@ -229,10 +228,32 @@ const AddBloodRequests = () => {
             <div class="form-row">
               <div class="input-data">
                 <input
+                  value={latitude}
+                  onChange={(e) => setLatitude(e.target.value)}
+                  placeholder="Latitude (for faster avaibility)"
+                  type="number"
+                  required
+                />
+                <div class="underline"></div>
+              </div>
+              <div class="input-data">
+                <input
+                  value={longitude}
+                  onChange={(e) => setLongitude(e.target.value)}
+                  placeholder="Longitude (for faster avaibility)"
+                  type="number"
+                  required
+                />
+                <div class="underline"></div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="input-data">
+                <input
                   value={anyPrecautions}
                   onChange={(e) => setPrecautions(e.target.value)}
                   placeholder="Any special precations to be taken"
-                  type="text"
+                  type="number"
                   required
                 />
                 <div class="underline"></div>

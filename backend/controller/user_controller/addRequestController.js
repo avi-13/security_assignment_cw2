@@ -17,6 +17,8 @@ const addRequests = async (req, res) => {
     instruction,
     anyPrecautions,
     contactPerson,
+    latitude,
+    longitude,
   } = req.body;
 
   console.log(req.body);
@@ -31,7 +33,9 @@ const addRequests = async (req, res) => {
     !quantity ||
     !urgency ||
     !date ||
-    !contactPerson
+    !contactPerson ||
+    !latitude ||
+    !longitude
   ) {
     return res.json({
       success: false,
@@ -55,7 +59,9 @@ const addRequests = async (req, res) => {
       instruction: instruction,
       anyPrecautions: anyPrecautions,
       contactPerson: contactPerson,
-      userId : userId
+      userId: userId,
+      latitude: latitude,
+      longitude: longitude,
     });
     await newRequest.save();
     console.log(newRequest);
@@ -101,14 +107,13 @@ const getAllRequest = async (req, res) => {
       }
     });
 
-    res.json({
+    res.status(200).json({
       success: true,
       categorizedData: categorizedData,
+      requestList: requestList,
     });
-
-    console.log(categorizedData);
   } catch (error) {
-    res.json(error);
+    res.status(400).json({ success: false, error: error });
   }
 };
 
@@ -128,6 +133,8 @@ const updateRequest = async (req, res) => {
     instruction,
     anyPrecautions,
     contactPerson,
+    latitude,
+    longitude,
   } = req.body;
 
   const id = req.params.id;
@@ -142,7 +149,9 @@ const updateRequest = async (req, res) => {
     !quantity ||
     !urgency ||
     !date ||
-    !contactPerson
+    !contactPerson ||
+    !latitude ||
+    !longitude
   ) {
     return res.json({
       success: false,
@@ -166,6 +175,8 @@ const updateRequest = async (req, res) => {
       instruction: instruction,
       anyPrecautions: anyPrecautions,
       contactPerson: contactPerson,
+      latitude: latitude,
+      longitude: longitude,
     };
     await Request.findByIdAndUpdate(id, updatedRequest);
     res.json({
@@ -209,15 +220,39 @@ const getSingleRequest = async (req, res) => {
   if (!id) {
     return res.json({
       success: false,
-      message: "",
+      message: "Invalid request ID",
     });
   }
+
   try {
-    const singleRequest = await Request.findById(id);
+    const singleRequest = await Request.findById(id).populate("userId");
+
+    if (!singleRequest) {
+      return res.status(404).json({
+        success: false,
+        message: "Request not found",
+      });
+    }
+
+    const user = singleRequest.userId;
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found for the given request",
+      });
+    }
+
     res.status(200).json({
       success: true,
       message: "",
-      requestblood: singleRequest,
+      requestblood: {
+        ...singleRequest._doc,
+        user: {
+          userId: user._id,
+          username: user.username,
+        },
+      },
     });
   } catch (error) {
     console.log(error);
@@ -228,6 +263,7 @@ const getSingleRequest = async (req, res) => {
     });
   }
 };
+
 
 module.exports = {
   addRequests,

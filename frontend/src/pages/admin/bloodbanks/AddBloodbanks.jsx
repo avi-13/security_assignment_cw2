@@ -19,18 +19,11 @@ export default function AddBloodBanks() {
   const [bbNameSearch, setBBNameSearch] = useState("");
   const [sortBy, setSortBy] = useState("createdAt");
   const [sortOrder, setSortOrder] = useState("desc");
+  const [latitude, setLatitude] = useState("");
+  const [longitude, setLongitude] = useState("");
 
   const fetchBloodBanks = async () => {
     try {
-      console.log(
-        "API Request Parameters:",
-        bbAddressSearch,
-        bloodGroupsSearch,
-        bbNameSearch,
-        sortBy,
-        sortOrder
-      );
-
       const response = await getallBloodBankApi(
         bbAddressSearch,
         bloodGroupsSearch,
@@ -39,9 +32,7 @@ export default function AddBloodBanks() {
         sortOrder
       );
 
-      console.log("API Response:", response.data);
-
-      setBloodBank(response.data.bloodBanks);
+      setBloodBank(response?.data?.bloodBanks);
     } catch (error) {
       console.error("Error Fetching BloodBanks", error);
     }
@@ -55,39 +46,12 @@ export default function AddBloodBanks() {
   const [bbAddress, setbbAddress] = useState("");
   const [bbContact, setbbContact] = useState("");
   const [operatingHours, setOperatingHours] = useState("");
+  const [serviceOffered, setServiceOffered] = useState("");
+  const [specialInstructions, setSpecialInstructions] = useState("");
+  const [additionalNotes, setAdditionalNotes] = useState("");
   const [availableBloodGroups, setAvailableBloodGroups] = useState("");
   const [socialMediaLinks, setSocialMediaLinks] = useState("");
 
-  const handleSort = (column) => {
-    setSortBy(column);
-    setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-  };
-
-  const searchbyname = (e) => {
-    setBBNameSearch(e.target.value);
-  };
-
-  const changebbName = (e) => {
-    setbbName(e.target.value);
-  };
-
-  const changebbAddress = (e) => {
-    setbbAddress(e.target.value);
-  };
-
-  const changebbContact = (e) => {
-    setbbContact(e.target.value);
-  };
-
-  const changeOperatingHours = (e) => {
-    setOperatingHours(e.target.value);
-  };
-  const changeAvailableBloodGroups = (e) => {
-    setAvailableBloodGroups(e.target.value);
-  };
-  const changeSocialMediaLinks = (e) => {
-    setSocialMediaLinks(e.target.value);
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -99,7 +63,12 @@ export default function AddBloodBanks() {
     formData.append("bContact", bbContact);
     formData.append("oHours", operatingHours);
     formData.append("bgavailable", availableBloodGroups);
+    formData.append("serviceOffered", serviceOffered);
+    formData.append("specialInstructions", specialInstructions);
+    formData.append("additionalNotes", additionalNotes);
     formData.append("socialLinks", socialMediaLinks);
+    formData.append("latitude", latitude);
+    formData.append("longitude", longitude);
 
     createBloodBankApi(formData)
       .then((res) => {
@@ -240,99 +209,102 @@ export default function AddBloodBanks() {
               </tr>
             </thead>
             <tbody className="w-full">
-              {bloodBank.map((item) => (
-                <tr className="h-20 text-sm leading-none text-gray-800 bg-white hover:bg-gray-100 border-b border-t border-gray-100">
-                  <td className="pl-4 cursor-pointer" onClick={openimageModal}>
-                    <div className="flex items-center">
-                      <div className="w-10 h-10">
-                        <img
-                          className="w-full h-full"
-                          src="/../assets/images/logo.png"
-                          alt="Thumbnail Image"
-                        />
-                      </div>
-                    </div>
-                  </td>
-                  <td className="pl-12">
-                    <p className="font-medium">{item.bbName}</p>
-                  </td>
-                  <td className="pl-12">
-                    <p className="text-sm font-medium leading-none text-gray-800">
-                      {item.bbAddress}
-                    </p>
-                  </td>
-                  <td className="pl-12">
-                    <p className="font-medium">{item.bbContact}</p>
-                  </td>
-                  <td className="pl-20">
-                    <p className="font-medium">{item.operatingHours}</p>
-                  </td>
-                  <td className="pl-20">
-                    <p className="font-medium">{item.availableBloodGroups}</p>
-                  </td>
-
-                  <td className="pl-20">
-                    <p className="font-medium">{item.socialMediaLinks}</p>
-                  </td>
-                  <td className="pl-20 overflow-y max-w-[200px] truncate">
-                    <p className="font-medium">
-                      {
-                        new Date(item.createdAt).toLocaleDateString()}
-                    </p>
-                  </td>
-
-                  <td className="px-7 2xl:px-0">
-                    {/* Edit Button */}
-                    <button className="focus:outline-none py-2 px-4">
-                      <FontAwesomeIcon
-                        icon={faEdit}
-                        className="text-blue-500 hover:text-blue-700 cursor-pointer"
-                      />
-                    </button>
-
-                    {/* Delete Button */}
-                    <button
-                      className="focus:outline-none ml-2"
-                      onClick={opendeleteModal}
+              {bloodBank &&
+                bloodBank.map((item) => (
+                  <tr className="h-20 text-sm leading-none text-gray-800 bg-white hover:bg-gray-100 border-b border-t border-gray-100">
+                    <td
+                      className="pl-4 cursor-pointer"
+                      onClick={openimageModal}
                     >
-                      <FontAwesomeIcon
-                        icon={faTrash}
-                        className="text-red-500 hover:text-red-700 cursor-pointer "
-                      />
-                    </button>
-
-                    {isdeleteModalOpen && (
-                      <div
-                        className="fixed inset-0 flex items-center justify-center bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full"
-                        id="my-modal"
-                      >
-                        <div className="relative mx-auto p-5 border w-1/4 shadow-lg rounded-md bg-white space-y-8 justify-center items-center flex flex-col">
-                          <i className="fa-solid fa-triangle-exclamation text-red-500 fa-5x"></i>
-                          <h1 className="font-medium w-3/4 mx-auto text-center">
-                            Are you sure you want to Delete?
-                          </h1>
-
-                          <div className="flex flex-wrap items-center justify-between mx-auto w-full">
-                            <button
-                              onClick={() => handleDelete(item._id)}
-                              className="w-1/3 text-white bg-red-500 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm text-center py-2.5"
-                            >
-                              Delete
-                            </button>
-                            <button
-                              type="submit"
-                              className="w-1/3 text-white bg-gray-500 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm py-2.5"
-                              onClick={closedeleteModal}
-                            >
-                              Cancel
-                            </button>
-                          </div>
+                      <div className="flex items-center">
+                        <div className="w-10 h-10">
+                          <img
+                            className="w-full h-full"
+                            src="/../assets/images/logo.png"
+                            alt="Thumbnail Image"
+                          />
                         </div>
                       </div>
-                    )}
-                  </td>
-                </tr>
-              ))}
+                    </td>
+                    <td className="pl-12">
+                      <p className="font-medium">{item.bbName}</p>
+                    </td>
+                    <td className="pl-12">
+                      <p className="text-sm font-medium leading-none text-gray-800">
+                        {item.bbAddress}
+                      </p>
+                    </td>
+                    <td className="pl-12">
+                      <p className="font-medium">{item.bbContact}</p>
+                    </td>
+                    <td className="pl-20">
+                      <p className="font-medium">{item.operatingHours}</p>
+                    </td>
+                    <td className="pl-20">
+                      <p className="font-medium">{item.availableBloodGroups}</p>
+                    </td>
+
+                    <td className="pl-20">
+                      <p className="font-medium">{item.socialMediaLinks}</p>
+                    </td>
+                    <td className="pl-20 overflow-y max-w-[200px] truncate">
+                      <p className="font-medium">
+                        {new Date(item.createdAt).toLocaleDateString()}
+                      </p>
+                    </td>
+
+                    <td className="px-7 2xl:px-0">
+                      {/* Edit Button */}
+                      <button className="focus:outline-none py-2 px-4">
+                        <FontAwesomeIcon
+                          icon={faEdit}
+                          className="text-blue-500 hover:text-blue-700 cursor-pointer"
+                        />
+                      </button>
+
+                      {/* Delete Button */}
+                      <button
+                        className="focus:outline-none ml-2"
+                        onClick={opendeleteModal}
+                      >
+                        <FontAwesomeIcon
+                          icon={faTrash}
+                          className="text-red-500 hover:text-red-700 cursor-pointer "
+                        />
+                      </button>
+
+                      {isdeleteModalOpen && (
+                        <div
+                          className="fixed inset-0 flex items-center justify-center bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full"
+                          id="my-modal"
+                        >
+                          <div className="relative mx-auto p-5 border w-1/4 shadow-lg rounded-md bg-white space-y-8 justify-center items-center flex flex-col">
+                            <i className="fa-solid fa-triangle-exclamation text-red-500 fa-5x"></i>
+                            <h1 className="font-normal text-center">
+                              Are you sure you want to Delete?
+                            </h1>
+
+                            <div className="flex flex-wrap items-center justify-between mx-auto w-full">
+                              <button
+                                onClick={() => handleDelete(item._id)}
+                                className="w-1/3 text-white bg-red-500 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm text-center py-2.5"
+                              >
+                                Delete
+                              </button>
+                              <button
+                                type="submit"
+                                className="w-1/3 text-white bg-gray-500 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm py-2.5"
+                                onClick={closedeleteModal}
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>
@@ -411,12 +383,13 @@ export default function AddBloodBanks() {
                     <label className="block text-sm font-medium text-gray-900">
                       BloodBank Operating Hours
                     </label>
-                    <textarea
+                    <input
+                      type="text"
                       onChange={changeOperatingHours}
                       className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
                       rows="4"
                       required
-                    ></textarea>
+                    ></input>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-900">
@@ -424,12 +397,68 @@ export default function AddBloodBanks() {
                     </label>
                     <input
                       onChange={changeSocialMediaLinks}
-                      type="number"
+                      type="text"
                       className="mt-1 block w-full  border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
                       required
                     />
                   </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-900">
+                      Latitude
+                    </label>
+                    <input
+                      onChange={(e) => setLatitude(e.target.value)}
+                      type="number"
+                      className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-900">
+                      Longitude
+                    </label>
+                    <input
+                      onChange={(e) => setLongitude(e.target.value)}
+                      type="number"
+                      className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-900">
+                      Types of Service
+                    </label>
+                    <input
+                      onChange={(e) => setServiceOffered(e.target.value)}
+                      type="text"
+                      className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-900">
+                      Special Instruction
+                    </label>
+                    <input
+                      onChange={(e) => setSpecialInstructions(e.target.value)}
+                      type="text"
+                      className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                      required
+                    />
+                  </div>
                 </div>
+                  <div className="col-lg-12">
+                    <label className="block text-sm font-medium text-gray-900">
+                      Additional Note
+                    </label>
+                    <textarea
+                      rows={5}
+                      onChange={(e) => setAdditionalNotes(e.target.value)}
+                      type="text"
+                      className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                      required
+                    />
+                  </div>
                 <div>
                   <label
                     htmlFor="bloodbankImage"

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { viewRequestApi } from "../../../apis/api";
+import ShareButtons from "../../../components/ShareButtons";
 import "../../../style/viewrequests.css";
 
 const ViewBloodRequest = () => {
@@ -9,12 +10,25 @@ const ViewBloodRequest = () => {
     urgent: [],
     normal: [],
   });
+
+  const [show, setShow] = useState(false);
+  const [activeDivId, setActiveDivId] = useState("");
+  const [patientName, setPatientName] = useState("");
+
   useEffect(() => {
     viewRequestApi().then((res) => {
       console.log(res.data);
       setBloodRequest(res.data.categorizedData);
     });
   }, []);
+
+  const handleShareClick = (id, event, patientName) => {
+    event.preventDefault();
+    setShow(true);
+    setActiveDivId(id);
+    setPatientName(patientName);
+    console.log(patientName);
+  };
 
   return (
     <>
@@ -25,7 +39,7 @@ const ViewBloodRequest = () => {
           {bloodRequest.critical ? (
             bloodRequest.critical.map((item) => (
               <li>
-                <a href="" className="card">
+                <a className="card">
                   <div className="card_details">
                     <p>
                       <strong>Patient:</strong> {item.patientName}
@@ -68,16 +82,24 @@ const ViewBloodRequest = () => {
                           {item.contactPerson}
                         </h3>
                         <span className="card__status text-white">
-                          1 hour ago
+                          {item.date}
                         </span>
                       </div>
                     </div>
                     <p className="card__description d-flex justify-content-between gap-2 text-white">
-                      <Link className="btn btn-primary w-50" to={""}>
+                      <button
+                        className="btn btn-primary w-50"
+                        onClick={(event) =>
+                          handleShareClick(item._id, event, item.patientName)
+                        }
+                      >
                         Share
-                      </Link>
-                      <Link className="btn btn-success w-50" to={""}>
-                        Accept Request
+                      </button>
+                      <Link
+                        to={`/view_request/${item._id}`}
+                        className="btn btn-success w-50"
+                      >
+                        View Request
                       </Link>
                     </p>
                   </div>
@@ -89,8 +111,6 @@ const ViewBloodRequest = () => {
           )}
         </ul>
       </div>
-
-      {/* for Urgent Condition */}
 
       <div className="urgent">
         <h1 className="text-center">Urgent Condition Requests</h1>
@@ -137,19 +157,28 @@ const ViewBloodRequest = () => {
                     >
                       <div className="card__header-text">
                         <h3 className="card__title text-white">
-                          Jessica Parker
+                          <strong>Person To Contact:</strong>{" "}
+                          {item.contactPerson}
                         </h3>
                         <span className="card__status text-white">
-                          1 hour ago
+                          {item.date}
                         </span>
                       </div>
                     </div>
                     <p className="card__description d-flex justify-content-between gap-2 text-white">
-                      <Link className="btn btn-primary w-50" to={""}>
+                      <button
+                        className="btn btn-primary w-50"
+                        onClick={(event) =>
+                          handleShareClick(item.id, event, item.patientName)
+                        }
+                      >
                         Share
-                      </Link>
-                      <Link className="btn btn-success w-50" to={""}>
-                        Accept Request
+                      </button>
+                      <Link
+                        to={`/view_request/${item._id}`}
+                        className="btn btn-success w-50"
+                      >
+                        View Request
                       </Link>
                     </p>
                   </div>
@@ -208,19 +237,28 @@ const ViewBloodRequest = () => {
                     >
                       <div className="card__header-text">
                         <h3 className="card__title text-white">
-                          Jessica Parker
+                          <strong>Person To Contact:</strong>{" "}
+                          {item.contactPerson}
                         </h3>
                         <span className="card__status text-white">
-                          1 hour ago
+                          {item.date}
                         </span>
                       </div>
                     </div>
                     <p className="card__description d-flex justify-content-between gap-2 text-white">
-                      <Link className="btn btn-primary w-50" to={""}>
+                      <button
+                        className="btn btn-primary w-50"
+                        onClick={(event) =>
+                          handleShareClick(item.id, event, item.patientName)
+                        }
+                      >
                         Share
-                      </Link>
-                      <Link className="btn btn-success w-50" to={""}>
-                        Accept Request
+                      </button>
+                      <Link
+                        to={`/view_request/${item._id}`}
+                        className="btn btn-success w-50"
+                      >
+                        View Request
                       </Link>
                     </p>
                   </div>
@@ -232,8 +270,32 @@ const ViewBloodRequest = () => {
           )}
         </ul>
       </div>
+      {show && (
+        <divsh
+          className="max-h-30 rounded-md shadow-md max-w-md mx-auto transition duration-150 ease-in-out z-10 absolute top-60 right-0 bottom-100 left-0 "
+          id="modal"
+        >
+          <div role="alert" className="container mx-auto">
+            <button className="btn btn-danger" onClick={() => setShow(!show)}>
+              Cancel
+            </button>
+            <div className="relative py-8 px-8 md:px-16 bg-white dark:border-gray-700 shadow-md rounded border border-gray-400">
+              <div className="d-flex flex-row justify-content-around align-items-center p-4">
+                <h6>"Share blood request!"</h6>
+              </div>
+              <ShareButtons id={activeDivId} />
+              <div className="flex items-center justify-center w-full py-4">
+                <h6>Patient Name : {patientName}</h6>
+              </div>
+              <div
+                className="cursor-pointer absolute top-0 right-0 mt-4 mr-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-500 transition duration-150 ease-in-out"
+                onClick={() => setShow(!show)}
+              ></div>
+            </div>
+          </div>
+        </divsh>
+      )}
     </>
   );
 };
-
 export default ViewBloodRequest;

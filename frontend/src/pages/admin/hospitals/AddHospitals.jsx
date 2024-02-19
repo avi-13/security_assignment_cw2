@@ -18,6 +18,8 @@ export default function AddHospitals() {
   const [hospitalSearch, sethospitalSearch] = useState("");
   const [sortBy, setSortBy] = useState("createdAt");
   const [sortOrder, setSortOrder] = useState("desc");
+  const [latitude, setLatitude] = useState("");
+  const [longitude, setLongitude] = useState("");
 
   const fetchHospitals = async () => {
     try {
@@ -81,6 +83,8 @@ export default function AddHospitals() {
     formData.append("hospitalContactNumber", hospitalContactNumber);
     formData.append("hospitalType", hospitalType);
     formData.append("hospitalServices", hospitalServices);
+    formData.append("latitude", latitude);
+    formData.append("longitude", longitude);
 
     // making Api call
     createHospitalApi(formData)
@@ -356,14 +360,7 @@ export default function AddHospitals() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-900">
-                      Address
-                    </label>
-                    <input
-                      onChange={changeHospitalAddress}
-                      className="mt-1 block w-full  border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
-                      required
-                    />
+                    <DistrictList onChange={changeHospitalAddress} />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-900">
@@ -383,6 +380,28 @@ export default function AddHospitals() {
                     <input
                       onChange={changeHospitalType}
                       type="text"
+                      className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-900">
+                      Latitude
+                    </label>
+                    <input
+                      onChange={(e) => setLatitude(e.target.value)}
+                      type="number"
+                      className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-900">
+                      Longitude
+                    </label>
+                    <input
+                      onChange={(e) => setLongitude(e.target.value)}
+                      type="number"
                       className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
                       required
                     />

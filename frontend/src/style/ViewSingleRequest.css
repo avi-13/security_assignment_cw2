@@ -5,3 +5,9 @@
 .viewreqContainer{
     margin-top: 6rem !important;
 }
+
+
+
+.hospital-img{
+  object-fit: cover;
+}

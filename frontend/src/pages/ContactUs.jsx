@@ -1,7 +1,42 @@
-import React from "react";
+import React, { useState } from "react";
+import { toast } from "react-toastify";
+import { sendMessageApi } from "../apis/api";
 import "../style/contact-us.css";
 
 const ContactUs = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [subject, setSubject] = useState("");
+  const [message, setMessage] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    
+    formData.append("name", name);
+    formData.append("email", email);
+    formData.append("subject", subject);
+    formData.append("message", message);
+
+    sendMessageApi(formData)
+      .then((res) => {
+        if (res.data.success == false) {
+          toast.error(res.data.message);
+        } else {
+          toast.success(res.data.message);
+          setName("");
+          setEmail("");
+          setSubject("");
+          setMessage("");
+        }
+      })
+      .catch((err) => {
+        toast.error("Something went wrong");
+        console.log(err);
+      });
+  };
+
   return (
     <section class="contact" id="contact">
       <div class="container">
@@ -58,11 +93,19 @@ const ContactUs = () => {
             <form>
               <div class="row">
                 <div class="col-sm-6">
-                  <input type="text" class="form-control" placeholder="Name" />
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    class="form-control"
+                    placeholder="Name"
+                  />
                 </div>
                 <div class="col-sm-6">
                   <input
                     type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     class="form-control"
                     placeholder="Email"
                   />
@@ -71,6 +114,8 @@ const ContactUs = () => {
                   <input
                     type="text"
                     class="form-control"
+                    value={subject}
+                    onChange={(e) => setSubject(e.target.value)}
                     placeholder="Subject"
                   />
                 </div>
@@ -80,10 +125,12 @@ const ContactUs = () => {
                   class="form-control"
                   rows="5"
                   id="comment"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
                   placeholder="Message"
                 ></textarea>
               </div>
-              <button class="btn btn-block">
+              <button class="btn btn-block" onClick={handleSubmit}>
                 Send Now!
               </button>
             </form>

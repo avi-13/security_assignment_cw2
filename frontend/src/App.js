@@ -10,13 +10,17 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Services from "./pages/Services";
 import AdminPanel from "./pages/admin/AdminPanel";
+import BloodBanks from "./pages/users/BloodBanks/BloodBanks";
 import AddBloodRequests from "./pages/users/blood_request/AddBloodRequests";
+import SingleBloodRequest from "./pages/users/blood_request/SingleBloodRequest";
 import ViewBloodRequest from "./pages/users/blood_request/ViewBloodRequest";
 import BeADonor from "./pages/users/donor/BeADonor";
+import Hospitals from "./pages/users/hospitals/Hospitals";
+import SingleHospital from "./pages/users/hospitals/SingleHospital";
 import Profile from "./pages/users/profile/Profile";
 import AdminRoutes from "./protected/AdminRoutes";
 import UserRoutes from "./protected/UserRoutes";
-import SingleBloodRequest from "./pages/users/blood_request/SingleBloodRequest";
+import SingleBloodbank from "./pages/users/BloodBanks/SingleBloodBanks";
 
 function App() {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -40,6 +44,10 @@ function App() {
         <Route path="/view_request/:id" element={<SingleBloodRequest />} />
         <Route path="/blood_requests" element={<ViewBloodRequest />} />
         <Route path="/services" element={<Services />} />
+        <Route path="/hospitals" element={<Hospitals />} />
+        <Route path="/single-hospital/:id" element={<SingleHospital />} />
+        <Route path="/bloodbanks" element={<BloodBanks />} />
+        <Route path="/single-bloodbank/:id" element={<SingleBloodbank />} />
 
         <Route element={<UserRoutes />}>
           <Route path="/be-a-donor/:id" element={<BeADonor />} />

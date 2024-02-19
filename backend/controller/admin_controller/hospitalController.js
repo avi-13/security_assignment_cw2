@@ -7,6 +7,8 @@ const addHospitals = async (req, res) => {
     hospitalContactNumber,
     hospitalType,
     hospitalServices,
+    latitude,
+    longitude,
   } = req.body;
 
   if (
@@ -14,7 +16,9 @@ const addHospitals = async (req, res) => {
     !hospitalAddress ||
     !hospitalContactNumber ||
     !hospitalType ||
-    !hospitalServices
+    !hospitalServices ||
+    !latitude ||
+    !longitude
   ) {
     return res.json({
       success: false,
@@ -29,6 +33,8 @@ const addHospitals = async (req, res) => {
       hospitalContactNumber: hospitalContactNumber,
       hospitalType: hospitalType,
       hospitalServices: hospitalServices,
+      latitude: latitude,
+      longitude: longitude,
     });
 
     await newHospital.save();
@@ -40,6 +46,30 @@ const addHospitals = async (req, res) => {
     res.status(500).json({
       success: false,
       message: error,
+    });
+  }
+};
+
+const getHospitalById = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const hospital = await Hospital.findById(id);
+
+    if (!hospital) {
+      return res.status(404).json({
+        success: false,
+        message: "Hospital not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      hospital: hospital,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
     });
   }
 };
@@ -87,14 +117,17 @@ const getAllHospitals = async (req, res) => {
       [sortBy]: sortOrder,
     });
 
+    const fewHospitals =  hospitalLists.slice(0, 5);
+
     console.log("Hospital List:", hospitalLists);
 
-    res.json({
+    res.status(200).json({
       success: true,
       hospital: hospitalLists,
+      fewHospitals: fewHospitals,
     });
   } catch (error) {
-    res.json(error);
+    res.status(400).json(error);
   }
 };
 
@@ -105,6 +138,8 @@ const updateHospital = async (req, res) => {
     hospitalContactNumber,
     hospitalType,
     hospitalServices,
+    latitude,
+    longitude,
   } = req.body;
 
   const id = req.params.id;
@@ -115,7 +150,9 @@ const updateHospital = async (req, res) => {
     !hospitalAddress ||
     !hospitalContactNumber ||
     !hospitalType ||
-    !hospitalServices
+    !hospitalServices ||
+    !latitude ||
+    !longitude
   ) {
     return res.json({
       success: false,
@@ -130,6 +167,8 @@ const updateHospital = async (req, res) => {
       hospitalContactNumber: hospitalContactNumber,
       hospitalType: hospitalType,
       hospitalServices: hospitalServices,
+      latitude: latitude,
+      longitude: longitude,
     };
     await Hospital.findByIdAndUpdate(id, updatedHospital);
     res.json({
@@ -173,4 +212,5 @@ module.exports = {
   getAllHospitals,
   updateHospital,
   deleteHospital,
+  getHospitalById,
 };

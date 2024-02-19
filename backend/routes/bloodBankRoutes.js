@@ -10,4 +10,6 @@ router.put("/updatebloodbank/:id", bloodBankController.updateBloodBank);
 
 router.get("/getallbloodbank", bloodBankController.getAllBloodBanks);
 
+router.get("/single-bloodbank/:id", bloodBankController.getBloodbankbyId);
+
 module.exports = router;

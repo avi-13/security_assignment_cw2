@@ -10,4 +10,6 @@ router.delete("/deletehospital/:id", hospitalController.deleteHospital);
 
 router.put("/updatehospital/:id", hospitalController.updateHospital);
 
+router.get("/single-hospital/:id", hospitalController.getHospitalById);
+
 module.exports = router;
