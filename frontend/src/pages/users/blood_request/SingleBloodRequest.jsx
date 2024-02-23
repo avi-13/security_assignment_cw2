@@ -1,10 +1,26 @@
+import {
+  faCalendar,
+  faCalendarDay,
+  faCheck,
+  faCircleInfo,
+  faDroplet,
+  faExclamationCircle,
+  faHospital,
+  faInfo,
+  faMapLocationDot,
+  faPhone,
+  faPhoneAlt,
+  faUser,
+  faUserAlt,
+} from "@fortawesome/free-solid-svg-icons";
 import "leaflet/dist/leaflet.css";
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import { useParams } from "react-router-dom";
 import { getSingleRequestApi } from "../../../apis/api";
+import CustomFaIcons from "../../../components/CustomFaIcons";
 import "../../../style/Hospitals.css";
 import "../../../style/ViewSingleRequest.css";
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 
 const RequestDetails = () => {
   const { id } = useParams();
@@ -57,7 +73,7 @@ const RequestDetails = () => {
                   <b>Hospital Name</b>
                 </h5>
                 <h6 className="w3-text text-primary">
-                  <i className="fa fa-hospital fa-fw w3-margin-right"></i>
+                  <CustomFaIcons icon={faHospital} className={"m-0 me-2"} />
                   {requestDetails.hospitalName}
                 </h6>
                 <hr />
@@ -67,7 +83,10 @@ const RequestDetails = () => {
                   <b>Hospital Address</b>
                 </h5>
                 <h6 className="w3-text text-primary ">
-                  <i className="fa fa-map fa-fw w3-margin-right"></i>
+                  <CustomFaIcons
+                    icon={faMapLocationDot}
+                    className={"m-0 me-2"}
+                  />
                   {requestDetails.hospitalAddress}
                 </h6>
                 <hr />
@@ -77,7 +96,7 @@ const RequestDetails = () => {
                   <b>Hospital Phone Number</b>
                 </h5>
                 <h6 className="w3-text-teal">
-                  <i className="fa fa-phone fa-fw w3-margin-right"></i>
+                  <CustomFaIcons icon={faPhone} className={"m-0 me-2"} />
                   {requestDetails.phoneNumber}
                 </h6>
                 <hr />
@@ -88,7 +107,7 @@ const RequestDetails = () => {
                   <b>Person To Contact</b>
                 </h5>
                 <h6 className="w3-text-orange">
-                  <i className="fa fa-user fa-fw w3-margin-right"></i>
+                  <CustomFaIcons icon={faUserAlt} className={"m-0 me-2"} />
                   {requestDetails.contactPerson}
                 </h6>
                 <hr />
@@ -98,7 +117,7 @@ const RequestDetails = () => {
                   <b>Request Uploaded By: </b>
                 </h5>
                 <h6 className="w3-text-teal">
-                  <i className="fa fa-phone fa-fw w3-margin-right"></i>
+                  <CustomFaIcons icon={faPhoneAlt} className={"m-0 me-2"} />
                   {requestDetails.userId.fullName}
                 </h6>
                 <hr />
@@ -128,7 +147,7 @@ const RequestDetails = () => {
                     <b>Patient's Name</b>
                   </h2>
                   <h4 className="w3-text text-primary">
-                    <i className="fa fa-user fa-fw"></i>
+                    <CustomFaIcons icon={faUser} className={"m-0 me-2"} />
                     <label className="ms-2" htmlFor="">
                       {requestDetails.patientName}
                     </label>
@@ -138,7 +157,7 @@ const RequestDetails = () => {
                     <b>Required Blood</b>
                   </h2>
                   <h4 className="w3-text text-danger">
-                    <i className="fa fa-water fa-fw"></i>
+                    <CustomFaIcons icon={faDroplet} className={"m-0 me-2"} />
                     <label className="ms-2" htmlFor="">
                       {requestDetails.patientBloodType}
                     </label>
@@ -150,7 +169,10 @@ const RequestDetails = () => {
                     <b>Patient's Age</b>
                   </h5>
                   <h6 className="w3-text-orange">
-                    <i className="fa fa-calendar fa-fw w3-margin-right"></i>
+                    <CustomFaIcons
+                      icon={faCalendarDay}
+                      className={"m-0 me-2"}
+                    />
                     {requestDetails.patientAge}
                   </h6>
                   <hr />
@@ -161,7 +183,7 @@ const RequestDetails = () => {
                     <b>Date Required </b>
                   </h5>
                   <h6 className="w3-text-orange">
-                    <i className="fa fa-calendar fa-fw w3-margin-right"></i>
+                    <CustomFaIcons icon={faCalendar} className={"m-0 me-2"} />
                     {requestDetails.date}
                   </h6>
                   <hr />
@@ -172,73 +194,78 @@ const RequestDetails = () => {
                     <b>Amount Required</b>
                   </h5>
                   <h6 className="w3-text-orange">
-                    <i className="fa fa-user fa-fw w3-margin-right"></i>
+                    <CustomFaIcons icon={faCheck} className={"m-0 me-2"} />
                     {requestDetails.quantity}
                   </h6>
                   <hr />
                 </div>
               </div>
               <div class="w3-container">
-                  <h2
-                    className="w3-text-grey w3-padding-16 mb-0"
-                    style={{ display: "flex", alignItems: "center" }}
-                  >
-                    <label>
-                      <img
-                        className="hospital-img"
-                        src="../assets/icon/info.png"
-                        alt=""
-                        style={{ height: "5rem" }}
-                        srcset=""
-                      />
-                    </label>
-                    Other Information
-                  </h2>
-                  <div className="w3-container">
-                    <h5 className="w3-opacity">
-                      <b>Specific Components Required</b>
-                    </h5>
-                    <h6 className="w3-text-teal">
-                      <i className="fa fa-info fa-fw w3-margin-right"></i>
-                      {requestDetails.components}
-                    </h6>
-                    <hr />
-                  </div>
-                  <div className="w3-container">
-                    <h5 className="w3-opacity">
-                      <b>Reasons for the necessity of the blood</b>
-                    </h5>
-                    <h6 className="w3-text-teal">
-                      <i className="fa fa-envelope fa-fw w3-margin-right"></i>
-                      {requestDetails.reason}
-                    </h6>
-                    <hr />
-                  </div>
-                  <div className="w3-container">
-                    <h5 className="w3-opacity">
-                      <b>Precautions to be taken</b>
-                    </h5>
-                    <h6 className="w3-text-teal">
-                      <i className="fa fa-bolt fa-fw w3-margin-right"></i>
-                      {requestDetails.anyPrecautions}
-                    </h6>
-                    <hr />
-                  </div>
-                  <br />
-                
+                <h2
+                  className="w3-text-grey w3-padding-16 mb-0"
+                  style={{ display: "flex", alignItems: "center" }}
+                >
+                  <label>
+                    <img
+                      className="hospital-img"
+                      src="../assets/icon/info.png"
+                      alt=""
+                      style={{ height: "5rem" }}
+                      srcset=""
+                    />
+                  </label>
+                  Other Information
+                </h2>
+                <div className="w3-container">
+                  <h5 className="w3-opacity">
+                    <b>Specific Components Required</b>
+                  </h5>
+                  <h6 className="w3-text-teal">
+                    <CustomFaIcons icon={faInfo} className={"m-0 me-2"} />
+                    {requestDetails.components}
+                  </h6>
+                  <hr />
+                </div>
+                <div className="w3-container">
+                  <h5 className="w3-opacity">
+                    <b>Reasons for the necessity of the blood</b>
+                  </h5>
+                  <h6 className="w3-text-teal">
+                    <CustomFaIcons icon={faCircleInfo} className={"m-0 me-2"} />
+                    {requestDetails.reason}
+                  </h6>
+                  <hr />
+                </div>
+                <div className="w3-container">
+                  <h5 className="w3-opacity">
+                    <b>Precautions to be taken</b>
+                  </h5>
+                  <h6 className="w3-text-teal">
+                    <CustomFaIcons
+                      icon={faExclamationCircle}
+                      className={"m-0 me-2"}
+                    />
+                    {requestDetails.anyPrecautions}
+                  </h6>
+                  <hr />
+                </div>
+                <br />
               </div>
             </div>
           </div>
-          <div className=" w3-container req-map-wrapper mt-4 mb-8" key={requestDetails._id}>
-            <h3 className="map-h3">Location of the {requestDetails.hospitalName} hospital</h3>
+          <div
+            className=" w3-container req-map-wrapper mt-4 mb-8"
+            key={requestDetails._id}
+          >
+            <h3 className="map-h3">
+              Location of the {requestDetails.hospitalName} hospital
+            </h3>
             <MapContainer
               className="req-map-container"
               center={[requestDetails.latitude, requestDetails.longitude]}
               zoom={25}
             >
-              <TileLayer
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
+              <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
               <Marker
                 position={[requestDetails.longitude, requestDetails.latitude]}
               >

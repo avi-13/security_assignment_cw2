@@ -60,6 +60,13 @@ const userSchema = mongoose.Schema(
       type: Number,
       required: false,
     },
+
+    userImageURL: {
+      type: String,
+      required: false,
+      default:"https://res.cloudinary.com/dm7yesms2/image/upload/v1708584317/Users/cq2ndw5yfe3sh4eceleq"
+    },
+
   },
   { timestamps: true }
 );

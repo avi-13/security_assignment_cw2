@@ -1,4 +1,5 @@
 const Hospital = require("../../model/hospitalModel.js");
+const cloudinary = require("cloudinary");
 
 const addHospitals = async (req, res) => {
   const {
@@ -11,6 +12,17 @@ const addHospitals = async (req, res) => {
     longitude,
   } = req.body;
 
+  
+  // Check if req.files and req.files.bbImage exist
+  if (!req.files || !req.files.hospitalImage) {
+    return res.json({
+      success: false,
+      message: "Please upload a valid image",
+    });
+  }
+  const { hospitalImage } = req.files;
+  
+  console.log(req.body);
   if (
     !hospitalName ||
     !hospitalAddress ||
@@ -27,6 +39,14 @@ const addHospitals = async (req, res) => {
   }
 
   try {
+    const uploadedImage = await cloudinary.v2.uploader.upload(
+      hospitalImage.path,
+      {
+        folder: "Hospitals",
+        crop: "scale",
+      }
+    );
+
     const newHospital = new Hospital({
       hospitalName: hospitalName,
       hospitalAddress: hospitalAddress,
@@ -35,6 +55,7 @@ const addHospitals = async (req, res) => {
       hospitalServices: hospitalServices,
       latitude: latitude,
       longitude: longitude,
+      hospitalImageUrl: uploadedImage.secure_url,
     });
 
     await newHospital.save();
@@ -117,7 +138,7 @@ const getAllHospitals = async (req, res) => {
       [sortBy]: sortOrder,
     });
 
-    const fewHospitals =  hospitalLists.slice(0, 5);
+    const fewHospitals = hospitalLists.slice(0, 5);
 
     console.log("Hospital List:", hospitalLists);
 
@@ -142,6 +163,8 @@ const updateHospital = async (req, res) => {
     longitude,
   } = req.body;
 
+  const { hospitalImage } = req.files;
+
   const id = req.params.id;
 
   // validation
@@ -161,21 +184,49 @@ const updateHospital = async (req, res) => {
   }
 
   try {
-    const updatedHospital = {
-      hospitalName: hospitalName,
-      hospitalAddress: hospitalAddress,
-      hospitalContactNumber: hospitalContactNumber,
-      hospitalType: hospitalType,
-      hospitalServices: hospitalServices,
-      latitude: latitude,
-      longitude: longitude,
-    };
-    await Hospital.findByIdAndUpdate(id, updatedHospital);
-    res.json({
-      success: true,
-      message: "Hospital Updated Successfully",
-      hospital: updatedHospital,
-    });
+    if (hospitalImage) {
+      const uploadedImage = await cloudinary.v2.uploader.upload(
+        hospitalImage.path,
+        {
+          folder: "Hospitals",
+          crop: "scale",
+        }
+      );
+
+      const updatedHospital = {
+        hospitalName: hospitalName,
+        hospitalAddress: hospitalAddress,
+        hospitalContactNumber: hospitalContactNumber,
+        hospitalType: hospitalType,
+        hospitalServices: hospitalServices,
+        latitude: latitude,
+        longitude: longitude,
+        hospitalImageUrl: uploadedImage.secure_url,
+
+      };
+      await Hospital.findByIdAndUpdate(id, updatedHospital);
+      res.json({
+        success: true,
+        message: "Hospital Updated Successfully",
+        hospital: updatedHospital,
+      });
+    } else {
+      const updatedHospital = {
+        hospitalName: hospitalName,
+        hospitalAddress: hospitalAddress,
+        hospitalContactNumber: hospitalContactNumber,
+        hospitalType: hospitalType,
+        hospitalServices: hospitalServices,
+        latitude: latitude,
+        longitude: longitude,
+      };
+      await Hospital.findByIdAndUpdate(id, updatedHospital);
+      res.json({
+        success: true,
+        message: "Hospital Updated Successfully Without Image",
+        hospital: updatedHospital,
+      });
+    }
   } catch (error) {
     console.log(error);
     res.status(500).json({

@@ -1,6 +1,7 @@
 const User = require("../../model/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const cloudinary = require("cloudinary");
 
 const createUser = async (req, res) => {
   console.log(req.body);
@@ -188,76 +189,160 @@ const updateUser = async (req, res) => {
     const id = req.params.id;
     const user = await User.findById(id);
     console.log(user.isADonor);
+    const { userImage } = req.files;
+    console.log(userImage);
+    if (userImage) {
+      const uploadedImage = await cloudinary.v2.uploader.upload(
+        userImage.path,
+        {
+          folder: "Users",
+          crop: "scale",
+        }
+      );
 
-    if (user.isADonor == false) {
-      const { fullName, email, number, currentAddress } = req.body;
+      if (user.isADonor == false) {
+        const { fullName, email, number, currentAddress } = req.body;
 
-      if (!fullName || !email || !number || !currentAddress) {
-        return res.json({
-          success: false,
-          message: "Please Enter all the fields",
+        if (!fullName || !email || !number || !currentAddress) {
+          return res.json({
+            success: false,
+            message: "Please Enter all the fields",
+          });
+        }
+        const updatedUser = {
+          fullName: fullName,
+          email: email,
+          number: number,
+          currentAddress: currentAddress,
+          userImageURL: uploadedImage.secure_url,
+        };
+        await User.findByIdAndUpdate(id, updatedUser);
+
+        return res.status(200).json({
+          success: true,
+          message: "You have been register as a donor",
+        });
+      } else {
+        const {
+          fullName,
+          email,
+          number,
+          currentAddress,
+          gender,
+          dob,
+          isAvailable,
+          bloodGroup,
+          noPreviousDonation,
+          emergencyNumber,
+        } = req.body;
+        if (
+          !fullName ||
+          !email ||
+          !number ||
+          !currentAddress ||
+          !fullName ||
+          !gender ||
+          !dob ||
+          !bloodGroup ||
+          !noPreviousDonation ||
+          !emergencyNumber
+        ) {
+          return res.json({
+            success: false,
+            message: "Please Enter all the fields",
+          });
+        }
+        const updatedDonor = {
+          fullName: fullName,
+          email: email,
+          number: number,
+          currentAddress: currentAddress,
+          gender: gender,
+          dob: dob,
+          bloodGroup: bloodGroup,
+          noPreviousDonation: noPreviousDonation,
+          emergencyNumber: emergencyNumber,
+          isAvailable: isAvailable,
+          userImageURL: uploadedImage.secure_url,
+        };
+        await User.findByIdAndUpdate(id, updatedDonor);
+
+        return res.status(200).json({
+          success: true,
+          message: "You Account has been successfully Updated ",
         });
       }
-      const updatedUser = {
-        fullName: fullName,
-        email: email,
-        number: number,
-        currentAddress: currentAddress,
-      };
-      await User.findByIdAndUpdate(id, updatedUser);
-
-      return res.status(200).json({
-        success: true,
-        message: "You have been register as a donor",
-      });
     } else {
-      const {
-        fullName,
-        email,
-        number,
-        currentAddress,
-        gender,
-        dob,
-        isAvailable,
-        bloodGroup,
-        noPreviousDonation,
-        emergencyNumber,
-      } = req.body;
-      if (
-        !fullName ||
-        !email ||
-        !number ||
-        !currentAddress ||
-        !fullName ||
-        !gender ||
-        !dob ||
-        !bloodGroup ||
-        !noPreviousDonation ||
-        !emergencyNumber
-      ) {
-        return res.json({
-          success: false,
-          message: "Please Enter all the fields",
+      if (user.isADonor == false) {
+        const { fullName, email, number, currentAddress } = req.body;
+
+        if (!fullName || !email || !number || !currentAddress) {
+          return res.json({
+            success: false,
+            message: "Please Enter all the fields",
+          });
+        }
+        const updatedUser = {
+          fullName: fullName,
+          email: email,
+          number: number,
+          currentAddress: currentAddress,
+        };
+        await User.findByIdAndUpdate(id, updatedUser);
+
+        return res.status(200).json({
+          success: true,
+          message: "You have been register as a donor",
+        });
+      } else {
+        const {
+          fullName,
+          email,
+          number,
+          currentAddress,
+          gender,
+          dob,
+          isAvailable,
+          bloodGroup,
+          noPreviousDonation,
+          emergencyNumber,
+        } = req.body;
+        if (
+          !fullName ||
+          !email ||
+          !number ||
+          !currentAddress ||
+          !fullName ||
+          !gender ||
+          !dob ||
+          !bloodGroup ||
+          !noPreviousDonation ||
+          !emergencyNumber
+        ) {
+          return res.json({
+            success: false,
+            message: "Please Enter all the fields",
+          });
+        }
+        const updatedDonor = {
+          fullName: fullName,
+          email: email,
+          number: number,
+          currentAddress: currentAddress,
+          gender: gender,
+          dob: dob,
+          bloodGroup: bloodGroup,
+          noPreviousDonation: noPreviousDonation,
+          emergencyNumber: emergencyNumber,
+          isAvailable: isAvailable,
+        };
+        await User.findByIdAndUpdate(id, updatedDonor);
+
+        return res.status(200).json({
+          success: true,
+          message: "You Account has been successfully Updated without image",
         });
       }
-      const updatedDonor = {
-        fullName: fullName,
-        email: email,
-        number: number,
-        currentAddress: currentAddress,
-        gender: gender,
-        dob: dob,
-        bloodGroup: bloodGroup,
-        noPreviousDonation: noPreviousDonation,
-        emergencyNumber: emergencyNumber,
-        isAvailable: isAvailable,
-      };
-      await User.findByIdAndUpdate(id, updatedDonor);
-
-      return res.status(200).json({
-        success: true,
-        message: "You Account has been successfully Updated ",
-      });
     }
   } catch (error) {
     console.log(error);

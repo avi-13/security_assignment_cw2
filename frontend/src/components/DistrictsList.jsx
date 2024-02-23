@@ -1,6 +1,6 @@
 import React from "react";
 
-const DistrictList = ({ onChange }) => {
+const DistrictList = ({ onChange ,dynamicValue}) => {
   const getDistricts = () => {
     // List of districts
     const districts = [
@@ -93,7 +93,7 @@ const DistrictList = ({ onChange }) => {
           onChange={onChange}
           className="block w-full px-4 py-2 border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring focus:border-blue-300"
         >
-          <option value="all">All</option>
+          <option value="all">{dynamicValue?? 'All'}</option>
           {getDistricts().map((district, index) => (
             <option key={index} value={district}>
               {district}

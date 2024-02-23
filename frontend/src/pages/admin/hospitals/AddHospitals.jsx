@@ -1,6 +1,13 @@
-import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEdit,
+  faExclamationTriangle,
+  faTimes,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { CircularProgress } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
   createHospitalApi,
@@ -12,6 +19,7 @@ import DistrictList from "../../../components/DistrictsList";
 
 export default function AddHospitals() {
   const [hospitals, setHospitals] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [addressSearch, setAddressSearch] = useState("");
   const [bloodGroupsSearch, setBloodGroupsSearch] = useState("");
@@ -50,6 +58,8 @@ export default function AddHospitals() {
   const [hospitalContactNumber, setHospitalContactNumber] = useState("");
   const [hospitalType, setHospitalType] = useState("");
   const [hospitalServices, setHospitalServices] = useState("");
+  const [hospitalImage, setHospitalImage] = useState(null);
+
   const [isdeleteModalOpen, setdeleteIsModalOpen] = useState(false);
   const opendeleteModal = () => setdeleteIsModalOpen(true);
   const closedeleteModal = () => setdeleteIsModalOpen(false);
@@ -73,8 +83,15 @@ export default function AddHospitals() {
     setHospitalServices(e.target.value);
   };
 
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    setHospitalImage(file);
+    setImagePreview(URL?.createObjectURL(file));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     // making logical form data
     const formData = new FormData();
@@ -85,6 +102,7 @@ export default function AddHospitals() {
     formData.append("hospitalServices", hospitalServices);
     formData.append("latitude", latitude);
     formData.append("longitude", longitude);
+    formData.append("hospitalImage", hospitalImage);
 
     // making Api call
     createHospitalApi(formData)
@@ -92,12 +110,16 @@ export default function AddHospitals() {
         if (res.data.success == false) {
           toast.error(res.data.message);
         } else {
+          closeModal();
           toast.success(res.data.message);
         }
       })
       .catch((e) => {
         toast.error("Server Error");
         console.log(e);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
 
@@ -115,28 +137,10 @@ export default function AddHospitals() {
   };
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isimageModalOpen, setimageIsModalOpen] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-  const openimageModal = () => setimageIsModalOpen(true);
-  const closeimageModal = () => setimageIsModalOpen(false);
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      setImagePreview(reader.result);
-    };
-
-    if (file) {
-      reader.readAsDataURL(file);
-    } else {
-      setImagePreview(null);
-    }
-  };
 
   return (
     <>
@@ -174,113 +178,121 @@ export default function AddHospitals() {
                 htmlFor="filterSelect"
                 className="block text-sm font-medium my-1 text-gray-700"
               >
-                Blood Bank Name
+                Hospital
               </label>
               <input
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300"
                 type="text"
-                placeholder="Search Blood Banks..."
+                placeholder="Search Hospitals..."
                 onChange={(e) => sethospitalSearch(e.target.value)}
               />
             </div>
           </div>
 
-          <table className="w-full whitespace-nowrap">
-            <thead>
-              <tr className="h-16 w-full text-sm leading-none text-gray-800">
-                <th className="font-normal text-left pl-4">
-                  Hospital Image (Yet to be added)
-                </th>
-                <th className="font-normal text-left pl-4">Hospital Name</th>
-                <th className="font-normal text-left pl-12">Location</th>
-                <th className="font-normal text-left pl-12">Contact</th>
-                <th className="font-normal text-left pl-20">Hospital Type</th>
-                <th className="font-normal text-left pl-20">
-                  Hospital Service
-                </th>
-                <th className="font-normal text-left pl-12">
-                  <button
-                    onClick={() => handleSort("createdAt")}
-                    className="focus:outline-none"
-                  >
-                    Created Date
-                    {sortBy === "createdAt" && (
-                      <span className="ml-1">
-                        {sortOrder === "asc" ? "▲" : "▼"}
-                      </span>
-                    )}
-                  </button>
-                </th>
-                <th className="font-normal text-left pl-16">Action</th>
-              </tr>
-            </thead>
-            <tbody className="w-full">
-              {hospitals.map((item) => (
-                <tr className="h-20 text-sm leading-none text-gray-800 bg-white hover:bg-gray-100 border-b border-t border-gray-100">
-                  <td className="pl-4 cursor-pointer" onClick={openimageModal}>
-                    <div className="flex items-center">
-                      <div className="w-10 h-10">
-                        <img
-                          className="w-full h-full"
-                          src="/../assets/images/logo.png"
-                          alt="Thumbnail Image"
-                        />
-                      </div>
-                    </div>
-                  </td>
-                  <td className="pl-12">
-                    <p className="text-sm font-medium leading-none text-gray-800">
-                      {item.hospitalName}
-                    </p>
-                  </td>
-                  <td className="pl-12">
-                    <p className="font-medium">{item.hospitalAddress}</p>
-                  </td>
-                  <td className="pl-20">
-                    <p className="font-medium">{item.hospitalContactNumber}</p>
-                  </td>
-                  <td className="pl-20">
-                    <p className="font-medium">{item.hospitalType}</p>
-                  </td>
-                  <td className="pl-20 overflow-y max-w-[200px] truncate">
-                    <p className="font-medium">{item.hospitalServices}</p>
-                  </td>
-                  <td className="pl-20 overflow-y max-w-[200px] truncate">
-                    <p className="font-medium">
-                      {new Date(item.createdAt).toLocaleDateString()}
-                    </p>
-                  </td>
-                  <td className="px-7 2xl:px-0">
-                    {/* Edit Button */}
-                    <button className="focus:outline-none py-2 px-4">
-                      <FontAwesomeIcon
-                        icon={faEdit}
-                        className="text-blue-500 hover:text-blue-700 cursor-pointer"
-                      />
-                    </button>
+          <div className="w-full bg-white overflow-y-auto">
 
-                    {/* Delete Button */}
+            <table className="w-full whitespace-nowrap">
+              <thead>
+                <tr className="h-16 w-full text-sm leading-none text-gray-800">
+                  <th className="font-normal text-left pl-4">Hospital Image</th>
+                  <th className="font-normal text-left pl-4">Hospital Name</th>
+                  <th className="font-normal text-left pl-12">Location</th>
+                  <th className="font-normal text-left pl-12">Contact</th>
+                  <th className="font-normal text-left pl-20">Hospital Type</th>
+                  <th className="font-normal text-left pl-20">
+                    Hospital Service
+                  </th>
+                  <th className="font-normal text-left pl-12">
                     <button
-                      onClick={opendeleteModal}
-                      className="focus:outline-none ml-2 "
+                      onClick={() => handleSort("createdAt")}
+                      className="focus:outline-none"
                     >
-                      <FontAwesomeIcon
-                        icon={faTrash}
-                        className="text-red-500 hover:text-red-700 cursor-pointer "
-                      />
+                      Created Date
+                      {sortBy === "createdAt" && (
+                        <span className="ml-1">
+                          {sortOrder === "asc" ? "▲" : "▼"}
+                        </span>
+                      )}
                     </button>
+                  </th>
+                  <th className="font-normal text-left pl-16">Action</th>
+                </tr>
+              </thead>
+              <tbody className="w-full">
+                {hospitals.map((item) => (
+                  <tr className="h-20 text-sm leading-none text-gray-800 bg-white hover:bg-gray-100 border-b border-t border-gray-100">
+                    <td className="pl-4 cursor-pointer">
+                      <div className="flex items-center">
+                        <div className="w-10 h-10">
+                          <img
+                            className="w-full h-full"
+                            src={item.hospitalImageUrl}
+                            alt="Thumbnail Image"
+                          />
+                        </div>
+                      </div>
+                    </td>
+                    <td className="pl-12">
+                      <p className="text-sm font-medium leading-none text-gray-800">
+                        {item.hospitalName}
+                      </p>
+                    </td>
+                    <td className="pl-12">
+                      <p className="font-medium">{item.hospitalAddress}</p>
+                    </td>
+                    <td className="pl-20">
+                      <p className="font-medium">
+                        {item.hospitalContactNumber}
+                      </p>
+                    </td>
+                    <td className="pl-20">
+                      <p className="font-medium">{item.hospitalType}</p>
+                    </td>
+                    <td className="pl-20 overflow-y max-w-[200px] truncate">
+                      <p className="font-medium">{item.hospitalServices}</p>
+                    </td>
+                    <td className="pl-20 overflow-y max-w-[200px] truncate">
+                      <p className="font-medium">
+                        {new Date(item.createdAt).toLocaleDateString()}
+                      </p>
+                    </td>
+                    <td className="px-7 2xl:px-0">
+                      {/* Edit Button */}
+                      <Link
+                        className="focus:outline-none py-2 px-4"
+                        to={`/edit-hospital/${item._id}`}
+                      >
+                        <FontAwesomeIcon
+                          icon={faEdit}
+                          className="text-blue-500 hover:text-blue-700 cursor-pointer"
+                        />
+                      </Link>
 
+                      {/* Delete Button */}
+                      <button
+                        onClick={opendeleteModal}
+                        className="focus:outline-none ml-2 "
+                      >
+                        <FontAwesomeIcon
+                          icon={faTrash}
+                          className="text-red-500 hover:text-red-700 cursor-pointer "
+                        />
+                      </button>
+                    </td>
                     {isdeleteModalOpen && (
                       <div
-                        className="fixed inset-0 flex items-center justify-center bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full"
+                        className="fixed inset-0 flex items-center justify-center bg-opacity-20 overflow-y-auto h-full w-full"
                         id="my-modal"
                       >
-                        <div className="relative mx-auto p-5 border w-1/4 shadow-lg rounded-md bg-white space-y-8 justify-center items-center flex flex-col">
-                          <i className="fa-solid fa-triangle-exclamation text-red-500 fa-5x"></i>
-                          <h1 className="font-medium w-3/4 mx-auto text-center">
-                            Are you sure you want to Delete?
-                          </h1>
-
+                        <div className="relative mx-auto p-5 border  shadow-sm w-1/4 rounded-md bg-white space-y-8 justify-center items-center flex flex-col">
+                          <h6 className="font-medium w-3/4 mx-auto text-center">
+                            <FontAwesomeIcon
+                              className="me-4"
+                              icon={faExclamationTriangle}
+                            />
+                            <img src="../assets/images/sure_about_that.jpg" alt="" />
+                            Are you sure about that 👁️👁️?
+                          </h6>
                           <div className="flex flex-wrap items-center justify-between mx-auto w-full">
                             <button
                               onClick={() => handleDelete(item._id)}
@@ -299,47 +311,25 @@ export default function AddHospitals() {
                         </div>
                       </div>
                     )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        {isimageModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center">
-            <div
-              className="absolute inset-0 bg-black opacity-75"
-              onClick={closeimageModal}
-            ></div>
-            <div className="relative z-50 bg-white p-8">
-              <span
-                className="absolute top-0 right-0 cursor-pointer p-4"
-                onClick={closeimageModal}
-              >
-                &times;
-              </span>
-              <img
-                className="w-full h-auto"
-                src="../assets/images/3.png"
-                alt="Modal Image"
-              />
-            </div>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-        )}
-
+        </div>
         {isModalOpen && (
           <div
             className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full"
             id="my-modal"
           >
-            <div className="relative top-20 mx-auto p-5 border w-1/2 shadow-lg rounded-md bg-white">
+            <div className="relative top-3 mx-auto p-5 border w-1/2 shadow-lg rounded-md bg-white">
               {/* Close button */}
               <div className="absolute top-0 right-0 pt-4 pr-4">
                 <button
                   onClick={closeModal}
                   className="text-black bg-red-500 hover:bg-red-700 rounded-lg text-sm p-2"
                 >
-                  <i className="fa-solid fa-x text-white"></i>
+                  <FontAwesomeIcon icon={faTimes} />
                 </button>
               </div>
 
@@ -426,24 +416,26 @@ export default function AddHospitals() {
                     type="file"
                     accept="image/*"
                     className="mt-1 block w-full text-sm text-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-                    onChange={handleImageChange}
+                    onChange={handleImageUpload}
                     required
                   />
                   {imagePreview && (
                     <div className="mt-4">
-                      <img
-                        src="../assets/images/3.png"
-                        className="w-full rounded-md"
-                      />
+                      <img src={imagePreview} className="w-full rounded-md" />
                     </div>
                   )}
                 </div>
                 <button
                   onClick={handleSubmit}
                   type="submit"
+                  disabled={isLoading}
                   className="w-full text-white bg-cyan-700 hover:bg-cyan-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                 >
-                  Add Hospital
+                  {isLoading ? (
+                    <CircularProgress size={20} color="inherit" />
+                  ) : (
+                    "Add Hospital"
+                  )}
                 </button>
               </form>
             </div>

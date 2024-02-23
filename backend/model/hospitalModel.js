@@ -34,6 +34,11 @@ const hospitalSchema = mongoose.Schema(
       required: true,
       type: Number,
     },
+    hospitalImageUrl: {
+      type: String,
+      required: true,
+      trim: true,
+    },
   },
   {
     timestamps: true,

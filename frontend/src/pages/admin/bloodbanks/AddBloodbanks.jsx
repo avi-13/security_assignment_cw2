@@ -1,6 +1,13 @@
-import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEdit,
+  faExclamationCircle,
+  faTimes,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { CircularProgress } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
   createBloodBankApi,
@@ -21,6 +28,8 @@ export default function AddBloodBanks() {
   const [sortOrder, setSortOrder] = useState("desc");
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
+  const [bbImage, setBloodBankImage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchBloodBanks = async () => {
     try {
@@ -52,8 +61,44 @@ export default function AddBloodBanks() {
   const [availableBloodGroups, setAvailableBloodGroups] = useState("");
   const [socialMediaLinks, setSocialMediaLinks] = useState("");
 
+  const handleSort = (column) => {
+    setSortBy(column);
+    setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+  };
 
+  const searchbyname = (e) => {
+    setBBNameSearch(e.target.value);
+  };
+
+  const changebbName = (e) => {
+    setbbName(e.target.value);
+  };
+
+  const changebbAddress = (e) => {
+    setbbAddress(e.target.value);
+  };
+
+  const changebbContact = (e) => {
+    setbbContact(e.target.value);
+  };
+
+  const changeOperatingHours = (e) => {
+    setOperatingHours(e.target.value);
+  };
+  const changeAvailableBloodGroups = (e) => {
+    setAvailableBloodGroups(e.target.value);
+  };
+  const changeSocialMediaLinks = (e) => {
+    setSocialMediaLinks(e.target.value);
+  };
+
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0]; //files not file
+    setBloodBankImage(file);
+    setImagePreview(URL?.createObjectURL(file));
+  };
   const handleSubmit = (e) => {
+    setIsLoading(true);
     e.preventDefault();
 
     const formData = new FormData();
@@ -69,6 +114,7 @@ export default function AddBloodBanks() {
     formData.append("socialLinks", socialMediaLinks);
     formData.append("latitude", latitude);
     formData.append("longitude", longitude);
+    formData.append("bbImage", bbImage);
 
     createBloodBankApi(formData)
       .then((res) => {
@@ -77,12 +123,16 @@ export default function AddBloodBanks() {
         if (res.data.success == false) {
           toast.error(res.data.message);
         } else {
+          closeModal();
           toast.success(res.data.message);
         }
       })
       .catch((e) => {
         toast.error(e.message);
         console.log(e);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
 
@@ -100,31 +150,14 @@ export default function AddBloodBanks() {
   };
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isimageModalOpen, setimageIsModalOpen] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-  const openimageModal = () => setimageIsModalOpen(true);
-  const closeimageModal = () => setimageIsModalOpen(false);
   const [isdeleteModalOpen, setdeleteIsModalOpen] = useState(false);
   const opendeleteModal = () => setdeleteIsModalOpen(true);
   const closedeleteModal = () => setdeleteIsModalOpen(false);
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      setImagePreview(reader.result);
-    };
-
-    if (file) {
-      reader.readAsDataURL(file);
-    } else {
-      setImagePreview(null);
-    }
-  };
   return (
     <>
       <div className="w-full sm:px-6">
@@ -143,8 +176,8 @@ export default function AddBloodBanks() {
             </div>
           </div>
         </div>
-        <div className="bg-white shadow px-4 md:px-10 pt-4 md:pt-7 pb-5 overflow-y-auto">
-          <div className="flex flex-col items-center justify-center md:flex-row md:items-start md:justify-between md:gap-4 mb-4 w-full">
+        <div className="bg-white shadow px-4 md:px-10 pt-4 md:pt-7 pb-5">
+          <div className="flex flex-col items-center overflow-hidden justify-center md:flex-row md:items-start md:justify-between md:gap-4 mb-4 w-full">
             <div className="w-full md:w-1/3">
               <BloodGroupLists
                 onChange={(e) => setBGsearch(e.target.value)}
@@ -172,177 +205,168 @@ export default function AddBloodBanks() {
             </div>
           </div>
 
-          <table className="w-full whitespace-nowrap">
-            <thead>
-              <tr className="h-16 w-full text-sm leading-none text-gray-800">
-                <th className="font-normal text-left pl-4">
-                  BloodBank Image Yet to be added
-                </th>
-                <th className="font-normal text-left pl-4">BloodBank Name</th>
-                <th className="font-normal text-left pl-12">
-                  BloodBank Address
-                </th>
-                <th className="font-normal text-left pl-12">
-                  BloodBank Contact
-                </th>
-                <th className="font-normal text-left pl-20">Operating Hours</th>
-                <th className="font-normal text-left pl-20">
-                  BLoodGroups Available
-                </th>
-                <th className="font-normal text-left pl-20">
-                  SocialMedia Links
-                </th>
-                <th className="font-normal text-left pl-12">
-                  <button
-                    onClick={() => handleSort("createdAt")}
-                    className="focus:outline-none"
-                  >
-                    Created Date
-                    {sortBy === "createdAt" && (
-                      <span className="ml-1">
-                        {sortOrder === "asc" ? "▲" : "▼"}
-                      </span>
-                    )}
-                  </button>
-                </th>
-                <th className="font-normal text-left pl-16">Action</th>
-              </tr>
-            </thead>
-            <tbody className="w-full">
-              {bloodBank &&
-                bloodBank.map((item) => (
-                  <tr className="h-20 text-sm leading-none text-gray-800 bg-white hover:bg-gray-100 border-b border-t border-gray-100">
-                    <td
-                      className="pl-4 cursor-pointer"
-                      onClick={openimageModal}
+          <div className="w-full bg-white overflow-y-auto">
+            <table className="w-full whitespace-nowrap">
+              <thead>
+                <tr className="h-16 w-full text-sm leading-none text-gray-800">
+                  <th className="font-normal text-left pl-4">
+                    BloodBank Image
+                  </th>
+                  <th className="font-normal text-left pl-4">BloodBank Name</th>
+                  <th className="font-normal text-left pl-12">
+                    BloodBank Address
+                  </th>
+                  <th className="font-normal text-left pl-12">
+                    BloodBank Contact
+                  </th>
+                  <th className="font-normal text-left pl-20">
+                    Operating Hours
+                  </th>
+                  <th className="font-normal text-left pl-20">
+                    BLoodGroups Available
+                  </th>
+                  <th className="font-normal text-left pl-20">
+                    SocialMedia Links
+                  </th>
+                  <th className="font-normal text-left pl-12">
+                    <button
+                      onClick={() => handleSort("createdAt")}
+                      className="focus:outline-none"
                     >
-                      <div className="flex items-center">
-                        <div className="w-10 h-10">
-                          <img
-                            className="w-full h-full"
-                            src="/../assets/images/logo.png"
-                            alt="Thumbnail Image"
-                          />
-                        </div>
-                      </div>
-                    </td>
-                    <td className="pl-12">
-                      <p className="font-medium">{item.bbName}</p>
-                    </td>
-                    <td className="pl-12">
-                      <p className="text-sm font-medium leading-none text-gray-800">
-                        {item.bbAddress}
-                      </p>
-                    </td>
-                    <td className="pl-12">
-                      <p className="font-medium">{item.bbContact}</p>
-                    </td>
-                    <td className="pl-20">
-                      <p className="font-medium">{item.operatingHours}</p>
-                    </td>
-                    <td className="pl-20">
-                      <p className="font-medium">{item.availableBloodGroups}</p>
-                    </td>
-
-                    <td className="pl-20">
-                      <p className="font-medium">{item.socialMediaLinks}</p>
-                    </td>
-                    <td className="pl-20 overflow-y max-w-[200px] truncate">
-                      <p className="font-medium">
-                        {new Date(item.createdAt).toLocaleDateString()}
-                      </p>
-                    </td>
-
-                    <td className="px-7 2xl:px-0">
-                      {/* Edit Button */}
-                      <button className="focus:outline-none py-2 px-4">
-                        <FontAwesomeIcon
-                          icon={faEdit}
-                          className="text-blue-500 hover:text-blue-700 cursor-pointer"
-                        />
-                      </button>
-
-                      {/* Delete Button */}
-                      <button
-                        className="focus:outline-none ml-2"
-                        onClick={opendeleteModal}
-                      >
-                        <FontAwesomeIcon
-                          icon={faTrash}
-                          className="text-red-500 hover:text-red-700 cursor-pointer "
-                        />
-                      </button>
-
-                      {isdeleteModalOpen && (
-                        <div
-                          className="fixed inset-0 flex items-center justify-center bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full"
-                          id="my-modal"
-                        >
-                          <div className="relative mx-auto p-5 border w-1/4 shadow-lg rounded-md bg-white space-y-8 justify-center items-center flex flex-col">
-                            <i className="fa-solid fa-triangle-exclamation text-red-500 fa-5x"></i>
-                            <h1 className="font-normal text-center">
-                              Are you sure you want to Delete?
-                            </h1>
-
-                            <div className="flex flex-wrap items-center justify-between mx-auto w-full">
-                              <button
-                                onClick={() => handleDelete(item._id)}
-                                className="w-1/3 text-white bg-red-500 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm text-center py-2.5"
-                              >
-                                Delete
-                              </button>
-                              <button
-                                type="submit"
-                                className="w-1/3 text-white bg-gray-500 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm py-2.5"
-                                onClick={closedeleteModal}
-                              >
-                                Cancel
-                              </button>
-                            </div>
+                      Created Date
+                      {sortBy === "createdAt" && (
+                        <span className="ml-1">
+                          {sortOrder === "asc" ? "▲" : "▼"}
+                        </span>
+                      )}
+                    </button>
+                  </th>
+                  <th className="font-normal text-left pl-16">Action</th>
+                </tr>
+              </thead>
+              <tbody className="w-full">
+                {bloodBank &&
+                  bloodBank.map((item) => (
+                    <tr className="h-20 text-sm leading-none text-gray-800 bg-white hover:bg-gray-100 border-b border-t border-gray-100">
+                      <td className="pl-4 cursor-pointer">
+                        <div className="flex items-center">
+                          <div className="w-10 h-10">
+                            <img
+                              className="w-full h-full"
+                              src={item.bbImageUrl}
+                              alt="BloodBank Image"
+                            />
                           </div>
                         </div>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-        </div>
-        {isimageModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center">
-            <div
-              className="absolute inset-0 bg-black opacity-75"
-              onClick={closeimageModal}
-            ></div>
-            <div className="relative z-50 bg-white p-8">
-              <span
-                className="absolute top-0 right-0 cursor-pointer p-4"
-                onClick={closeimageModal}
-              >
-                &times;
-              </span>
-              <img
-                className="w-full h-auto"
-                src="/../assets/images/2.png"
-                alt="Modal Image"
-              />
-            </div>
+                      </td>
+                      <td className="pl-12">
+                        <p className="font-medium">{item.bbName}</p>
+                      </td>
+                      <td className="pl-12">
+                        <p className="text-sm font-medium leading-none text-gray-800">
+                          {item.bbAddress}
+                        </p>
+                      </td>
+                      <td className="pl-12">
+                        <p className="font-medium">{item.bbContact}</p>
+                      </td>
+                      <td className="pl-20">
+                        <p className="font-medium">{item.operatingHours}</p>
+                      </td>
+                      <td className="pl-20">
+                        <p className="font-medium">
+                          {item.availableBloodGroups}
+                        </p>
+                      </td>
+
+                      <td className="pl-20">
+                        <p className="font-medium">{item.socialMediaLinks}</p>
+                      </td>
+                      <td className="pl-20 overflow-y max-w-[200px] truncate">
+                        <p className="font-medium">
+                          {new Date(item.createdAt).toLocaleDateString()}
+                        </p>
+                      </td>
+
+                      <td className="px-7 2xl:px-0">
+                        {/* Edit Button */}
+                        <Link
+                          className="focus:outline-none py-2 px-4"
+                          to={`/edit-bloodbank/${item._id}`}
+                        >
+                          <FontAwesomeIcon
+                            icon={faEdit}
+                            className="text-blue-500 hover:text-blue-700 cursor-pointer"
+                          />
+                        </Link>
+
+                        {/* Delete Button */}
+                        <button
+                          className="focus:outline-none ml-2"
+                          onClick={opendeleteModal}
+                        >
+                          <FontAwesomeIcon
+                            icon={faTrash}
+                            className="text-red-500 hover:text-red-700 cursor-pointer "
+                          />
+                        </button>
+
+                        {isdeleteModalOpen && (
+                          <div
+                            className="fixed inset-0 flex items-center justify-center bg-opacity-20 overflow-y-auto h-full w-full"
+                            id="my-modal"
+                          >
+                            <div className="relative mx-auto p-5 border  shadow-sm w-1/4 rounded-md bg-white space-y-8 justify-center items-center flex flex-col">
+                              <h6 className="font-medium w-3/4 mx-auto text-center">
+                                <FontAwesomeIcon
+                                  className="me-4"
+                                  icon={faExclamationCircle}
+                                />
+                                <img
+                                  src="../assets/images/sure_about_that.jpg"
+                                  alt=""
+                                />
+                                Are you sure about that 👁️👁️?
+                              </h6>
+                              <div className="flex flex-wrap items-center justify-between mx-auto w-full">
+                                <button
+                                  onClick={() => handleDelete(item._id)}
+                                  className="w-1/3 text-white bg-red-500 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm text-center py-2.5"
+                                >
+                                  Delete
+                                </button>
+                                <button
+                                  type="submit"
+                                  className="w-1/3 text-white bg-gray-500 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm py-2.5"
+                                  onClick={closedeleteModal}
+                                >
+                                  Cancel
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
           </div>
-        )}
+        </div>
 
         {isModalOpen && (
           <div
             className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full"
             id="my-modal"
           >
-            <div className="relative top-20 mx-auto p-5 border w-1/2 shadow-lg rounded-md bg-white">
+            <div className="relative top-3 mx-auto p-5 border w-1/2 shadow-lg rounded-md bg-white">
               {/* Close button */}
               <div className="absolute top-0 right-0 pt-4 pr-4">
                 <button
                   onClick={closeModal}
                   className="text-black bg-red-500 hover:bg-red-700 rounded-lg text-sm p-2"
                 >
-                  <i className="fa-solid fa-x text-white"></i>
+                  <FontAwesomeIcon icon={faTimes} />
                 </button>
               </div>
 
@@ -447,18 +471,18 @@ export default function AddBloodBanks() {
                     />
                   </div>
                 </div>
-                  <div className="col-lg-12">
-                    <label className="block text-sm font-medium text-gray-900">
-                      Additional Note
-                    </label>
-                    <textarea
-                      rows={5}
-                      onChange={(e) => setAdditionalNotes(e.target.value)}
-                      type="text"
-                      className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
-                      required
-                    />
-                  </div>
+                <div className="col-lg-12">
+                  <label className="block text-sm font-medium text-gray-900">
+                    Additional Note
+                  </label>
+                  <textarea
+                    rows={5}
+                    onChange={(e) => setAdditionalNotes(e.target.value)}
+                    type="text"
+                    className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                    required
+                  />
+                </div>
                 <div>
                   <label
                     htmlFor="bloodbankImage"
@@ -467,24 +491,33 @@ export default function AddBloodBanks() {
                     BloodBank Image
                   </label>
                   <input
+                    required
                     type="file"
                     accept="image/*"
                     className="mt-1 block w-full text-sm text-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-                    onChange={handleImageChange}
-                    required
+                    onChange={handleImageUpload}
                   />
                   {imagePreview && (
-                    <div className="mt-4">
-                      <img src={imagePreview} className="w-full rounded-md" />
+                    <div className="mt-4 d-flex flex-row justify-content-center">
+                      <img
+                        src={imagePreview}
+                        className="rounded-md object-contain"
+                        width={300}
+                      />
                     </div>
                   )}
                 </div>
                 <button
                   onClick={handleSubmit}
                   type="submit"
+                  disabled={isLoading}
                   className="w-full text-white bg-cyan-700 hover:bg-cyan-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                 >
-                  Add BloodBank
+                  {isLoading ? (
+                    <CircularProgress size={20} color="inherit" />
+                  ) : (
+                    "Add BloodBank"
+                  )}
                 </button>
               </form>
             </div>

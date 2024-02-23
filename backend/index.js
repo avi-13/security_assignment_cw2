@@ -1,16 +1,28 @@
 const express = require("express");
 const dotenv = require("dotenv");
-const { connectDB } = require("./database/db");
 const cors = require("cors");
+const multiparty = require("connect-multiparty");
+const cloudinary = require("cloudinary");
+const connectDB = require("./database/db");
 
 const app = express();
 dotenv.config();
 
 connectDB();
 
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
+});
+
 app.use(express.json());
 
 const PORT = process.env.PORT;
+
+app.get("/", (req, res) => {
+  res.send("Hello");
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running!! on ${PORT}`);
@@ -21,7 +33,9 @@ const corsPolicy = {
   credentials: true,
   optionSuccessStatus: 200,
 };
+
 app.use(cors(corsPolicy));
+app.use(multiparty());
 
 // user routes
 app.use("/api/user", require("./routes/userRoutes"));
@@ -41,3 +55,4 @@ app.use("/api/contact", require("./routes/contactRoutes"));
 module.exports = {
   connectDB,
 };
+module.exports = app;

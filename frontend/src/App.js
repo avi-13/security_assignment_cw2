@@ -10,17 +10,20 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Services from "./pages/Services";
 import AdminPanel from "./pages/admin/AdminPanel";
+import EditHospital from "./pages/admin/hospitals/EditHospital";
 import BloodBanks from "./pages/users/BloodBanks/BloodBanks";
+import SingleBloodbank from "./pages/users/BloodBanks/SingleBloodBanks";
 import AddBloodRequests from "./pages/users/blood_request/AddBloodRequests";
 import SingleBloodRequest from "./pages/users/blood_request/SingleBloodRequest";
 import ViewBloodRequest from "./pages/users/blood_request/ViewBloodRequest";
 import BeADonor from "./pages/users/donor/BeADonor";
+import Users from "./pages/users/donor/Users";
 import Hospitals from "./pages/users/hospitals/Hospitals";
 import SingleHospital from "./pages/users/hospitals/SingleHospital";
 import Profile from "./pages/users/profile/Profile";
 import AdminRoutes from "./protected/AdminRoutes";
 import UserRoutes from "./protected/UserRoutes";
-import SingleBloodbank from "./pages/users/BloodBanks/SingleBloodBanks";
+import EditBloodBank from "./pages/admin/bloodbanks/EditBloodBank";
 
 function App() {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -28,10 +31,13 @@ function App() {
   return (
     <Router>
       <ToastContainer />
-      {user && user.isAdmin ? null : <Navbars />}
+      {!user || (user && !user.isAdmin) ? <Navbars /> : null}
       <Routes>
         <Route element={<AdminRoutes />}>
           <Route path="/admin/dashboard" element={<AdminPanel />} />
+          <Route path="/edit-hospital/:id" element={<EditHospital />} />
+          <Route path="/edit-bloodbank/:id" element={<EditBloodBank />} />
+          {/* <Route path="/admin/dashboard" element={<AdminPanel />} /> */}
         </Route>
 
         <Route path="/home" element={<HomePage />} />
@@ -50,6 +56,7 @@ function App() {
         <Route path="/single-bloodbank/:id" element={<SingleBloodbank />} />
 
         <Route element={<UserRoutes />}>
+          <Route path="/view_all_donors" element={<Users />} />
           <Route path="/be-a-donor/:id" element={<BeADonor />} />
           <Route path="/add_blood_requests" element={<AddBloodRequests />} />
           <Route path="/profile/:id" element={<Profile />} />

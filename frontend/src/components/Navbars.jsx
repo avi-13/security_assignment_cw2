@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { FiMenu } from "react-icons/fi";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import "../style/navbar.css";
-import { FiMenu } from "react-icons/fi";
 
 const Navbars = () => {
   const [activeItem, setActiveItem] = useState(null);
@@ -9,16 +9,22 @@ const Navbars = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isDropdownOpen, setDropdownOpen] = useState(false);
+  const [isLogoutModalOpen, setLogoutIsModalOpen] = useState(false);
+  const openLogoutModal = () => setLogoutIsModalOpen(true);
+  const closeLogoutModal = () => setLogoutIsModalOpen(false);
 
   const handleToggleDropdown = () => {
     setDropdownOpen(!isDropdownOpen);
   };
-
+  const cancel = (e) => {
+    closeLogoutModal();
+    navigate("/home");
+  };
   const handleLogout = (e) => {
+    closeLogoutModal();
     e.preventDefault();
     localStorage.clear();
     navigate("/login");
-    window.location.reload();
   };
   useEffect(() => {
     const pathname = location.pathname;
@@ -137,7 +143,7 @@ const Navbars = () => {
             <div className="profileImg">
               <img
                 class="img-account-profile  rounded-circle mb-2"
-                src="https://www.pngall.com/wp-content/uploads/12/Avatar-Profile-Vector-PNG-File.png"
+                src={users.userImageURL}
                 style={{ height: "4rem" }}
                 alt=""
               />
@@ -162,14 +168,14 @@ const Navbars = () => {
                     </Link>
                   </li>
                   <li style={{ width: "100%" }}>
-                    <Link className="dropdown-item" to="/change">
-                      Change Password
+                    <Link className="dropdown-item" to="/">
+                      My Requests
                     </Link>
                   </li>
                   <li style={{ width: "100%" }}>
                     <Link
                       className="dropdown-item"
-                      onClick={handleLogout}
+                      onClick={openLogoutModal}
                       to="/logout"
                     >
                       Logout
@@ -190,6 +196,38 @@ const Navbars = () => {
           </div>
         )}
       </nav>
+      {isLogoutModalOpen && (
+        <div
+          className="fixed inset-0 flex items-center justify-center bg-opacity-100 overflow-y-auto h-full w-full"
+          id="my-modal"
+        >
+          <div className="relative mx-auto p-4 border  shadow-sm w-1/4 rounded-md bg-white space-y-8 justify-center items-center flex flex-col">
+            <h6 className="font-medium w-3/4 mx-auto text-center">
+              <img
+                className="mb-2"
+                src="/assets/images/sure_about_that.jpg"
+                alt=""
+              />
+              Are you sure about that 👁️👁️?
+            </h6>
+            <div className="flex flex-wrap items-center justify-between m-0 w-full">
+              <button
+                onClick={handleLogout}
+                className="w-1/3 text-white bg-red-500 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm text-center py-2.5"
+              >
+                Yes, Logout !!
+              </button>
+              <button
+                type="submit"
+                className="w-1/3 text-white bg-gray-500 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm py-2.5"
+                onClick={cancel}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

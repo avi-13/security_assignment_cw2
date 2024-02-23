@@ -52,6 +52,7 @@ form .registerInputBox input{
 }
 form .registerInputBox i{
     position: absolute;
+    bottom: 5px;
     right: 8px;
     font-size: 1rem;
     color: #162938;

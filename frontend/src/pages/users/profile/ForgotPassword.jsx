@@ -5,7 +5,6 @@ const ForgotPassword = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Add your password reset logic here
   };
 
   return (

@@ -72,22 +72,21 @@ body {
 
 main {
   flex: 1;
-  padding-top:20px;
+  padding-top: 20px;
   overflow-y: auto;
 }
 
 @media (max-width: 670px) {
   .adminHeader {
-    height: 20px;
+    height: 100px !important;
   }
 
-  .adminHeader h1{
+  .adminHeader h1 {
     font-size: 0.6em;
   }
-  .adminHeader .dropdown a{
+  .adminHeader .dropdown a {
     font-size: 0.5em !important;
   }
-
 
   .adminWrapper {
     display: flex;
@@ -96,20 +95,6 @@ main {
 
   .adminUl {
     position: static;
-    /* display: flex; */
     height: 89vh;
   }
-  /*   
-  .adminLi button:hover {
-    height: 5rem;
-    font-size: 1.5rem;
-    width: 100%;
-    border-bottom: 1px solid #d9534f;
-  }
-  
-  .adminLi:hover{
-    background-color: #d9534f;
-    color: whitesmoke;
-  }
-   */
 }

@@ -1,6 +1,14 @@
+import {
+  faEnvelope,
+  faHome,
+  faMailBulk,
+  faMailForward,
+  faMobile,
+} from "@fortawesome/free-solid-svg-icons";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { sendMessageApi } from "../apis/api";
+import CustomFaIcons from "../components/CustomFaIcons";
 import "../style/contact-us.css";
 
 const ContactUs = () => {
@@ -13,7 +21,7 @@ const ContactUs = () => {
     e.preventDefault();
 
     const formData = new FormData();
-    
+
     formData.append("name", name);
     formData.append("email", email);
     formData.append("subject", subject);
@@ -62,7 +70,7 @@ const ContactUs = () => {
             </div>
             <div class="content">
               <div class="info">
-                <i class="fas fa-mobile-alt"></i>
+                <CustomFaIcons icon={faMobile} />
                 <h4 class="d-inline-block">
                   PHONE :
                   <br />
@@ -71,7 +79,7 @@ const ContactUs = () => {
               </div>
 
               <div class="info">
-                <i class="far fa-envelope"></i>
+                <CustomFaIcons size={"lg"} icon={faEnvelope} />
                 <h4 class="d-inline-block">
                   EMAIL :
                   <br />
@@ -80,7 +88,7 @@ const ContactUs = () => {
               </div>
 
               <div class="info">
-                <i class="fas fa-map-marker-alt"></i>
+                <CustomFaIcons size={"lg"} icon={faHome} />
                 <h4 class="d-inline-block">
                   ADDRESS :<br />
                   <span>DilliBazar, Kathmandu</span>

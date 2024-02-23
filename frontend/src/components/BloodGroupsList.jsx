@@ -1,6 +1,6 @@
 import React from "react";
 
-const BloodGroupLists = ({ onChange }) => {
+const BloodGroupLists = ({ onChange, dynamicValue }) => {
   const getBloodGroups = () => {
     // List of blood groups
     const bloodGroups = ["AB+", "AB-", "B-", "B+", "O+", "O-", "A+", "A-"];
@@ -18,7 +18,15 @@ const BloodGroupLists = ({ onChange }) => {
           onChange={onChange}
           className="block w-full px-4 py-2 border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring focus:border-blue-300"
         >
-          <option value="all">All</option>
+          <option
+            value={
+              dynamicValue
+                ? dynamicValue.toUpperCase().replace(/\s/g, "-")
+                : "all"
+            }
+          >
+            {dynamicValue ? dynamicValue : "All"}
+          </option>
           {getBloodGroups().map((bloodGroup, index) => (
             <option
               key={index}

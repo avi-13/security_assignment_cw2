@@ -1,4 +1,5 @@
 const BloodBanks = require("../../model/bloodBankModel.js");
+const cloudinary = require("cloudinary");
 
 const addBloodBanks = async (req, res) => {
   const {
@@ -14,6 +15,16 @@ const addBloodBanks = async (req, res) => {
     latitude,
     longitude,
   } = req.body;
+  
+  // Check if req.files and req.files.bbImage exist
+  if (!req.files || !req.files.bbImage) {
+    return res.json({
+      success: false,
+      message: "Please upload a valid image",
+    });
+  }
+
+  const { bbImage } = req.files;
 
   console.log(req.body);
   if (
@@ -36,6 +47,11 @@ const addBloodBanks = async (req, res) => {
   }
 
   try {
+    const uploadedImage = await cloudinary.v2.uploader.upload(bbImage.path, {
+      folder: "BloodBanks",
+      crop: "scale",
+    });
+
     const newBloodBank = new BloodBanks({
       bbName: bName,
       bbAddress: bAddress,
@@ -48,6 +64,7 @@ const addBloodBanks = async (req, res) => {
       socialMediaLinks: socialLinks,
       latitude: latitude,
       longitude: longitude,
+      bbImageUrl: uploadedImage.secure_url,
     });
 
     await newBloodBank.save();
@@ -117,6 +134,8 @@ const getAllBloodBanks = async (req, res) => {
       bloodBanks: bloodBankList,
       fewBloodBanks: fewBloodBanks,
       mobbank: mobbank,
+      bloodbanks: bloodBankList,
+      message: "Fetched"
     });
   } catch (error) {
     res.json(error);
@@ -162,6 +181,9 @@ const updateBloodBank = async (req, res) => {
     longitude,
   } = req.body;
 
+  const { bbImage } = req.files;
+
+
   const id = req.params.id;
 
   // validation
@@ -185,25 +207,52 @@ const updateBloodBank = async (req, res) => {
   }
 
   try {
-    const updatedBloodBanks = {
-      bName: bName,
-      bAddress: bAddress,
-      bContact: bContact,
-      oHours: oHours,
-      bgavailable: bgavailable,
-      serviceOffered: serviceOffered,
-      specialInstructions: specialInstructions,
-      additionalNotes: additionalNotes,
-      socialLinks: socialLinks,
-      latitude: latitude,
-      longitude: longitude,
-    };
-    await BloodBanks.findByIdAndUpdate(id, updatedBloodBanks);
-    res.status(200).json({
-      success: true,
-      message: "bloodBanks Updated Successfully",
-      bloodbanks: updatedBloodBanks,
-    });
+    if (bbImage) {
+      const uploadedImage = await cloudinary.v2.uploader.upload(bbImage.path, {
+        folder: "BloodBanks",
+        corp: "scale",
+      });
+      const updatedBloodBanks = {
+        bName: bName,
+        bAddress: bAddress,
+        bContact: bContact,
+        oHours: oHours,
+        bgavailable: bgavailable,
+        serviceOffered: serviceOffered,
+        specialInstructions: specialInstructions,
+        additionalNotes: additionalNotes,
+        socialLinks: socialLinks,
+        latitude: latitude,
+        longitude: longitude,
+        bbImageUrl: uploadedImage.secure_url,
+      };
+      await BloodBanks.findByIdAndUpdate(id, updatedBloodBanks);
+      res.status(200).json({
+        success: true,
+        message: "BloodBanks Updated Successfully With Image",
+        bloodbanks: updatedBloodBanks,
+      });
+    } else {
+      const updatedBloodBanks = {
+        bName: bName,
+        bAddress: bAddress,
+        bContact: bContact,
+        oHours: oHours,
+        bgavailable: bgavailable,
+        serviceOffered: serviceOffered,
+        specialInstructions: specialInstructions,
+        additionalNotes: additionalNotes,
+        socialLinks: socialLinks,
+        latitude: latitude,
+        longitude: longitude,
+      };
+      await BloodBanks.findByIdAndUpdate(id, updatedBloodBanks);
+      res.status(200).json({
+        success: true,
+        message: "bloodBanks Updated Successfully Without Image",
+        bloodbanks: updatedBloodBanks,
+      });
+    }
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -269,7 +318,7 @@ const bloodBankPagination = async (req, res) => {
 const searchBloodbanks = async (req, res, next) => {
   try {
     const { q } = req.query;
-    const bloodbanks = await Product.find({
+    const bloodbanks = await Bb.find({
       name: { $regex: q, $options: "i" },
     });
 

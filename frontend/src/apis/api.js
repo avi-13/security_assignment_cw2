@@ -4,8 +4,8 @@ const Api = axios.create({
   baseURL: "http://localhost:5000",
   withCredentials: true,
   headers: {
-    // "Content-Type": "multipart/form-data",
-    "Content-Type": "application/json",
+    "Content-Type": "multipart/form-data",
+    // "Content-Type": "application/json",
   },
 });
 
@@ -111,3 +111,9 @@ export const sendMessageApi = (data) =>
 
 export const getContactUsApi = (data) =>
   Api.get("/api/contact/getallcontact", data);
+
+export const newsAPi = (data) =>
+  Api.get(
+    "https://newsdata.io/api/1/news?apikey=pub_3882905bc0f7ab80ee7df6334e62ac3b05d3a&q=health&country=np",
+    data
+  );

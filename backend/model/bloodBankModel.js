@@ -52,6 +52,12 @@ const bloodBankSchema = mongoose.Schema(
       required: true,
       type: Number,
     },
+
+    bbImageUrl: {
+      type: String,
+      required: true,
+      trim: true, // cuts space and stores in the db
+    },
   },
   {
     timestamps: true,
