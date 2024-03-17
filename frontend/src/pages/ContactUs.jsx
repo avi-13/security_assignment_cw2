@@ -46,9 +46,9 @@ const ContactUs = () => {
   };
 
   return (
-    <section class="contact" id="contact">
-      <div class="container">
-        <div class="heading text-center">
+    <section className="contact" id="contact">
+      <div className="container">
+        <div className="heading text-center">
           <h2>Get in Touch</h2>
           <p>
             Thank you for your interest in contacting us. Whether you have a
@@ -58,9 +58,9 @@ const ContactUs = () => {
             Feel free to reach out to us using the information below:
           </p>
         </div>
-        <div class="row">
-          <div class="col-md-5">
-            <div class="title">
+        <div className="row">
+          <div className="col-md-5">
+            <div className="title">
               <h3>Contact detail</h3>
               <p>
                 If you have any questions or concerns related to your order, our
@@ -68,28 +68,28 @@ const ContactUs = () => {
                 your order number in your email for a faster response.
               </p>
             </div>
-            <div class="content">
-              <div class="info">
+            <div className="content">
+              <div className="info">
                 <CustomFaIcons icon={faMobile} />
-                <h4 class="d-inline-block">
+                <h4 className="d-inline-block">
                   PHONE :
                   <br />
                   <span>9588840000, 9095505011</span>
                 </h4>
               </div>
 
-              <div class="info">
+              <div className="info">
                 <CustomFaIcons size={"lg"} icon={faEnvelope} />
-                <h4 class="d-inline-block">
+                <h4 className="d-inline-block">
                   EMAIL :
                   <br />
                   <span>bloodbank@gmail.com</span>
                 </h4>
               </div>
 
-              <div class="info">
+              <div className="info">
                 <CustomFaIcons size={"lg"} icon={faHome} />
-                <h4 class="d-inline-block">
+                <h4 className="d-inline-block">
                   ADDRESS :<br />
                   <span>DilliBazar, Kathmandu</span>
                 </h4>
@@ -97,40 +97,40 @@ const ContactUs = () => {
             </div>
           </div>
 
-          <div class="col-md-7">
+          <div className="col-md-7">
             <form>
-              <div class="row">
-                <div class="col-sm-6">
+              <div className="row">
+                <div className="col-sm-6">
                   <input
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    class="form-control"
+                    className="form-control"
                     placeholder="Name"
                   />
                 </div>
-                <div class="col-sm-6">
+                <div className="col-sm-6">
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    class="form-control"
+                    className="form-control"
                     placeholder="Email"
                   />
                 </div>
-                <div class="col-sm-12">
+                <div className="col-sm-12">
                   <input
                     type="text"
-                    class="form-control"
+                    className="form-control"
                     value={subject}
                     onChange={(e) => setSubject(e.target.value)}
                     placeholder="Subject"
                   />
                 </div>
               </div>
-              <div class="form-group">
+              <div className="form-group">
                 <textarea
-                  class="form-control"
+                  className="form-control"
                   rows="5"
                   id="comment"
                   value={message}
@@ -138,7 +138,7 @@ const ContactUs = () => {
                   placeholder="Message"
                 ></textarea>
               </div>
-              <button class="btn btn-block" onClick={handleSubmit}>
+              <button className="btn btn-block" onClick={handleSubmit}>
                 Send Now!
               </button>
             </form>

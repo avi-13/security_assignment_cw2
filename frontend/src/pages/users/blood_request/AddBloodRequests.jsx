@@ -75,11 +75,11 @@ const AddBloodRequests = () => {
   return (
     <>
       <div className="reqBody">
-        <div class="addbloodrequestcontainer">
-          <div class="text">Add Blood Request</div>
+        <div className="addbloodrequestcontainer">
+          <div className="text">Add Blood Request</div>
           <form action="#">
-            <div class="form-row">
-              <div class="input-data">
+            <div className="form-row">
+              <div className="input-data">
                 <input
                   value={patientName}
                   onChange={(e) => setPatientName(e.target.value)}
@@ -87,9 +87,9 @@ const AddBloodRequests = () => {
                   type="text"
                   required
                 />
-                <div class="underline"></div>
+                <div className="underline"></div>
               </div>
-              <div class="input-data">
+              <div className="input-data">
                 <input
                   value={patientAge}
                   onChange={(e) => setPatientAge(e.target.value)}
@@ -97,9 +97,9 @@ const AddBloodRequests = () => {
                   type="number"
                   required
                 />
-                <div class="underline"></div>
+                <div className="underline"></div>
               </div>
-              <div class="input-data">
+              <div className="input-data">
                 <select
                   value={patientBloodType}
                   onChange={(e) => setPatientBloodType(e.target.value)}
@@ -119,12 +119,12 @@ const AddBloodRequests = () => {
                   <option value="A+">B-</option>
                   <option value="A+">O-</option>
                 </select>
-                <div class="underline"></div>
+                <div className="underline"></div>
               </div>
             </div>
 
-            <div class="form-row">
-              <div class="input-data">
+            <div className="form-row">
+              <div className="input-data">
                 <input
                   value={hospitalName}
                   onChange={(e) => sethospitalName(e.target.value)}
@@ -132,9 +132,9 @@ const AddBloodRequests = () => {
                   type="text"
                   required
                 />
-                <div class="underline"></div>
+                <div className="underline"></div>
               </div>
-              <div class="input-data">
+              <div className="input-data">
                 <input
                   value={hospitalAddress}
                   onChange={(e) => setHospitalAddress(e.target.value)}
@@ -142,9 +142,9 @@ const AddBloodRequests = () => {
                   type="text"
                   required
                 />
-                <div class="underline"></div>
+                <div className="underline"></div>
               </div>
-              <div class="input-data">
+              <div className="input-data">
                 <input
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
@@ -152,11 +152,11 @@ const AddBloodRequests = () => {
                   type="number"
                   required
                 />
-                <div class="underline"></div>
+                <div className="underline"></div>
               </div>
             </div>
-            <div class="form-row">
-              <div class="input-data">
+            <div className="form-row">
+              <div className="input-data">
                 <input
                   value={quantity}
                   onChange={(e) => setQuantity(e.target.value)}
@@ -164,9 +164,9 @@ const AddBloodRequests = () => {
                   type="text"
                   required
                 />
-                <div class="underline"></div>
+                <div className="underline"></div>
               </div>
-              <div class="input-data">
+              <div className="input-data">
                 <select
                   value={urgency}
                   onChange={(e) => setUrgency(e.target.value)}
@@ -180,9 +180,9 @@ const AddBloodRequests = () => {
                   <option value="Urgent">Urgent</option>
                   <option value="Normal">Normal</option>
                 </select>
-                <div class="underline"></div>
+                <div className="underline"></div>
               </div>
-              <div class="input-data">
+              <div className="input-data">
                 <input
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
@@ -193,8 +193,8 @@ const AddBloodRequests = () => {
                 />
               </div>
             </div>
-            <div class="form-row">
-              <div class="input-data">
+            <div className="form-row">
+              <div className="input-data">
                 <input
                   value={components}
                   onChange={(e) => setComponents(e.target.value)}
@@ -202,9 +202,9 @@ const AddBloodRequests = () => {
                   type="text"
                   required
                 />
-                <div class="underline"></div>
+                <div className="underline"></div>
               </div>
-              <div class="input-data">
+              <div className="input-data">
                 <input
                   value={contactPerson}
                   onChange={(e) => setContactPerson(e.target.value)}
@@ -212,9 +212,9 @@ const AddBloodRequests = () => {
                   type="text"
                   required
                 />
-                <div class="underline"></div>
+                <div className="underline"></div>
               </div>
-              <div class="input-data">
+              <div className="input-data">
                 <input
                   value={reason}
                   onChange={(e) => setReason(e.target.value)}
@@ -222,11 +222,11 @@ const AddBloodRequests = () => {
                   type="text"
                   required
                 />
-                <div class="underline"></div>
+                <div className="underline"></div>
               </div>
             </div>
-            <div class="form-row">
-              <div class="input-data">
+            <div className="form-row">
+              <div className="input-data">
                 <input
                   value={latitude}
                   onChange={(e) => setLatitude(e.target.value)}
@@ -234,9 +234,9 @@ const AddBloodRequests = () => {
                   type="number"
                   required
                 />
-                <div class="underline"></div>
+                <div className="underline"></div>
               </div>
-              <div class="input-data">
+              <div className="input-data">
                 <input
                   value={longitude}
                   onChange={(e) => setLongitude(e.target.value)}
@@ -244,11 +244,11 @@ const AddBloodRequests = () => {
                   type="number"
                   required
                 />
-                <div class="underline"></div>
+                <div className="underline"></div>
               </div>
             </div>
-            <div class="form-row">
-              <div class="input-data">
+            <div className="form-row">
+              <div className="input-data">
                 <input
                   value={anyPrecautions}
                   onChange={(e) => setPrecautions(e.target.value)}
@@ -256,11 +256,11 @@ const AddBloodRequests = () => {
                   type="number"
                   required
                 />
-                <div class="underline"></div>
+                <div className="underline"></div>
               </div>
             </div>
-            <div class="form-row">
-              <div class="input-data textarea">
+            <div className="form-row">
+              <div className="input-data textarea">
                 <textarea
                   value={instruction}
                   onChange={(e) => setInstruction(e.target.value)}
@@ -270,7 +270,7 @@ const AddBloodRequests = () => {
                   required
                 />
                 <br />
-                <div class="underline"></div>
+                <div className="underline"></div>
                 <br />
               </div>
             </div>

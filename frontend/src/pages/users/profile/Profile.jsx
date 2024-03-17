@@ -109,23 +109,23 @@ const Profile = ({ updateFullName }) => {
 
   return (
     <>
-      <div id="profileContainer" class="container-xl px-4 mt-4">
-        <div class="row">
-          <div class="col-xl-3">
-            <div class="card mb-4 mb-xl-0">
-              <div class="card-header text-center"> Profile Picture</div>
+      <div id="profileContainer" className="container-xl px-4 mt-4">
+        <div className="row">
+          <div className="col-xl-3">
+            <div className="card mb-4 mb-xl-0">
+              <div className="card-header text-center"> Profile Picture</div>
               <div
-                class="card-body"
+                className="card-body"
                 style={{ display: "grid", justifyItems: "center" }}
               >
                 <img
-                  class="img-account-profile rounded-circle mb-2"
+                  className="img-account-profile rounded-circle mb-2"
                   src={userImageUrl}
                   alt=""
                 />
                 <input
                   type="file"
-                  class="btn btn-primary"
+                  className="btn btn-primary"
                   onChange={handleImageUpload}
                 />
 
@@ -147,7 +147,7 @@ const Profile = ({ updateFullName }) => {
                   <>
                     <h3>New Image</h3>
                     <img
-                      class="img-account-profile rounded-circle mb-2"
+                      className="img-account-profile rounded-circle mb-2"
                       src={previewImage}
                       alt=""
                     />
@@ -156,23 +156,23 @@ const Profile = ({ updateFullName }) => {
               </div>
             </div>
           </div>
-          <div class="col-xl-8">
-            <div class="card mb-4">
-              <div class="card-header">Account Details</div>
-              <div class="card-body">
+          <div className="col-xl-8">
+            <div className="card mb-4">
+              <div className="card-header">Account Details</div>
+              <div className="card-body">
                 <form>
-                  {/* <div class="mb-3">
-                    <label class="small mb-1" >Username (how your name will appear to other users on the site)</label>
-                    <input class="form-control" type="text" placeholder="Enter your username" value={fullName} />
+                  {/* <div className="mb-3">
+                    <label className="small mb-1" >Username (how your name will appear to other users on the site)</label>
+                    <input className="form-control" type="text" placeholder="Enter your username" value={fullName} />
                   </div> */}
-                  <div class="row gx-3 mb-3">
-                    <div class="col-md-6">
-                      <label class="small mb-1" for="inputFirstName">
+                  <div className="row gx-3 mb-3">
+                    <div className="col-md-6">
+                      <label className="small mb-1" for="inputFirstName">
                         Full Name
                       </label>
                       <input
                         onChange={(e) => setFullName(e.target.value)}
-                        class="form-control"
+                        className="form-control"
                         id="inputFirstName"
                         type="text"
                         placeholder="Enter your first name"
@@ -180,12 +180,12 @@ const Profile = ({ updateFullName }) => {
                       />
                     </div>
 
-                    <div class="col-md-6">
-                      <label class="small mb-1" for="inputEmailAddress">
+                    <div className="col-md-6">
+                      <label className="small mb-1" for="inputEmailAddress">
                         Email address
                       </label>
                       <input
-                        class="form-control"
+                        className="form-control"
                         id="inputEmailAddress"
                         type="email"
                         onChange={(e) => setEmail(e.target.value)}
@@ -194,23 +194,23 @@ const Profile = ({ updateFullName }) => {
                       />
                     </div>
                   </div>
-                  <div class="row gx-3 mb-3">
-                    <div class="col-md-6">
-                      <label class="small mb-1">Phone Number</label>
+                  <div className="row gx-3 mb-3">
+                    <div className="col-md-6">
+                      <label className="small mb-1">Phone Number</label>
                       <input
-                        class="form-control"
+                        className="form-control"
                         type="text"
                         value={number}
                         onChange={(e) => setNumber(e.target.value)}
                       />
                     </div>
-                    <div class="col-md-6">
-                      <label class="small mb-1" for="inputLocation">
+                    <div className="col-md-6">
+                      <label className="small mb-1" for="inputLocation">
                         Address
                       </label>
                       <input
                         onChange={(e) => setCurrentAddress(e.target.value)}
-                        class="form-control"
+                        className="form-control"
                         id="inputLocation"
                         type="text"
                         placeholder="Enter your location"
@@ -220,22 +220,22 @@ const Profile = ({ updateFullName }) => {
                   </div>
                   {users.isADonor ? (
                     <>
-                      <div class="row gx-3 mb-3">
-                        <div class="col-md-6">
-                          <label class="small mb-1" for="inputPhone">
+                      <div className="row gx-3 mb-3">
+                        <div className="col-md-6">
+                          <label className="small mb-1" for="inputPhone">
                             Emergency Number
                           </label>
                           <input
                             onChange={(e) => setEmergencyNumber(e.target.value)}
-                            class="form-control"
+                            className="form-control"
                             id="inputPhone"
                             type="tel"
                             placeholder="Enter your Emergency Number"
                             value={emergencyNumber}
                           />
                         </div>
-                        <div class="col-md-6">
-                          <label class="small mb-1" for="inputBirthday">
+                        <div className="col-md-6">
+                          <label className="small mb-1" for="inputBirthday">
                             Birthday
                           </label>
                           <input
@@ -244,23 +244,23 @@ const Profile = ({ updateFullName }) => {
                             onFocus={(e) => (e.target.type = "date")}
                             onBlur={(e) => (e.target.type = { dob })}
                             onChange={(e) => setDOb(e.target.value)}
-                            class="form-control"
+                            className="form-control"
                             id="inputBirthday"
                             name="birthday"
                             value={dob}
                           />
                         </div>
                       </div>
-                      <div class="row gx-3 mb-3">
-                        <div class="col-md-6">
-                          <label class="small mb-1" for="inputLastName">
+                      <div className="row gx-3 mb-3">
+                        <div className="col-md-6">
+                          <label className="small mb-1" for="inputLastName">
                             Gender
                           </label>
                           <select
                             style={{ height: "auto" }}
                             onChange={(e) => setGender(e.target.value)}
                             type="text"
-                            class="form-control"
+                            className="form-control"
                             required
                           >
                             <option aria-disabled value={gender}>
@@ -272,16 +272,16 @@ const Profile = ({ updateFullName }) => {
                           </select>
                         </div>
                       </div>
-                      <div class="row gx-3 mb-3">
-                        <div class="col-md-6">
-                          <label class="small mb-1" for="inputLocation">
+                      <div className="row gx-3 mb-3">
+                        <div className="col-md-6">
+                          <label className="small mb-1" for="inputLocation">
                             Select BloodGroup
                           </label>
                           <select
                             style={{ height: "auto" }}
                             onChange={(e) => setBloodGroup(e.target.value)}
                             type="text"
-                            class="form-control"
+                            className="form-control"
                             required
                           >
                             <option disabled value={bloodGroup}>
@@ -297,13 +297,13 @@ const Profile = ({ updateFullName }) => {
                             <option value="A+">O-</option>
                           </select>
                         </div>
-                        <div class="col-md-6">
-                          <label class="small mb-1" for="inputLocation">
+                        <div className="col-md-6">
+                          <label className="small mb-1" for="inputLocation">
                             No. of Previous Donation 'Approx'
                           </label>
                           <input
                             onChange={(e) => setPrevDonation(e.target.value)}
-                            class="form-control"
+                            className="form-control"
                             id="inputLocation"
                             type="number"
                             value={noPreviousDonation}
@@ -315,7 +315,7 @@ const Profile = ({ updateFullName }) => {
 
                   <button
                     onClick={handleSubmit}
-                    class="btn btn-primary"
+                    className="btn btn-primary"
                     type="button"
                     disabled={isLoading}
                   >

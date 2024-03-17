@@ -190,7 +190,6 @@ export default function AddHospitals() {
           </div>
 
           <div className="w-full bg-white overflow-y-auto">
-
             <table className="w-full whitespace-nowrap">
               <thead>
                 <tr className="h-16 w-full text-sm leading-none text-gray-800">
@@ -290,7 +289,10 @@ export default function AddHospitals() {
                               className="me-4"
                               icon={faExclamationTriangle}
                             />
-                            <img src="../assets/images/sure_about_that.jpg" alt="" />
+                            <img
+                              src="../assets/images/sure_about_that.jpg"
+                              alt=""
+                            />
                             Are you sure about that 👁️👁️?
                           </h6>
                           <div className="flex flex-wrap items-center justify-between mx-auto w-full">
@@ -379,7 +381,15 @@ export default function AddHospitals() {
                       Latitude
                     </label>
                     <input
-                      onChange={(e) => setLatitude(e.target.value)}
+                      onChange={(e) => {
+                        const inputValue = e.target.value;
+                        const floatValue = inputValue
+                          ? parseFloat(inputValue)
+                          : null;
+                        const formattedValue =
+                          floatValue !== null ? floatValue.toFixed(2) : "";
+                        setLatitude(formattedValue);
+                      }}
                       type="number"
                       className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
                       required
@@ -390,7 +400,15 @@ export default function AddHospitals() {
                       Longitude
                     </label>
                     <input
-                      onChange={(e) => setLongitude(e.target.value)}
+                      onChange={(e) => {
+                        const inputValue = e.target.value;
+                        const floatValue = inputValue
+                          ? parseFloat(inputValue)
+                          : null;
+                        const formattedValue =
+                          floatValue !== null ? floatValue.toFixed(2) : "";
+                        setLongitude(formattedValue);
+                      }}
                       type="number"
                       className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
                       required

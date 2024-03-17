@@ -125,7 +125,10 @@ const EditHospital = () => {
               />
             </div>
             <div>
-              <DistrictList dynamicValue={hospitalAddress} onChange={changeHospitalAddress} />
+              <DistrictList
+                dynamicValue={hospitalAddress}
+                onChange={changeHospitalAddress}
+              />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-900">
@@ -157,7 +160,12 @@ const EditHospital = () => {
               </label>
               <input
                 value={latitude}
-                onChange={(e) => setLatitude(e.target.value)}
+                onChange={(e) => {
+                  const inputValue = e.target.value;
+                  const floatValue = inputValue ? parseFloat(inputValue) : null;
+                  const formattedValue = floatValue !== null ? floatValue.toFixed(2) : '';
+                  setLatitude(formattedValue);
+                }}
                 type="number"
                 className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
                 required
@@ -169,7 +177,12 @@ const EditHospital = () => {
               </label>
               <input
                 value={longitude}
-                onChange={(e) => setLongitude(e.target.value)}
+                onChange={(e) => {
+                  const inputValue = e.target.value;
+                  const floatValue = inputValue ? parseFloat(inputValue) : null;
+                  const formattedValue = floatValue !== null ? floatValue.toFixed(2) : '';
+                  setLongitude(formattedValue);
+                }}
                 type="number"
                 className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
                 required

@@ -38,8 +38,9 @@ const bloodBankSchema = mongoose.Schema(
 
     availableBloodGroups: {
       required: true,
-      type: String,
+      type: [String],
     },
+    
     socialMediaLinks: {
       required: true,
       type: String,
@@ -47,6 +48,7 @@ const bloodBankSchema = mongoose.Schema(
     latitude: {
       required: true,
       type: Number,
+
     },
     longitude: {
       required: true,

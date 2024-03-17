@@ -129,35 +129,35 @@ const HomePage = ({ history }) => {
         </button>
       </div>
 
-      <section class="bg-white p-0 mt-4">
-        <div class="container p-0">
-          <div class="row align-items-center justify-content-between">
-            <div class="col-lg-8 col-xl-7 col-xxl-6">
-              <div class=" text-center text-xl-start">
-                <h1 class="display-5 fw-bolder text-danger mb-2">
+      <section className="bg-white p-0 mt-4">
+        <div className="container p-0">
+          <div className="row align-items-center justify-content-between">
+            <div className="col-lg-8 col-xl-7 col-xxl-6">
+              <div className=" text-center text-xl-start">
+                <h1 className="display-5 fw-bolder text-danger mb-2">
                   Welcome to Blood Bank
                 </h1>
-                <p class="lead fw-normal text-danger mb-4">
+                <p className="lead fw-normal text-danger mb-4">
                   A place where you can find the blood donors and request for
                   blood. We are here to help you. <br />
                   "Empower Compassion, Donate with Passion"
                 </p>
-                <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start">
+                <div className="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start">
                   <a
-                    class="btn btn-outline-danger btn-lg px-4 me-sm-3"
+                    className="btn btn-outline-danger btn-lg px-4 me-sm-3"
                     href="#features"
                   >
                     Get Started
                   </a>
-                  <a class="btn btn-outline-dark btn-lg px-4" href="#!">
+                  <a className="btn btn-outline-dark btn-lg px-4" href="#!">
                     Learn More
                   </a>
                 </div>
               </div>
             </div>
-            <div class="col-xl-5 col-xxl-6 d-none d-xl-block text-center">
+            <div className="col-xl-5 col-xxl-6 d-none d-xl-block text-center">
               <img
-                class="img-fluid rounded-3"
+                className="img-fluid rounded-3"
                 src="https://www.kvgmch.org/wp-content/uploads/2019/06/blood-bank-min.jpg"
                 alt="..."
               />
@@ -166,19 +166,19 @@ const HomePage = ({ history }) => {
         </div>
       </section>
 
-      <div class="row justify-content-center mb-6">
-        <div class="col-md-8">
-          <div class="card mt-5">
-            <div class="card-body">
-              <h5 class="card-title text-center mb-4">Search Users</h5>
+      <div className="row justify-content-center mb-6">
+        <div className="col-md-8">
+          <div className="card mt-5">
+            <div className="card-body">
+              <h5 className="card-title text-center mb-4">Search Users</h5>
               <form id="userSearchForm">
-                <div class="form-group">
+                <div className="form-group">
                   <DistrictList
                     value={district}
                     onChange={(e) => setDistrict(e.target.value)}
                   />
                 </div>
-                <div class="form-group">
+                <div className="form-group">
                   <BloodGroupLists
                     value={bloodGroup}
                     onChange={(e) => setBloodGroup(e.target.value)}
@@ -186,7 +186,7 @@ const HomePage = ({ history }) => {
                 </div>
                 <button
                   onClick={handleSearch}
-                  class="btn btn-primary btn-block"
+                  className="btn btn-primary btn-block"
                 >
                   Search
                 </button>
@@ -196,154 +196,76 @@ const HomePage = ({ history }) => {
         </div>
       </div>
 
-      {/* <section class="content-section" id="portfolio">
-        <div class="container px-4 px-lg-5">
-          <div class="content-section-heading text-center">
-            <h2 class="mb-5">Recent Projects</h2>
+      {bloodbankData && (
+        <div className="hospitals-container m-4 mt-5 p-2 border-primary">
+          <div className="w-full flex flex-row justify-between mt-4">
+            <h3>Bloodbanks</h3>
+            <a
+              href="/bloodbanks"
+              className="text-blue-500 no-underline hover:underline"
+            >
+              View All Bloodbanks
+            </a>
           </div>
-          <div class="row gx-0">
-            <div class="col-lg-6">
-              <a class="portfolio-item" href="#!">
-                <div class="caption">
-                  <div class="caption-content d-flex flex-column align-items-center">
-                    <h1 class="h2 text-center">Donors Registered</h1>
-                    <h1 class="mb-0">25</h1>
-                  </div>
-                </div>
-                <img
-                  class="img-fluid"
-                  src="https://zameenblog.s3.amazonaws.com/blog/wp-content/uploads/2019/08/cover-image-2-4.jpg"
-                  alt="..."
-                />
-              </a>
-            </div>
-            <div class="col-lg-6">
-              <a class="portfolio-item" href="#!">
-                <div class="caption">
-                  <div class="caption-content">
-                    <div class="h2">Ice Cream</div>
-                    <p class="mb-0">
-                      A dark blue background with a colored pencil, a clip, and
-                      a tiny ice cream cone!
-                    </p>
-                  </div>
-                </div>
-                <img
-                  class="img-fluid"
-                  src="https://wallpapercave.com/wp/wp4323537.png"
-                  alt="..."
-                />
-              </a>
-            </div>
-            <div class="col-lg-6">
-              <a class="portfolio-item" href="#!">
-                <div class="caption">
-                  <div class="caption-content">
-                    <div class="h2">Strawberries</div>
-                    <p class="mb-0">
-                      Strawberries are such a tasty snack, especially with a
-                      little sugar on top!
-                    </p>
-                  </div>
-                </div>
-                <img class="img-fluid" src="../assets/images/6.png" alt="..." />
-              </a>
-            </div>
-            <div class="col-lg-6">
-              <a class="portfolio-item" href="#!">
-                <div class="caption">
-                  <div class="caption-content">
-                    <div class="h2">Workspace</div>
-                    <p class="mb-0">
-                      A yellow workspace with some scissors, pencils, and other
-                      objects.
-                    </p>
-                  </div>
-                </div>
-                <img class="img-fluid" src="../assets/images/7.png" alt="..." />
-              </a>
-            </div>
-          </div>
-        </div>
-      </section> */}
-
-      {hospitalData && (
-        <section className="pb-2 mb-5">
-          <div className="d-flex flex-row justify-content-between ms-5 me-5">
-            <h1>Hospitals</h1>
-            <Link className="fs-4" to={"/hospitals"}>
-              View more
-            </Link>
-          </div>
-          <div className="hmprodContainer">
-            {hospitalData.map((hospital) => (
-              <div class="hmproduct-image">
-                <img
-                  src={
-                    hospital.hospitalImageUrl ??
-                    "https://www.brookings.edu/wp-content/uploads/2017/05/hospital002.jpg"
-                  }
-                  alt={hospital.hospitalName}
-                  height={20}
-                  width={500}
-                />
-
-                <div class="hminfo bg-success">
-                  <h4>{hospital.hospitalName}</h4>
-                  <ul>
-                    <li>
-                      <strong>{hospital.hospitalContactNumber}</strong>
-                    </li>
-                    <li>
-                      <strong>{hospital.hospitalType} </strong>
-                    </li>
-                  </ul>
-                </div>
+          {bloodbankData.map((bloodbank) => (
+            <div className="hospital-item">
+              <img
+                src={
+                  bloodbank.bbImageUrl ??
+                  "https://www.brookings.edu/wp-content/uploads/2017/05/hospital002.jpg"
+                }
+                alt={bloodbank.bbName}
+                className="hospital-image"
+              />
+              <div className="hospital-details">
+                <h3 className="text-lg font-bold m-0">{bloodbank.bbName}</h3>
+                <p className="font-bold text-white m-0">
+                  Address: {bloodbank.bbAddress}
+                </p>
+                <p className="font-bold text-white m-0">
+                  Phone: {bloodbank.bContact}
+                </p>
               </div>
-            ))}
-          </div>
-        </section>
+            </div>
+          ))}
+        </div>
       )}
 
-      {bloodbankData && (
-        <section className="pb-2 mb-5">
-          <div className="d-flex flex-row justify-content-between ms-5 me-5">
-            <h1>BloodBanks</h1>
-            <Link className="fs-4" to={"/bloodbanks"}>
-              View more
-            </Link>
+      {hospitalData && (
+        <div className="hospitals-container m-4 p-2 border-primary">
+          <div className="w-full flex flex-row justify-between mt-4">
+            <h3>Hospitals</h3>
+            <a
+              href="/hospitals"
+              className="text-blue-500 no-underline hover:underline"
+            >
+              View All Hospitals
+            </a>
           </div>
-          <div className="hmprodContainer">
-            {bloodbankData.map((bloodbank) => (
-              <div class="hmproduct-image">
-                <img
-                  src={bloodbank.bbImageUrl}
-                  alt={bloodbank.bbName}
-                  height={20}
-                  width={500}
-                />
-
-                <div class="hminfo">
-                  <h4>{bloodbank.bbName}</h4>
-                  <ul>
-                    <li>
-                      <strong>{bloodbank.bbAddress} </strong>
-                    </li>
-                    <li>
-                      <strong>{bloodbank.bContact} </strong>
-                    </li>
-                    <li>
-                      <strong>{bloodbank.operatingHours} </strong>
-                    </li>
-                    <li>
-                      <strong>{bloodbank.availableBloodGroups} </strong>
-                    </li>
-                  </ul>
-                </div>
+          {hospitalData.map((hospital) => (
+            <div className="hospital-item">
+              <img
+                src={
+                  hospital.hospitalImageUrl ??
+                  "https://www.brookings.edu/wp-content/uploads/2017/05/hospital002.jpg"
+                }
+                alt={hospital.hospitalName}
+                className="hospital-image"
+              />
+              <div className="hospital-details">
+                <h3 className="text-lg font-bold m-0">
+                  {hospital.hospitalName}
+                </h3>
+                <p className="font-bold text-white m-0">
+                  Address: {hospital.hospitalAddress}
+                </p>
+                <p className="font-bold text-white m-0">
+                  Phone: {hospital.hospitalContactNumber}
+                </p>
               </div>
-            ))}
-          </div>
-        </section>
+            </div>
+          ))}
+        </div>
       )}
 
       {isLoading && <CustomCircularProgress />}

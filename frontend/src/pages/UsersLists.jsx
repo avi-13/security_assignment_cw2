@@ -11,7 +11,9 @@ const UsersLists = () => {
 
   useEffect(() => {
     if (searchedUsers && searchedUsers?.length > 0) {
-      setUsers(searchedUsers);
+      const nonAdminUsers = searchedUsers.filter(user => !user.isAdmin);
+      setUsers(nonAdminUsers);
+      console.log(searchedUsers);
       setLoading(false);
     } else {
       setTimeout(() => {
@@ -29,10 +31,11 @@ const UsersLists = () => {
         <>
           {users?.length > 0 ? (
             <ul className="users-list">
+              {console.log(users.isAdmin)}
               {users?.map((user) => (
                 <li key={user._id} className="user-card">
                   <div
-                    className={`user-image-container ${
+                    className={`user-image ${
                       user.isAvailable ? "green-border" : "red-border"
                     }`}
                   >
@@ -65,7 +68,10 @@ const UsersLists = () => {
             </ul>
           ) : (
             <div className="not-found">
-              No Users Found <span role="img" aria-label="sad">😢</span>
+              No Users Found{" "}
+              <span role="img" aria-label="sad">
+                😢
+              </span>
             </div>
           )}
         </>

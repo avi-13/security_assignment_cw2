@@ -5,7 +5,7 @@ const Footer = () => {
   return (
     <>
       <footer>
-        <section class="top">
+        <section className="top">
           <img alt="" src="assets/images/logotrans.png" />
           <ul>
             <li>

@@ -137,9 +137,7 @@ const getAllHospitals = async (req, res) => {
       [sortBy]: sortOrder,
     });
 
-    const fewHospitals = hospitalLists.slice(5);
-
-    // console.log("Hospital List:", hospitalLists);
+    const fewHospitals = hospitalLists.slice(-5);
 
     res.status(200).json({
       success: true,

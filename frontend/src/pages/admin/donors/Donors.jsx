@@ -7,7 +7,7 @@ export default function ViewDonors() {
   useEffect(() => {
     fetchAllUsersApi()
       .then((res) => {
-        console.log(res.data);
+        console.log(res.data.users);
         const formattedUsers = res.data.users.map((user) => {
           const dateOfBirth = new Date(user.dob);
           const formattedDateOfBirth = `${dateOfBirth.getDate()}/${

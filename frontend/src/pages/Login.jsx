@@ -57,18 +57,18 @@ const Login = () => {
   return (
     <>
       <div className="loginSecondBody">
-        <div class="loginContainer">
-          <div class="loginForm">
+        <div className="loginContainer">
+          <div className="loginForm">
             <header>Login</header>
             <form>
-              <div class="loginInputBox">
+              <div className="loginInputBox">
                 <i>
                   <CustomFaIcons icon={faEnvelope} size={"sm"} />
                 </i>
                 <input onChange={changeEmail} type="text" required />
                 <label>Email</label>
               </div>
-              <div class="loginInputBox">
+              <div className="loginInputBox">
                 <i>
                   <CustomFaIcons icon={faLock} size={"sm"} />
                 </i>
@@ -80,7 +80,7 @@ const Login = () => {
                 />
                 <label>Password</label>
               </div>
-              <div class="link">
+              <div className="link">
                 <Link to={"/forgetpassword"}> Forgot Password</Link>
               </div>
               <button
@@ -89,7 +89,7 @@ const Login = () => {
               >
                 Login
               </button>
-              <div class="link">
+              <div className="link">
                 <p>
                   Don't have an account? <Link to={"/register"}>Signup</Link>
                 </p>

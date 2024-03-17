@@ -80,11 +80,11 @@ const BeADonor = () => {
   return (
     <>
       <div className="donorBody">
-        <div class="donor-container">
+        <div className="donor-container">
           <div className="donor-image">
             <img src="../assets/images/donors.png" alt="image" />
           </div>
-          <div class="donor-container-text">
+          <div className="donor-container-text">
             <form style={{ border: " grey solid 0.2rem", padding: "2rem" }}>
               <h1 className="text-center">Register as Donor</h1>
               <input

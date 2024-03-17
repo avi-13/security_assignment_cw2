@@ -43,7 +43,7 @@ const RequestDetails = () => {
       <div className="viewreqContainer">
         <div className="w3-row-padding">
           <div className="w3-half">
-            <div class="w3-display-container">
+            <div className="w3-display-container">
               <img
                 className="hospital-img"
                 src="https://th.bing.com/th/id/OIP.CRACOhG4JMd5LZFiPxwtMQHaFj?rs=1&pid=ImgDetMain"
@@ -125,8 +125,8 @@ const RequestDetails = () => {
               </div>
             </div>
           </div>
-          <div class="w3-half">
-            <div class="w3-white w3-text-grey w3-card-4">
+          <div className="w3-half">
+            <div className="w3-white w3-text-grey w3-card-4">
               <div className="w3-container w3-card w3-white w3-margin-bottom">
                 <h2
                   className="w3-text-red font-bold w3-padding-16"
@@ -200,7 +200,7 @@ const RequestDetails = () => {
                   <hr />
                 </div>
               </div>
-              <div class="w3-container">
+              <div className="w3-container">
                 <h2
                   className="w3-text-grey w3-padding-16 mb-0"
                   style={{ display: "flex", alignItems: "center" }}

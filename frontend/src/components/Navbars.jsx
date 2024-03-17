@@ -76,10 +76,10 @@ const Navbars = ({ fullName }) => {
     <>
       <nav style={{ position: "fixed", zIndex: "99", top: "0", left: "0" }}>
         <input type="checkbox" id="check" />
-        <label for="check" className="checkbtn">
+        <label htmlFor="check" className="checkbtn">
           <FiMenu />
         </label>
-        <label for="" className="logo text-danger">
+        <label htmlFor="" className="logo text-danger">
           BloodBank
         </label>
         <ul className="nav-ul">
@@ -142,7 +142,7 @@ const Navbars = ({ fullName }) => {
           <>
             <div className="profileImg">
               <img
-                class="img-account-profile  rounded-circle mb-2"
+                className="img-account-profile  rounded-circle mb-2"
                 src={users.userImageURL}
                 style={{ height: "4rem" }}
                 alt=""

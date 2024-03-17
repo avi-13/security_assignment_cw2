@@ -16,6 +16,7 @@ import {
 } from "../../../apis/api";
 import BloodGroupLists from "../../../components/BloodGroupsList";
 import DistrictList from "../../../components/DistrictsList";
+import MultiSelectBG from "../../../components/MultiSeletctBG";
 
 export default function AddBloodBanks() {
   // useEffect for fetching all the products and showing in table
@@ -58,7 +59,7 @@ export default function AddBloodBanks() {
   const [serviceOffered, setServiceOffered] = useState("");
   const [specialInstructions, setSpecialInstructions] = useState("");
   const [additionalNotes, setAdditionalNotes] = useState("");
-  const [availableBloodGroups, setAvailableBloodGroups] = useState("");
+  const [availableBloodGroups, setAvailableBloodGroups] = useState([]);
   const [socialMediaLinks, setSocialMediaLinks] = useState("");
 
   const handleSort = (column) => {
@@ -85,8 +86,9 @@ export default function AddBloodBanks() {
   const changeOperatingHours = (e) => {
     setOperatingHours(e.target.value);
   };
-  const changeAvailableBloodGroups = (e) => {
-    setAvailableBloodGroups(e.target.value);
+  const changeAvailableBloodGroups = (selectedOptions) => {
+    const selectedValues = selectedOptions.map((option) => option.value);
+    setAvailableBloodGroups(selectedValues);
   };
   const changeSocialMediaLinks = (e) => {
     setSocialMediaLinks(e.target.value);
@@ -279,8 +281,22 @@ export default function AddBloodBanks() {
                         </p>
                       </td>
 
-                      <td className="pl-20">
-                        <p className="font-medium">{item.socialMediaLinks}</p>
+                      <td
+                        className="pl-20"
+                        style={{
+                          maxWidth: "200px",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        }}
+                      >
+                        <p
+                          className="font-medium"
+                          title={item.socialMediaLinks}
+                        >
+                          {item.socialMediaLinks.length > 20
+                            ? `${item.socialMediaLinks.substring(0, 20)}...`
+                            : item.socialMediaLinks}
+                        </p>
                       </td>
                       <td className="pl-20 overflow-y max-w-[200px] truncate">
                         <p className="font-medium">
@@ -401,7 +417,7 @@ export default function AddBloodBanks() {
                     />
                   </div>
                   <div>
-                    <BloodGroupLists onChange={changeAvailableBloodGroups} />
+                    <MultiSelectBG onChange={changeAvailableBloodGroups} />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-900">
@@ -431,7 +447,15 @@ export default function AddBloodBanks() {
                       Latitude
                     </label>
                     <input
-                      onChange={(e) => setLatitude(e.target.value)}
+                      onChange={(e) => {
+                        const inputValue = e.target.value;
+                        const floatValue = inputValue
+                          ? parseFloat(inputValue)
+                          : null;
+                        const formattedValue =
+                          floatValue !== null ? floatValue.toFixed(2) : "";
+                        setLatitude(formattedValue);
+                      }}
                       type="number"
                       className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
                       required
@@ -442,7 +466,15 @@ export default function AddBloodBanks() {
                       Longitude
                     </label>
                     <input
-                      onChange={(e) => setLongitude(e.target.value)}
+                      onChange={(e) => {
+                        const inputValue = e.target.value;
+                        const floatValue = inputValue
+                          ? parseFloat(inputValue)
+                          : null;
+                        const formattedValue =
+                          floatValue !== null ? floatValue.toFixed(2) : "";
+                        setLongitude(formattedValue);
+                      }}
                       type="number"
                       className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
                       required

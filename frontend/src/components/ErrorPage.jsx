@@ -4,21 +4,21 @@ import "../style/Errorpage.css";
 const ErrorPage = () => {
   return (
     <div className="errorpage">
-      <div class="noise"></div>
-      <div class="overlay"></div>
-      <div class="terminal">
+      <div className="noise"></div>
+      <div className="overlay"></div>
+      <div className="terminal">
         <h1>
-          Oops !!!  <span class="errorcode">404</span>
+          Oops !!!  <span className="errorcode">404</span>
         </h1>
-        <p class="output">
+        <p className="output">
           The page you are looking for might have been removed, had its name
           changed or is temporarily unavailable.
         </p>
-        <p class="output">
+        <p className="output">
           Please try to <a href="#1">go back</a> or{" "}
           <a href="#2">return to the homepage</a>.
         </p>
-        <p class="output">Good luck.</p>
+        <p className="output">Good luck.</p>
       </div>
     </div>
   );

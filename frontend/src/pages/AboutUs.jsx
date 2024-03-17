@@ -5,14 +5,14 @@ import "../style/Aboutus.css";
 const AboutUs = () => {
   return (
     <>
-      <section class="aboutus-banner">
-        <div class="aboutus-container">
+      <section className="aboutus-banner">
+        <div className="aboutus-container">
           <h1>Blood Bank & E-Donor: About Us</h1>
           <p>Welcome to Blood Bank & E-Donor Platform</p>
         </div>
       </section>
-      <section class="first">
-        <div class="aboutus-container">
+      <section className="first">
+        <div className="aboutus-container">
           <h5>Our Mission :</h5>
           <br />
           <p>
@@ -23,17 +23,17 @@ const AboutUs = () => {
             blood counts, and together, we can make a significant impact on
             healthcare outcomes.
           </p>
-          <Link class="cta" to={"/"}>
+          <Link className="cta" to={"/"}>
             Discover more ⟩
           </Link>
         </div>
       </section>
-      <section class="second">
-        <div class="aboutus-container">
-          <div class="left-img">
+      <section className="second">
+        <div className="aboutus-container">
+          <div className="left-img">
             <img src="../assets/images/contactus.png" alt="Person" />
           </div>
-          <div class="right-content">
+          <div className="right-content">
             <h5>Contact Us </h5>
             <br />
             <p>
@@ -48,7 +48,7 @@ const AboutUs = () => {
               and will do our best to respond to your inquiries promptly. Thank
               you for choosing us!
             </p>
-            <Link class="cta" to={"/contact-us"}>
+            <Link className="cta" to={"/contact-us"}>
               Contact Us »
             </Link>
           </div>

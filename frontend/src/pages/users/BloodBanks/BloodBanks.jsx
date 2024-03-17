@@ -1,15 +1,15 @@
 import "leaflet/dist/leaflet.css";
-import '../../../style/BloodBank.css'
+import "../../../style/BloodBank.css";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getallBloodBankApi } from "../../../apis/api";
 
 const BloodBanks = () => {
-  const [bloodbankData,setBloodbankData] = useState([]);
+  const [bloodbankData, setBloodbankData] = useState([]);
 
   useEffect(() => {
     getallBloodBankApi().then((res) => {
-      if (res.data.success ) {
+      if (res.data.success) {
         setBloodbankData(res?.data?.bloodBank);
       }
     });
@@ -29,7 +29,8 @@ const BloodBanks = () => {
               <img
                 className="image-container"
                 src={bloodbank.bbImageUrl}
-                alt="bloodbank 1"
+                alt={bloodbank.bbName}
+                style={{ height: "20rem",width:"100%", objectFit: "cover"}}
               />
               <div className="d-flex flex-row gap-4 justify-content-between">
                 <h3 className="map-h3">{bloodbank.bbName}</h3>
