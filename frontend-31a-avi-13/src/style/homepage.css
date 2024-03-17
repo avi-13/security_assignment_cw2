@@ -1,0 +1,202 @@
+* {
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif !important;
+}
+
+#carouselExampleControlsNoTouching {
+  width: 100%;
+  padding: 7rem 3rem 3rem 2rem;
+}
+
+.homeStats {
+  display: flex;
+  justify-content: space-around;
+  gap: 8rem;
+  width: 100%;
+  align-items: center;
+  background-color: white;
+  padding: 4rem;
+}
+
+.hmstats {
+  display: grid;
+  width: 20rem;
+  border-radius: 2rem;
+  padding: 3rem;
+  background-color: black;
+  text-align: center;
+  color: white;
+  transition: 0.5s all ease-in-out;
+}
+
+.hmstats:hover {
+  cursor: pointer;
+  background-color: red;
+  color: white;
+  transform: scale(1.2);
+  animation-duration: 0.8ms;
+}
+.hmstats i {
+  font-size: 4rem;
+  margin-bottom: 10px;
+}
+
+.hmstats p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.count {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.hmMob {
+  display: flex;
+  padding: 2rem;
+}
+
+.image-container {
+  position: relative;
+}
+
+.full-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.overlapping-image {
+  position: absolute;
+  top: -3rem;
+  z-index: 1;
+  width: 25rem;
+  height: 32rem;
+}
+
+.portfolio-item {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  max-width: 530px;
+  margin: auto auto 1rem;
+}
+.portfolio-item .caption {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(33, 37, 41, 0.2);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
+}
+.portfolio-item .caption .caption-content {
+  color: #fff;
+  margin: auto 2rem 2rem;
+}
+.portfolio-item .caption .caption-content h2,
+.portfolio-item .caption .caption-content .h2 {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
+.portfolio-item .caption .caption-content p {
+  font-weight: 300;
+  font-size: 1.2rem;
+}
+@media (min-width: 992px) {
+  .portfolio-item {
+    max-width: none;
+    margin: 0;
+  }
+  .portfolio-item .caption {
+    transition: background-color 0.7s, -webkit-clip-path 0.25s ease-out;
+    transition: clip-path 0.25s ease-out, background-color 0.7s;
+    transition: clip-path 0.25s ease-out, background-color 0.7s,
+      -webkit-clip-path 0.25s ease-out;
+    -webkit-clip-path: inset(0px);
+    clip-path: inset(0px);
+  }
+  .portfolio-item .caption .caption-content {
+    transition: opacity 0.25s;
+    margin-left: 5rem;
+    margin-right: 5rem;
+    margin-bottom: 5rem;
+  }
+  .portfolio-item img {
+    transition: -webkit-clip-path 0.25s ease-out;
+    transition: clip-path 0.25s ease-out;
+    transition: clip-path 0.25s ease-out, -webkit-clip-path 0.25s ease-out;
+    -webkit-clip-path: inset(-1px);
+    clip-path: inset(-1px);
+  }
+  .portfolio-item:hover img {
+    -webkit-clip-path: inset(2rem);
+    clip-path: inset(2rem);
+  }
+  .portfolio-item:hover .caption {
+    background-color: rgba(225, 124, 127, 0.251);
+    -webkit-clip-path: inset(2rem);
+    clip-path: inset(2rem);
+  }
+}
+
+/* product image  */
+.hmprodContainer {
+  margin: 4px;
+  display: flex;
+  gap: 2px;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+}
+.hmproduct-image {
+  transition: all 0.3s ease-out;
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  display: inline-block;
+}
+
+#hmcontainer img {
+  width: 100%;
+  height: 100%;
+}
+
+.hminfo {
+  background: rgba(226, 144, 144, 0.9);
+  transition: all 0.3s ease-out;
+  transform: translateX(-100%);
+  position: absolute;
+  line-height: 1.9;
+  text-align: left;
+  font-size: 120%;
+  cursor: no-drop;
+  color: #fff;
+  height: 100%;
+  width: 100%;
+  left: 0;
+  top: 0;
+}
+
+.hminfo h4 {
+  text-align: center;
+}
+.hmproduct-image:hover .hminfo {
+  transform: translateX(0);
+}
+
+.hminfo ul li {
+  transition: 0.3s ease;
+}
+.hminfo ul li:hover {
+  transform: translateX(50px) scale(1.3);
+}
+
+.hmproduct-image:hover img {
+  transition: all 0.3s ease-out;
+}
+.hmproduct-image:hover img {
+  transform: scale(1.2, 1.2);
+}
