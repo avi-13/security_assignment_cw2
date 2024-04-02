@@ -179,11 +179,7 @@ const Navbars = ({ fullName }) => {
                     </li>
                   ) : null}
                   <li style={{ width: "100%" }}>
-                    <Link
-                      className="dropdown-item"
-                      onClick={openLogoutModal}
-                      to="/logout"
-                    >
+                    <Link className="dropdown-item" onClick={openLogoutModal}>
                       Logout
                     </Link>
                   </li>
@@ -204,7 +200,7 @@ const Navbars = ({ fullName }) => {
       </nav>
       {isLogoutModalOpen && (
         <div
-          className="fixed inset-0 flex items-center justify-center bg-opacity-100 overflow-y-auto h-full w-full"
+          className="fixed inset-0 flex items-center justify-center bg-opacity-100 overflow-y-auto h-full w-full z-50"
           id="my-modal"
         >
           <div className="relative mx-auto p-4 border  shadow-sm w-1/4 rounded-md bg-white space-y-8 justify-center items-center flex flex-col">
