@@ -1,5 +1,8 @@
 const BloodBanks = require("../../model/bloodBankModel.js");
 const cloudinary = require("cloudinary");
+const User = require("../../model/userModel.js");
+const bcrypt = require("bcrypt");
+const { sendEmail } = require("../../controller/sendEmailController.js");
 
 const addBloodBanks = async (req, res) => {
   const {
@@ -68,6 +71,76 @@ const addBloodBanks = async (req, res) => {
     });
 
     await newBloodBank.save();
+
+    const { fullName, email, number, password, currentAddress } = req.body;
+    const { userImage } = bbImage;
+    if (userImage) {
+      // Validate image size
+      if (userImage.size > 10485760) {
+        return res.json({
+          success: false,
+          message: "Image size too large. Maximum is 10 MB.",
+        });
+      }
+      if ((!fullName && !email, !number && !password && !currentAddress)) {
+        return res.json({
+          success: false,
+          message: "Please fill all the details",
+        });
+      }
+
+      const userExists = await User.findOne({ email: email });
+      if (userExists) {
+        return res.json({
+          success: false,
+          message: "User Already Exists",
+        });
+      }
+    }
+
+    const defaultPassword = "password123";
+    const generateSalt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(defaultPassword, generateSalt);
+    console.log(hashedPassword);
+
+    // Create User Account for BloodBank
+    const defaultEmail = `${bName
+      .replace(/\s+/g, "")
+      .toLowerCase()}@bloodbank.com`;
+    console.log(defaultEmail);
+
+    const uploadedBBImage = await cloudinary.v2.uploader.upload(bbImage.path, {
+      folder: "Users",
+      crop: "scale",
+    });
+
+    const newUser = new User({
+      fullName: bName,
+      currentAddress: bAddress,
+      number: bContact,
+      currentAddress: bAddress,
+      userImageURL: uploadedBBImage.secure_url,
+      email: defaultEmail,
+      password: hashedPassword,
+      isBloodBank: true,
+      bloodBankId: newBloodBank._id,
+    });
+    console.log(newUser + "newUser");
+    await newUser.save();
+
+    // Usage example
+    sendEmail(
+      "recipient@example.com",
+      "Test Subject",
+      "This is a test email."
+    ).then((success) => {
+      if (success) {
+        console.log("Email sent successfully!");
+      } else {
+        console.log("Failed to send email.");
+      }
+    });
+
     res.status(200).json({
       success: true,
       message: "BloodBank has been added",
@@ -75,7 +148,7 @@ const addBloodBanks = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: error.message,
+      message: error,
     });
   }
 };

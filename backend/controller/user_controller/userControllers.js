@@ -148,7 +148,11 @@ const loginUser = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: findUser._id, isAdmin: findUser.isAdmin },
+      {
+        id: findUser._id,
+        isAdmin: findUser.isAdmin,
+        isBloodBank: findUser.isBloodBank,
+      },
       process.env.JWT_TOKEN_SECRET
     );
 

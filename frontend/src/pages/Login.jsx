@@ -40,13 +40,16 @@ const Login = () => {
           const jsonDecode = JSON.stringify(res.data.userData);
           localStorage.setItem("user", jsonDecode);
           const userAdmin = res.data.userData;
-          if (userAdmin.isAdmin == false) {
+          if (userAdmin.isAdmin == false && userAdmin.isBloodBank == false) {
             navigate("/home");
             window.location.reload();
             return;
+          } else if (userAdmin.isAdmin == false && userAdmin.isBloodBank == true) {
+            navigate("/bb/dashboard");
+          } else {
+            navigate("/admin/dashboard");
+            window.location.reload();
           }
-          navigate("/admin/dashboard");
-          window.location.reload();
         }
       })
       .catch((err) => {
@@ -75,7 +78,7 @@ const Login = () => {
                 <input
                   onChange={changePassword}
                   type="password"
-                  maxlength="26"
+                  maxLength="26"
                   required
                 />
                 <label>Password</label>
@@ -92,6 +95,13 @@ const Login = () => {
               <div className="link">
                 <p>
                   Don't have an account? <Link to={"/register"}>Signup</Link>
+                </p>
+              </div>
+
+              <div className="link">
+                <p>
+                  Want to Register Your Blood Bank ?{" "}
+                  <Link to={"/bloodbank"}>Register BloodBank</Link>
                 </p>
               </div>
             </form>

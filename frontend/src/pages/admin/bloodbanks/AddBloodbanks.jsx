@@ -1,5 +1,5 @@
 import {
-  faEdit,
+  faCheck,
   faExclamationCircle,
   faTimes,
   faTrash,
@@ -307,25 +307,29 @@ export default function AddBloodBanks() {
                       <td className="px-7 2xl:px-0">
                         {/* Edit Button */}
                         <Link
-                          className="focus:outline-none py-2 px-4"
-                          to={`/edit-bloodbank/${item._id}`}
+                          className="focus:outline-none py-2 me-1 px-4 bg-[#008000] hover:!bg-[#000000] rounded-lg cursor-pointer"
+                          title="Accept BloodBank Request"
                         >
                           <FontAwesomeIcon
-                            icon={faEdit}
-                            className="text-blue-500 hover:text-blue-700 cursor-pointer"
+                            icon={faCheck}
+                            color="white"
+                            className="text-[#ffffff] cursor-pointer"
+                            title="Accept BloodBank Request"
                           />
                         </Link>
 
                         {/* Delete Button */}
-                        <button
-                          className="focus:outline-none ml-2"
+                        <Link
+                          className="focus:outline-none py-2 px-4 bg-[#ff0000] hover:!bg-[#000000] rounded-lg cursor-pointer"
                           onClick={opendeleteModal}
+                          title="Delete Item"
                         >
                           <FontAwesomeIcon
                             icon={faTrash}
-                            className="text-red-500 hover:text-red-700 cursor-pointer "
+                            title="Delete Item"
+                            className="text-[#ffffff] cursor-pointer"
                           />
-                        </button>
+                        </Link>
 
                         {isdeleteModalOpen && (
                           <div

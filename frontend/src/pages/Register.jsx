@@ -170,7 +170,7 @@ const Register = () => {
               <input
                 onChange={changeEmail}
                 type="text"
-                maxlength="26"
+                maxLength="26"
                 required
               />
               <label>Enter Your Email</label>
@@ -183,7 +183,7 @@ const Register = () => {
               <input
                 onChange={changeContact}
                 type="number"
-                maxlength="10"
+                maxLength="10"
                 required
               />
               <label>Enter Your Contact No.</label>
@@ -196,7 +196,7 @@ const Register = () => {
               <input
                 onChange={changeCurrentAddress}
                 type="text"
-                maxlength="26"
+                maxLength="26"
                 required
               />
               <label>Enter Your Current Address</label>
@@ -209,7 +209,7 @@ const Register = () => {
               <input
                 onChange={changePassword}
                 type="password"
-                maxlength="26"
+                maxLength="26"
                 required
               />
               <label>Enter Your Password</label>
@@ -222,7 +222,7 @@ const Register = () => {
               <input
                 onChange={changeConfirmPassword}
                 type="password"
-                maxlength="26"
+                maxLength="26"
                 required
               />
               <label>Confirm your Password</label>

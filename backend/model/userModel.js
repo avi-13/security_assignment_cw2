@@ -67,6 +67,10 @@ const userSchema = mongoose.Schema(
       default:
         "https://res.cloudinary.com/dm7yesms2/image/upload/v1708584317/Users/cq2ndw5yfe3sh4eceleq",
     },
+    isBloodBank : {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

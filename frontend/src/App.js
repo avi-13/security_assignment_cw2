@@ -7,7 +7,9 @@ import ErrorPage from "./components/ErrorPage";
 import Footer from "./components/Footer";
 import { default as Navbars } from "./components/Navbars";
 import AboutUs from "./pages/AboutUs";
+import BBDashBoard from "./pages/BBUsers/BBDashBoard";
 import ContactUs from "./pages/ContactUs";
+import ForBloodbank from "./pages/ForBloodbank";
 import HomePage from "./pages/HomePage";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -29,6 +31,7 @@ import ForgetPassword from "./pages/users/profile/ForgetPassword";
 import History from "./pages/users/profile/History";
 import Profile from "./pages/users/profile/Profile";
 import AdminRoutes from "./protected/AdminRoutes";
+import BloodBankUserRoutes from "./protected/BloodBankUserRoutes";
 import UserRoutes from "./protected/UserRoutes";
 
 function App() {
@@ -49,6 +52,10 @@ function App() {
           {/* <Route path="/admin/dashboard" element={<AdminPanel />} /> */}
         </Route>
 
+        <Route element={<BloodBankUserRoutes />}>
+          <Route path="/bb/dashboard" element={<BBDashBoard />} />
+        </Route>
+
         <Route path="/home" element={<HomePage />} />
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<Login />} />
@@ -66,6 +73,7 @@ function App() {
         <Route path="/forgetpassword" element={<ForgetPassword />} />
         <Route path="/users-list" element={<UsersLists />} />
         <Route path="/*" element={<ErrorPage />} />
+        <Route path="/bloodbank" element={<ForBloodbank />} />
 
         <Route element={<UserRoutes />}>
           <Route path="/view_all_donors" element={<Users />} />

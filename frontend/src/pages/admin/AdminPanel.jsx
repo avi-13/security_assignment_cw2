@@ -46,6 +46,9 @@ function AdminPanel() {
     case "AddNews":
       content = <AddNews />;
       break;
+    case "AddNews":
+        content = <AddNews />;
+        break;
     default:
       content = <AdminDashboard />;
   }

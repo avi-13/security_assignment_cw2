@@ -167,7 +167,7 @@ const Profile = ({ updateFullName }) => {
                   </div> */}
                   <div className="row gx-3 mb-3">
                     <div className="col-md-6">
-                      <label className="small mb-1" for="inputFirstName">
+                      <label className="small mb-1" htmlFor="inputFirstName">
                         Full Name
                       </label>
                       <input
@@ -181,7 +181,7 @@ const Profile = ({ updateFullName }) => {
                     </div>
 
                     <div className="col-md-6">
-                      <label className="small mb-1" for="inputEmailAddress">
+                      <label className="small mb-1" htmlFor="inputEmailAddress">
                         Email address
                       </label>
                       <input
@@ -205,7 +205,7 @@ const Profile = ({ updateFullName }) => {
                       />
                     </div>
                     <div className="col-md-6">
-                      <label className="small mb-1" for="inputLocation">
+                      <label className="small mb-1" htmlFor="inputLocation">
                         Address
                       </label>
                       <input
@@ -222,7 +222,7 @@ const Profile = ({ updateFullName }) => {
                     <>
                       <div className="row gx-3 mb-3">
                         <div className="col-md-6">
-                          <label className="small mb-1" for="inputPhone">
+                          <label className="small mb-1" htmlFor="inputPhone">
                             Emergency Number
                           </label>
                           <input
@@ -235,7 +235,7 @@ const Profile = ({ updateFullName }) => {
                           />
                         </div>
                         <div className="col-md-6">
-                          <label className="small mb-1" for="inputBirthday">
+                          <label className="small mb-1" htmlFor="inputBirthday">
                             Birthday
                           </label>
                           <input
@@ -253,7 +253,7 @@ const Profile = ({ updateFullName }) => {
                       </div>
                       <div className="row gx-3 mb-3">
                         <div className="col-md-6">
-                          <label className="small mb-1" for="inputLastName">
+                          <label className="small mb-1" htmlFor="inputLastName">
                             Gender
                           </label>
                           <select
@@ -274,7 +274,7 @@ const Profile = ({ updateFullName }) => {
                       </div>
                       <div className="row gx-3 mb-3">
                         <div className="col-md-6">
-                          <label className="small mb-1" for="inputLocation">
+                          <label className="small mb-1" htmlFor="inputLocation">
                             Select BloodGroup
                           </label>
                           <select
@@ -298,7 +298,7 @@ const Profile = ({ updateFullName }) => {
                           </select>
                         </div>
                         <div className="col-md-6">
-                          <label className="small mb-1" for="inputLocation">
+                          <label className="small mb-1" htmlFor="inputLocation">
                             No. of Previous Donation 'Approx'
                           </label>
                           <input
