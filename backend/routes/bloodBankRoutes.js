@@ -12,4 +12,6 @@ router.get("/getallbloodbank", bloodBankController.getAllBloodBanks);
 
 router.get("/single-bloodbank/:id", bloodBankController.getBloodbankbyId);
 
+router.get("/send-info/:id", bloodBankController.sendEmailController);
+
 module.exports = router;

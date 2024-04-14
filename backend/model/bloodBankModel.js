@@ -60,6 +60,16 @@ const bloodBankSchema = mongoose.Schema(
       required: true,
       trim: true, // cuts space and stores in the db
     },
+    
+    contactEmail : {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
 
   },
   {

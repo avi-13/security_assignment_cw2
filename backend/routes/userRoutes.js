@@ -9,6 +9,8 @@ router.post("/register", userController.createUser);
 
 router.post("/login", userController.loginUser);
 
+router.post("/send_otp", userController.sendVerification);
+
 router.put("/beadonor/:id", userController.beAdonor);
 
 router.get("/getAllUsers", userController.getAllUsers);

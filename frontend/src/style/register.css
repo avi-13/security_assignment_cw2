@@ -38,6 +38,7 @@ form .registerInputBox{
     border-bottom: 2px solid #162938;
     position: relative;
     align-items: center;
+    
 }
 form .registerInputBox input{
     width: 100%;
@@ -49,6 +50,8 @@ form .registerInputBox input{
     color: #162938;
     padding: 0 10px;
     font-weight: 600;
+    
+
 }
 form .registerInputBox i{
     position: absolute;
@@ -56,6 +59,8 @@ form .registerInputBox i{
     right: 8px;
     font-size: 1rem;
     color: #162938;
+    
+
 }
 form .registerInputBox label{
     position: absolute;
@@ -67,9 +72,12 @@ form .registerInputBox label{
     pointer-events: none;
     font-weight: 500;
     transition: .3s;
+    
+
 }
 form .registerInputBox input:focus~label,
 form .registerInputBox input:valid~label{
+    
     top: -5px;
 }
 form button{

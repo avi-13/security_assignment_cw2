@@ -13,6 +13,8 @@ const Api = axios.create({
 
 export const createUserApi = (data) => Api.post("/api/user/register", data);
 
+export const sendOtpApi = (data) => Api.post("/api/user/send_otp", data);
+
 export const loginUserApi = (data) => Api.post("/api/user/login", data);
 
 export const updateUser = (id, data) =>
@@ -96,6 +98,9 @@ export const fetchSingleBloodBankApi = (id) =>
 
 export const deleteBloodBankApi = (id) =>
   Api.delete(`/api/bloodbank/deletebloodbank/${id}`);
+
+  export const sendInfoApi = (id) =>
+  Api.get(`/api/bloodbank/send-info/${id}`);
 
 export const updateBloodBankApi = (id, formData) =>
   Api.put(`/api/bloodbank/updatebloodbank/${id}`, formData);

@@ -1,7 +1,7 @@
 // emailSender.js
 const nodemailer = require('nodemailer');
 
-const sendEmail = async (to, subject, text) => {
+const sendEmailController = async (to, subject, text) => {
   try {
     let transporter = nodemailer.createTransport({
       service: "gmail",
@@ -19,11 +19,11 @@ const sendEmail = async (to, subject, text) => {
     });
 
     console.log("Email sent: " + info.response);
-    return true; // Email sent successfully
+    return true; 
   } catch (error) {
     console.error("Error sending email:", error);
-    return false; // Email sending failed
+    return false; 
   }
 };
 
-module.exports = { sendEmail };
+module.exports = { sendEmailController };

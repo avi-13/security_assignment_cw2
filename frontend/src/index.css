@@ -12,3 +12,10 @@ body {
 code {
   font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
 }
+
+input {
+  box-shadow: none !important;
+}
+input:focus {
+  box-shadow: none !important;
+}

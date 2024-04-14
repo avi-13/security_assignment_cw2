@@ -13,6 +13,7 @@ import {
   createBloodBankApi,
   deleteBloodBankApi,
   getallBloodBankApi,
+  sendInfoApi,
 } from "../../../apis/api";
 import BloodGroupLists from "../../../components/BloodGroupsList";
 import DistrictList from "../../../components/DistrictsList";
@@ -151,6 +152,19 @@ export default function AddBloodBanks() {
     });
   };
 
+    // delete
+    const sendInfo = (id) => {
+      // make Api call
+      sendInfoApi(id).then((res) => {
+        if (res.data.success == true) {
+          toast.success(res.data.message);
+          window.location.reload();
+        } else {
+          toast.error(res.data.message);
+        }
+      });
+    };
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
 
@@ -168,14 +182,6 @@ export default function AddBloodBanks() {
             <p className="inline-flex sm:ml-3  sm:mt-0 items-start justify-start px-6 py-3  text-black focus:outline-none rounded">
               BloodBanks
             </p>
-            <div>
-              <button
-                className="inline-flex sm:ml-3 mt-1 sm:mt-0 items-start justify-start px-6 py-3 bg-[#111111] hover:bg-[#ff0000] text-white focus:outline-none rounded"
-                onClick={openModal}
-              >
-                Add BloodBanks
-              </button>
-            </div>
           </div>
         </div>
         <div className="bg-white shadow px-4 md:px-10 pt-4 md:pt-7 pb-5">
@@ -230,6 +236,7 @@ export default function AddBloodBanks() {
                   <th className="font-normal text-left pl-20">
                     SocialMedia Links
                   </th>
+                  <th className="font-normal text-left pl-20">Is Verifiied ?</th>
                   <th className="font-normal text-left pl-12">
                     <button
                       onClick={() => handleSort("createdAt")}
@@ -298,17 +305,18 @@ export default function AddBloodBanks() {
                             : item.socialMediaLinks}
                         </p>
                       </td>
+
                       <td className="pl-20 overflow-y max-w-[200px] truncate">
                         <p className="font-medium">
                           {new Date(item.createdAt).toLocaleDateString()}
                         </p>
                       </td>
-
-                      <td className="px-7 2xl:px-0">
+                      <td className="pl-7 2xl:px-0">
                         {/* Edit Button */}
                         <Link
                           className="focus:outline-none py-2 me-1 px-4 bg-[#008000] hover:!bg-[#000000] rounded-lg cursor-pointer"
                           title="Accept BloodBank Request"
+                          onClick={() => sendInfo(item._id)}
                         >
                           <FontAwesomeIcon
                             icon={faCheck}

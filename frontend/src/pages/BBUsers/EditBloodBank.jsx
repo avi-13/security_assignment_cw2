@@ -4,9 +4,9 @@ import { CircularProgress } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { fetchSingleBloodBankApi, updateBloodBankApi } from "../../../apis/api";
-import BloodGroupLists from "../../../components/BloodGroupsList";
-import DistrictList from "../../../components/DistrictsList";
+import { fetchSingleBloodBankApi, updateBloodBankApi } from "../../apis/api";
+import BloodGroupLists from "../../components/BloodGroupsList";
+import DistrictList from "../../components/DistrictsList";
 
 const EditBloodBank = () => {
   const { id } = useParams();

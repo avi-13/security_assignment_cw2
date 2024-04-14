@@ -19,6 +19,7 @@ export default function ForBloodbank() {
   const [socialMediaLinks, setSocialMediaLinks] = useState("");
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
+  const [contactEmail, setContactEmail] = useState("");
   const [bbImage, setBloodBankImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -69,6 +70,7 @@ export default function ForBloodbank() {
     formData.append("latitude", latitude);
     formData.append("longitude", longitude);
     formData.append("bbImage", bbImage);
+    formData.append("contactEmail", contactEmail);
 
     createBloodBankApi(formData)
       .then((res) => {
@@ -218,6 +220,21 @@ export default function ForBloodbank() {
               className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
               required
             />
+          </div>
+          <div className="col-lg-12">
+            <label className="block text-sm font-medium text-gray-900">
+              Contact Email
+            </label>
+            <input
+              onChange={(e) => setContactEmail(e.target.value)}
+              type="text"
+              className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
+              required
+            />
+            <div className="text-red-500 text-sm mt-1">
+              Please enter a valid email address the password and email of your
+              account is sent here ...
+            </div>
           </div>
           <div>
             <label

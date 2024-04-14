@@ -19,6 +19,7 @@
     "connect-multiparty": "^2.2.0",
     "cors": "^2.8.5",
     "express-fileupload": "^1.4.3",
+    "flowbite-react": "^0.8.0",
     "jest": "^27.5.1",
     "js": "^0.1.0",
     "jsonwebtoken": "^9.0.2",

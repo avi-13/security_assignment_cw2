@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const cloudinary = require("cloudinary");
 const nodemailer = require("nodemailer");
 const RequestBlood = require("../../model/RequestBloodModel");
+const { sendEmailController } = require("../sendEmailController");
 const sendEmail = async (to, subject, text) => {
   let transporter = nodemailer.createTransport({
     service: "gmail",
@@ -22,10 +23,38 @@ const sendEmail = async (to, subject, text) => {
   });
 };
 
-const createUser = async (req, res) => {
+const sendVerification = async (req, res) => {
+  const otp = Math.floor(1000 + Math.random() * 9000);
+  console.log(otp);
+  const { email } = req.body;
   console.log(req.body);
   try {
-    const { fullName, email, number, password, currentAddress } = req.body;
+    const emailSent = await sendEmailController(
+      email,
+      "Welcome to BloodBank",
+      `Your verification code is: ${otp}`
+    );
+
+    if (emailSent) {
+      res.status(200).json({
+        success: true,
+        message: "Email sent successfully.",
+        otp: otp,
+      });
+    } else {
+      res
+        .status(500)
+        .json({ success: false, message: "Failed to send email." });
+    }
+  } catch (error) {
+    console.error("Error handling /send-verification route:", error);
+    res.status(500).json({ success: false, message: "Server error." });
+  }
+};
+
+const createUser = async (req, res) => {
+  try {
+    const { fullName, email, number, password, currentAddress, otp } = req.body;
     // Check if req.files and req.files.bbImage exist
     // if (!req.files || !req.files.bbImage) {
     //   return res.json({
@@ -34,6 +63,8 @@ const createUser = async (req, res) => {
     //   });
     // }
     const { userImage } = req.files;
+    const { userVerificationCode } = req.body;
+
     if (userImage) {
       // Validate image size
       if (userImage.size > 10485760) {
@@ -76,13 +107,20 @@ const createUser = async (req, res) => {
         password: passwordEncrypted,
         userImageURL: uploadedImage.secure_url,
       });
+      console.log(userVerificationCode, otp);
+      if (userVerificationCode == otp) {
+        await newUser.save();
 
-      await newUser.save();
-
-      return res.status(201).json({
-        success: true,
-        message: "Your account has been created with Image",
-      });
+        return res.status(201).json({
+          success: true,
+          message: "Your account has been created with Image",
+        });
+      } else {
+        return res.json({
+          success: false,
+          message: "Verification code did not match",
+        });
+      }
     } else {
       const userExists = await User.findOne({ email: email });
       if (userExists) {
@@ -103,12 +141,21 @@ const createUser = async (req, res) => {
         password: passwordEncrypted,
       });
 
-      await newUser.save();
+      const { userVerificationCode } = req.body;
 
-      return res.status(201).json({
-        success: true,
-        message: "Your account has been created without Image",
-      });
+      if (userVerificationCode == otp) {
+        await newUser.save();
+
+        return res.status(201).json({
+          success: true,
+          message: "Your account has been created with Image",
+        });
+      } else {
+        return res.json({
+          success: false,
+          message: "Verification code did not match",
+        });
+      }
     }
   } catch (e) {
     console.log(e);
@@ -622,4 +669,5 @@ module.exports = {
   forgetPassword,
   searchUsers,
   getRequestsByUserId,
+  sendVerification,
 };
