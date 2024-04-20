@@ -7,7 +7,6 @@ import ErrorPage from "./components/ErrorPage";
 import Footer from "./components/Footer";
 import { default as Navbars } from "./components/Navbars";
 import AboutUs from "./pages/AboutUs";
-import BBDashBoard from "./pages/BBUsers/BBDashBoard";
 import EditBloodBank from "./pages/BBUsers/EditBloodBank";
 import ContactUs from "./pages/ContactUs";
 import ForBloodbank from "./pages/ForBloodbank";
@@ -33,6 +32,7 @@ import Profile from "./pages/users/profile/Profile";
 import AdminRoutes from "./protected/AdminRoutes";
 import BloodBankUserRoutes from "./protected/BloodBankUserRoutes";
 import UserRoutes from "./protected/UserRoutes";
+import BBDashBoard from "./pages/BBUsers/BBDashBoard";
 
 function App() {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -43,7 +43,7 @@ function App() {
   return (
     <Router>
       <ToastContainer />
-      {!user || (user && !user.isAdmin) ? <Navbars /> : null}
+      {!user || (user && !user.isAdmin && !user.isBloodBank) ? <Navbars /> : null}
       <Routes>
         <Route element={<AdminRoutes />}>
           <Route path="/admin/dashboard" element={<AdminPanel />} />
@@ -53,7 +53,8 @@ function App() {
         </Route>
 
         <Route element={<BloodBankUserRoutes />}>
-          <Route path="/bb/dashboard" element={<BBDashBoard />} />
+          <Route path="/bb/dashboard" element={<AdminPanel />} />
+          <Route path="/maindash" element={<BBDashBoard />} />
         </Route>
 
         <Route path="/home" element={<HomePage />} />
@@ -86,7 +87,7 @@ function App() {
           <Route path="/get_my_request/:id" element={<History />} />
         </Route>
       </Routes>
-      {!user || (user && !user.isAdmin) ? <Footer /> : null}
+      {!user || (user && !user.isAdmin && !user.isBloodBank) ? <Footer /> : null}
     </Router>
   );
 }

@@ -99,7 +99,8 @@ const addBloodBanks = async (req, res) => {
       }
     }
 
-    const defaultPassword = "password123";
+    const randomPassword = generateRandomPassword(8);
+    const defaultPassword = randomPassword;
     const generateSalt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(defaultPassword, generateSalt);
     console.log(hashedPassword);
@@ -137,7 +138,7 @@ const addBloodBanks = async (req, res) => {
       longitude: longitude,
       contactEmail: contactEmail,
     });
-    console.log(newUser + "newUser");
+    
     await newUser.save();
 
     res.status(200).json({
@@ -151,6 +152,15 @@ const addBloodBanks = async (req, res) => {
     });
   }
 };
+function generateRandomPassword(length) {
+  const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+{}[]|;:,.<>?";
+  let password = "";
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * charset.length);
+    password += charset[randomIndex];
+  }
+  return password;
+}
 
 const getAllBloodBanks = async (req, res) => {
   try {
@@ -344,7 +354,6 @@ const sendEmailController = async (req, res) => {
       });
     }
     console.log(reqBloodBank);
-    // Create User Account for BloodBank
     const defaultEmail = `${reqBloodBank.bbName
       .replace(/\s+/g, "")
       .toLowerCase()}@bloodbank.com`;
@@ -422,25 +431,25 @@ const bloodBankPagination = async (req, res) => {
   }
 };
 
-const searchBloodbanks = async (req, res, next) => {
-  try {
-    const { q } = req.query;
-    const bloodbanks = await Bb.find({
-      name: { $regex: q, $options: "i" },
-    });
+// const searchBloodbanks = async (req, res, next) => {
+//   try {
+//     const { q } = req.query;
+//     const bloodbanks = await Bb.find({
+//       name: { $regex: q, $options: "i" },
+//     });
 
-    if (bloodbanks.length < 1)
-      throw new ErrorHandler(404, "No BloodBanks found");
+//     if (bloodbanks.length < 1)
+//       throw new ErrorHandler(404, "No BloodBanks found");
 
-    res.status(201).json({
-      status: "success",
-      message: "Found",
-      bloodbanks,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
+//     res.status(201).json({
+//       status: "success",
+//       message: "Found",
+//       bloodbanks,
+//     });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
 
 module.exports = {
   getAllBloodBanks,
@@ -448,7 +457,7 @@ module.exports = {
   updateBloodBank,
   deleteBloodBank,
   bloodBankPagination,
-  searchBloodbanks,
+  // searchBloodbanks,
   getBloodbankbyId,
   sendEmailController,
 };

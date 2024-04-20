@@ -16,7 +16,7 @@ const BloodGroupLists = ({ onChange, dynamicValue }) => {
       <div className="relative">
         <select
           onChange={onChange}
-          className="block w-full px-4 py-2 border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring focus:border-blue-300"
+          className="block w-full px-4 py-2 border rounded-md appearance-none focus:outline-none focus:ring focus:border-gray-300"
         >
           <option
             value={
@@ -36,21 +36,7 @@ const BloodGroupLists = ({ onChange, dynamicValue }) => {
             </option>
           ))}
         </select>
-        <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-          <svg
-            className="w-4 h-4 text-gray-500"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
-        </div>
+
       </div>
     </div>
   );

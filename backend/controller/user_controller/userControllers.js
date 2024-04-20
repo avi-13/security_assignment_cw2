@@ -5,6 +5,7 @@ const cloudinary = require("cloudinary");
 const nodemailer = require("nodemailer");
 const RequestBlood = require("../../model/RequestBloodModel");
 const { sendEmailController } = require("../sendEmailController");
+const user = require("../../model/userModel");
 const sendEmail = async (to, subject, text) => {
   let transporter = nodemailer.createTransport({
     service: "gmail",
@@ -25,9 +26,22 @@ const sendEmail = async (to, subject, text) => {
 
 const sendVerification = async (req, res) => {
   const otp = Math.floor(1000 + Math.random() * 9000);
-  console.log(otp);
   const { email } = req.body;
-  console.log(req.body);
+
+  const isAUser = await User.findOne({ email: email });
+  if (isAUser) {
+    return res.json({
+      success: false,
+      message: "User already exists.",
+    });
+  }
+
+  if (!email || !email.includes("@")) {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid email address. Please provide a valid email.",
+    });
+  }
   try {
     const emailSent = await sendEmailController(
       email,
@@ -42,13 +56,25 @@ const sendVerification = async (req, res) => {
         otp: otp,
       });
     } else {
-      res
-        .status(500)
-        .json({ success: false, message: "Failed to send email." });
+      res.status(500).json({
+        success: false,
+        message:
+          "Failed to send email. Please check the recipient's email address.",
+      });
     }
   } catch (error) {
     console.error("Error handling /send-verification route:", error);
-    res.status(500).json({ success: false, message: "Server error." });
+
+    let errorMessage = "Server error.";
+    if (error.message.includes("No recipients defined")) {
+      errorMessage =
+        "Invalid email address. Please check the recipient's email address.";
+    }
+
+    res.status(500).json({
+      success: false,
+      message: errorMessage,
+    });
   }
 };
 
@@ -113,7 +139,7 @@ const createUser = async (req, res) => {
 
         return res.status(201).json({
           success: true,
-          message: "Your account has been created with Image",
+          message: "Your account has been created",
         });
       } else {
         return res.json({
@@ -148,7 +174,7 @@ const createUser = async (req, res) => {
 
         return res.status(201).json({
           success: true,
-          message: "Your account has been created with Image",
+          message: "Your account has been created",
         });
       } else {
         return res.json({
@@ -272,7 +298,7 @@ const beAdonor = async (req, res) => {
 //  fetching all the users
 const getAllUsers = async (req, res) => {
   try {
-    const userList = await User.find();
+    const userList = await User.find({isAdmin: false});
     res.json({
       success: true,
       users: userList,

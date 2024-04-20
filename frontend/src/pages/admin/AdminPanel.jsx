@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CustomFaIcons from "../../components/CustomFaIcons";
 import "../../style/AdminPanel.css";
+import BBDashBoard from "../BBUsers/BBDashBoard";
 import AdminDashboard from "./admin_dashboard/AdminDashboard";
 import AddBloodBanks from "./bloodbanks/AddBloodbanks";
 import ViewDonors from "./donors/Donors";
@@ -32,7 +33,11 @@ function AdminPanel() {
   let content;
   switch (currentPage) {
     case "AdminDashboard":
-      content = <AdminDashboard />;
+      {
+        users.isAdmin
+          ? (content = <AdminDashboard />)
+          : (content = <BBDashBoard />);
+      }
       break;
     case "Donors":
       content = <ViewDonors />;
@@ -43,14 +48,20 @@ function AdminPanel() {
     case "AddHospitals":
       content = <AddHospitals />;
       break;
+    case "My BloodBank":
+      content = <AddBloodBanks />;
+      break;
     case "AddNews":
       content = <AddNews />;
       break;
     case "AddNews":
-        content = <AddNews />;
-        break;
-    default:
-      content = <AdminDashboard />;
+      content = <AddNews />;
+      break;
+    default: {
+      users.isAdmin
+        ? (content = <AdminDashboard />)
+        : (content = <BBDashBoard />);
+    }
   }
   useEffect(() => {
     localStorage.setItem("currentPage", currentPage);
@@ -61,12 +72,16 @@ function AdminPanel() {
       <div className="adminMainContainer">
         <header className="adminHeader">
           <h1>Blood Bank Admin Panel</h1>
-          <div className="d-flex flex-row align-items-center gap-3">
-            <h6 className="m-0 me-2">Welcome, {users.fullName}</h6>
-            <button onClick={openLogoutModal} className="logoutBtn">
-              <CustomFaIcons icon={faSignOut} className={"m-0 me-2"} />
-            </button>
-          </div>
+          {users.isAdmin ? (
+            <div className="d-flex flex-row align-items-center gap-3">
+              <h6 className="m-0 me-2">Welcome, {users.fullName}</h6>
+              <button onClick={openLogoutModal} className="logoutBtn">
+                <CustomFaIcons icon={faSignOut} className={"m-0 me-2"} />
+              </button>
+            </div>
+          ) : (
+            <></>
+          )}
         </header>
         <div className="adminWrapper">
           <ul className="adminUl">
@@ -91,12 +106,21 @@ function AdminPanel() {
                 currentPage === "AddBloodBanks" ? "active" : ""
               }`}
             >
-              <button
-                onClick={() => setCurrentPage("AddBloodBanks")}
-                tabIndex="3"
-              >
-                AddBloodBanks
-              </button>
+              {users.isAdmin ? (
+                <button
+                  onClick={() => setCurrentPage("AddBloodBanks")}
+                  tabIndex="3"
+                >
+                  AddBloodBanks
+                </button>
+              ) : (
+                <button
+                  onClick={() => setCurrentPage("My BloodBank")}
+                  tabIndex="3"
+                >
+                  My BloodBank
+                </button>
+              )}
             </li>
             <li
               className={`adminLi ${
@@ -107,16 +131,31 @@ function AdminPanel() {
                 onClick={() => setCurrentPage("AddHospitals")}
                 tabIndex="4"
               >
-                AddHospitals
+                {users.isAdmin ? "AddHospitals" : "View Hospitals"}
               </button>
             </li>
-            <li
-              className={`adminLi ${currentPage === "AddNews" ? "active" : ""}`}
-            >
-              <button onClick={() => setCurrentPage("AddNews")} tabIndex="5">
-                AddNews
-              </button>
-            </li>
+            {users.isAdmin ? (
+              <li
+                className={`adminLi ${
+                  currentPage === "AddNews" ? "active" : ""
+                }`}
+              >
+                <button onClick={() => setCurrentPage("AddNews")} tabIndex="5">
+                  AddNews
+                </button>
+              </li>
+            ) : null}
+            {users.isBloodBank ? (
+              <li
+                className={`adminLi ${
+                  currentPage === "AddNews" ? "active" : ""
+                }`}
+              >
+                <button onClick={() => setCurrentPage("AddNews")} tabIndex="5">
+                  Add Campaigns
+                </button>
+              </li>
+            ) : null}
           </ul>
           <main>
             {content}

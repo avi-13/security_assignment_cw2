@@ -18,6 +18,8 @@ import BloodGroupLists from "../../../components/BloodGroupsList";
 import DistrictList from "../../../components/DistrictsList";
 
 export default function AddHospitals() {
+  const users = JSON.parse(localStorage.getItem("user"));
+
   const [hospitals, setHospitals] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -145,21 +147,23 @@ export default function AddHospitals() {
   return (
     <>
       <div className="w-full sm:px-6">
-        <div className="px-4 md:px-10 py-2 md:py-7 bg-gray-100 rounded-tl-lg rounded-tr-lg">
-          <div className="sm:flex flex-row items-center justify-between">
-            <p className="inline-flex sm:ml-3  sm:mt-0 items-start justify-start px-6 py-3  text-black focus:outline-none rounded">
-              Hospitals
-            </p>
-            <div>
-              <button
-                className="inline-flex sm:ml-3 mt-1 sm:mt-0 items-start justify-start px-6 py-3 bg-[#111111] hover:bg-[#ff0000] text-white focus:outline-none rounded"
-                onClick={openModal}
-              >
-                Add Hospitals
-              </button>
+        {users.isAdmin ? (
+          <div className="px-4 md:px-10 py-2 md:py-7 bg-gray-100 rounded-tl-lg rounded-tr-lg">
+            <div className="sm:flex flex-row items-center justify-between">
+              <p className="inline-flex sm:ml-3  sm:mt-0 items-start justify-start px-6 py-3  text-black focus:outline-none rounded">
+                Hospitals
+              </p>
+              <div>
+                <button
+                  className="inline-flex sm:ml-3 mt-1 sm:mt-0 items-start justify-start px-6 py-3 bg-[#111111] hover:bg-[#ff0000] text-white focus:outline-none rounded"
+                  onClick={openModal}
+                >
+                  Add Hospitals
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        ) : null}
         <div className="bg-white shadow px-4 md:px-10 pt-4 md:pt-7 pb-5 overflow-y-auto">
           <div className="flex flex-col items-center justify-center md:flex-row md:items-start md:justify-between md:gap-4 mb-4 w-full">
             <div className="w-full md:w-1/3">

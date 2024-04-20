@@ -86,7 +86,7 @@ const Navbars = ({ fullName }) => {
           <>
             <ul className="nav-ul">
               <li className="nav-li">
-                <Link to={"/"} className={activeItem === 0 ? "active" : ""}>
+                <Link to={"/bb/dashboard"} className={activeItem === 0 ? "active" : ""}>
                   Home
                 </Link>
               </li>

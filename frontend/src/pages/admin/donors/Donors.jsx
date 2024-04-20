@@ -49,7 +49,6 @@ export default function ViewDonors() {
                 <th>Email</th>
                 <th>Number</th>
                 <th>Current Address</th>
-                <th>Is Admin</th>
                 <th>Is Available</th>
                 <th>Is A Donor</th>
                 <th>Gender</th>
@@ -60,13 +59,12 @@ export default function ViewDonors() {
               </tr>
             </thead>
             <tbody>
-              {users.map((item) => (
+              {!users.isAdmin && users?.map((item) => (
                 <tr key={item._id}>
                   <td>{item.fullName || "Null"}</td>
                   <td>{item.email || "Null"}</td>
                   <td>{item.number || "Null"}</td>
                   <td>{item.currentAddress || "Null"}</td>
-                  <td>{item.isAdmin ? "Yes" : "No"}</td>
                   <td>{item.isAvailable ? "Yes" : "No"}</td>
                   <td>{item.isADonor ? "Yes" : "No"}</td>
                   <td>{item.gender || "Null"}</td>

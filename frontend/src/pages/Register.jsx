@@ -5,7 +5,7 @@ import {
   faPhone,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "../../src/style/navbar.css";
@@ -99,20 +99,25 @@ const Register = () => {
     setCpasswordError("");
 
     if (fullName.trim() === "") {
-      setFullnameError("First Name is Required");
+      setFullnameError("Name is Required");
       isValid = false;
     }
     if (email.trim() === "") {
       setEmailError("Email is Required");
       isValid = false;
     }
+    if (email.trim() !== "" && !email.includes("@")) {
+      setEmailError("Invalid Email");
+      isValid = false;
+    }
 
-    if (number.trim() === "") {
+    if (number.trim() === "" || number.length !== 10) {
       setNumberError("NUmber is Required");
       isValid = false;
     }
+
     if (currentAddress.trim() === "") {
-      setCurrentAddressError("Email is Required");
+      setCurrentAddressError("Address is Required");
       isValid = false;
     }
     if (password.trim() === "") {
@@ -120,7 +125,7 @@ const Register = () => {
       isValid = false;
     }
     if (confirmPassword.trim() === "") {
-      setCpasswordError("Password is Required");
+      setCpasswordError("Password doesnot match");
       isValid = false;
     }
 
