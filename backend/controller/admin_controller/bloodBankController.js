@@ -2,7 +2,7 @@ const BloodBanks = require("../../model/bloodBankModel.js");
 const cloudinary = require("cloudinary");
 const User = require("../../model/userModel.js");
 const bcrypt = require("bcrypt");
-const { sendEmail } = require("../../controller/sendEmailController.js");
+const { sendEmailController } = require("../sendEmailController");
 
 const addBloodBanks = async (req, res) => {
   const {
@@ -100,10 +100,9 @@ const addBloodBanks = async (req, res) => {
     }
 
     const randomPassword = generateRandomPassword(8);
-    const defaultPassword = randomPassword;
     const generateSalt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(defaultPassword, generateSalt);
-    console.log(hashedPassword);
+    const hashedPassword = await bcrypt.hash(randomPassword, generateSalt);
+    console.log(randomPassword);
 
     // Create User Account for BloodBank
     const defaultEmail = `${bName
@@ -138,13 +137,24 @@ const addBloodBanks = async (req, res) => {
       longitude: longitude,
       contactEmail: contactEmail,
     });
-    
-    await newUser.save();
 
-    res.status(200).json({
-      success: true,
-      message: "BloodBank has been added",
+    await sendEmailController(
+      contactEmail,
+      "Bloodbank Account Details",
+      `Your BloodBank email is: ${defaultEmail} and Password is: ${randomPassword}`
+    ).then(async (success) => {
+      if (success) {
+        await newUser.save();
+
+        res.status(200).json({
+          success: true,
+          message: "BloodBank has been added",
+        });
+      } else {
+        console.log("Failed to send email.");
+      }
     });
+
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -343,41 +353,41 @@ const updateBloodBank = async (req, res) => {
   }
 };
 
-const sendEmailController = async (req, res) => {
-  try {
-    const reqBloodBank = await BloodBanks.findById(req.params.id);
+// const sendEmailController = async (req, res) => {
+//   try {
+//     const reqBloodBank = await BloodBanks.findById(req.params.id);
 
-    if (!reqBloodBank) {
-      return res.json({
-        success: false,
-        message: "BloodBank Not Found",
-      });
-    }
-    console.log(reqBloodBank);
-    const defaultEmail = `${reqBloodBank.bbName
-      .replace(/\s+/g, "")
-      .toLowerCase()}@bloodbank.com`;
+//     if (!reqBloodBank) {
+//       return res.json({
+//         success: false,
+//         message: "BloodBank Not Found",
+//       });
+//     }
+//     console.log(reqBloodBank);
+//     const defaultEmail = `${reqBloodBank.bbName
+//       .replace(/\s+/g, "")
+//       .toLowerCase()}@bloodbank.com`;
 
-    sendEmail(
-      `${reqBloodBank.contactEmail}`,
-      "Bloodbank email and Password",
-      `"Your BloodBank email is:  ${defaultEmail} and Password is: password123`
-    ).then((success) => {
-      if (success) {
-        console.log("Email sent successfully!");
-        reqBloodBank.isVerified = true;
-      } else {
-        console.log("Failed to send email.");
-      }
-    });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      success: false,
-      message: "Server Error",
-    });
-  }
-};
+//     sendEmail(
+//       `${reqBloodBank.contactEmail}`,
+//       "Bloodbank email and Password",
+//       `"Your BloodBank email is:  ${defaultEmail} and Password is: password123`
+//     ).then((success) => {
+//       if (success) {
+//         console.log("Email sent successfully!");
+//         reqBloodBank.isVerified = true;
+//       } else {
+//         console.log("Failed to send email.");
+//       }
+//     });
+//   } catch (error) {
+//     console.log(error);
+//     return res.status(500).json({
+//       success: false,
+//       message: "Server Error",
+//     });
+//   }
+// };
 
 const deleteBloodBank = async (req, res) => {
   try {
@@ -459,5 +469,5 @@ module.exports = {
   bloodBankPagination,
   // searchBloodbanks,
   getBloodbankbyId,
-  sendEmailController,
+  // sendEmailController,
 };

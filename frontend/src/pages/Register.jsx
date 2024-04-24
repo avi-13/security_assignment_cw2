@@ -112,7 +112,7 @@ const Register = () => {
     }
 
     if (number.trim() === "" || number.length !== 10) {
-      setNumberError("NUmber is Required");
+      setNumberError("Number is Invalid (Must be 10 word) ");
       isValid = false;
     }
 
