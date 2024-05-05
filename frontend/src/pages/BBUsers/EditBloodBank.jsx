@@ -125,7 +125,7 @@ const EditBloodBank = () => {
           </Link>
         </div>
         <form className="space-y-1 m-0">
-          <h3 className="text-lg mb-4 font-medium leading-6 text-gray-900 text-center font-semibold text-2xl">
+          <h3 className="mb-4 leading-6 text-gray-900 text-center font-semibold text-2xl">
             Edit BloodBanks
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">

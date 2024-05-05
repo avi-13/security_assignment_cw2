@@ -120,6 +120,12 @@ export const viewRequestApi = (data) =>
 export const getSingleRequestApi = (id) =>
   Api.get(`/api/blood_request/request/${id}`);
 
+export const deleteRequestApi = (id) =>
+  Api.delete(`/api/blood_request/delete_request/${id}`);
+
+export const updateRequestApi = (id, data) =>
+  Api.put(`/api/blood_request/update_request/${id}`, data);
+
 // ======================================> Contact US API <===============================
 
 export const sendMessageApi = (data) =>

@@ -97,7 +97,7 @@ export default function ForBloodbank() {
     <>
       <div className="mx-auto mt-24 mb-4 p-5 border w-1/2 shadow-lg rounded-md bg-white">
         <form className="space-y-6">
-          <h3 className="text-lg font-medium leading-6 text-gray-900 text-center font-semibold text-2xl">
+          <h3 className="leading-6 text-gray-900 text-center font-semibold text-2xl">
             Add New BloodBank
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">

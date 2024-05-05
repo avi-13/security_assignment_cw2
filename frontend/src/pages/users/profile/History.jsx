@@ -1,10 +1,39 @@
+import {
+  faEdit,
+  faExclamationTriangle,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { getMyRequestApi } from "../../../apis/api";
+import { Link, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import { deleteRequestApi, getMyRequestApi } from "../../../apis/api";
 
 const History = () => {
   const { id } = useParams();
   const [requests, setRequests] = useState([]);
+  const [isdeleteModalOpen, setdeleteIsModalOpen] = useState(false);
+  const opendeleteModal = () => setdeleteIsModalOpen(true);
+  const closedeleteModal = () => setdeleteIsModalOpen(false);
+  const [requestII, setRequestII] = useState("");
+
+  // delete
+  const handleDelete = (id) => {
+    // make Api call
+    deleteRequestApi(id)
+      .then((res) => {
+        if (res.data.success == true) {
+          toast.success(res.data.message);
+          closedeleteModal(true);
+          setRequests(requests.filter((item) => item._id !== id));
+        } else {
+          toast.error(res.data.message);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   useEffect(() => {
     const fetchRequests = async () => {
@@ -43,6 +72,7 @@ const History = () => {
                 <th scope="col">Instruction</th>
                 <th scope="col">Any Precautions</th>
                 <th scope="col">Contact Person</th>
+                <th scope="col"> Action </th>
               </tr>
             </thead>
             <tbody>
@@ -62,6 +92,65 @@ const History = () => {
                   <td>{request?.instruction}</td>
                   <td>{request?.anyPrecautions}</td>
                   <td>{request?.contactPerson}</td>
+                  {
+                    <td className="px-7 2xl:px-0">
+                      {/* Edit Button */}
+                      <Link
+                        className="focus:outline-none py-2 px-4"
+                        to={`/edit-request/${request?._id}`}
+                      >
+                        <FontAwesomeIcon
+                          icon={faEdit}
+                          className="text-blue-500 hover:text-blue-700 cursor-pointer"
+                        />
+                      </Link>
+
+                      {/* Delete Button */}
+                      <button
+                        onClick={() => {
+                          opendeleteModal();
+                          setRequestII(request._id);
+                        }}
+                        className="focus:outline-none ml-2 "
+                      >
+                        <FontAwesomeIcon
+                          icon={faTrash}
+                          className="text-red-500 hover:text-red-700 cursor-pointer "
+                        />
+                      </button>
+                    </td>
+                  }
+                  {isdeleteModalOpen && (
+                    <div
+                      className="fixed inset-0 flex items-center justify-center bg-opacity-20 overflow-y-auto h-full w-full"
+                      id="my-modal"
+                    >
+                      <div className="relative mx-auto p-5 border  shadow-sm w-1/4 rounded-md bg-white space-y-8 justify-center items-center flex flex-col">
+                        <h6 className="font-medium w-3/4 mx-auto text-center">
+                          <FontAwesomeIcon
+                            className="me-4"
+                            icon={faExclamationTriangle}
+                          />
+                          Are you sure about that 👁️👁️?
+                        </h6>
+                        <div className="relative flex flex-wrap items-center z-50 justify-between mx-auto w-full">
+                          <button
+                            onClick={() => handleDelete(requestII)}
+                            className="w-1/3 text-white bg-red-500 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm text-center py-2.5"
+                          >
+                            Delete
+                          </button>
+                          <button
+                            type="submit"
+                            className="w-1/3 text-white bg-gray-500 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm py-2.5"
+                            onClick={closedeleteModal}
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </tr>
               ))}
             </tbody>

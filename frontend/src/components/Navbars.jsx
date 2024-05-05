@@ -18,7 +18,6 @@ const Navbars = ({ fullName }) => {
   };
   const cancel = (e) => {
     closeLogoutModal();
-    navigate("/home");
   };
   const handleLogout = (e) => {
     closeLogoutModal();

@@ -218,7 +218,9 @@ export default function AddHospitals() {
                       )}
                     </button>
                   </th>
-                  <th className="font-normal text-left pl-16">Action</th>
+                  {users.isBloodBank ? null : (
+                    <th className="font-normal text-left pl-16">Action</th>
+                  )}
                 </tr>
               </thead>
               <tbody className="w-full">
@@ -259,29 +261,31 @@ export default function AddHospitals() {
                         {new Date(item.createdAt).toLocaleDateString()}
                       </p>
                     </td>
-                    <td className="px-7 2xl:px-0">
-                      {/* Edit Button */}
-                      <Link
-                        className="focus:outline-none py-2 px-4"
-                        to={`/edit-hospital/${item._id}`}
-                      >
-                        <FontAwesomeIcon
-                          icon={faEdit}
-                          className="text-blue-500 hover:text-blue-700 cursor-pointer"
-                        />
-                      </Link>
+                    {users.isBloodBank ? null : (
+                      <td className="px-7 2xl:px-0">
+                        {/* Edit Button */}
+                        <Link
+                          className="focus:outline-none py-2 px-4"
+                          to={`/edit-hospital/${item._id}`}
+                        >
+                          <FontAwesomeIcon
+                            icon={faEdit}
+                            className="text-blue-500 hover:text-blue-700 cursor-pointer"
+                          />
+                        </Link>
 
-                      {/* Delete Button */}
-                      <button
-                        onClick={opendeleteModal}
-                        className="focus:outline-none ml-2 "
-                      >
-                        <FontAwesomeIcon
-                          icon={faTrash}
-                          className="text-red-500 hover:text-red-700 cursor-pointer "
-                        />
-                      </button>
-                    </td>
+                        {/* Delete Button */}
+                        <button
+                          onClick={opendeleteModal}
+                          className="focus:outline-none ml-2 "
+                        >
+                          <FontAwesomeIcon
+                            icon={faTrash}
+                            className="text-red-500 hover:text-red-700 cursor-pointer "
+                          />
+                        </button>
+                      </td>
+                    )}
                     {isdeleteModalOpen && (
                       <div
                         className="fixed inset-0 flex items-center justify-center bg-opacity-20 overflow-y-auto h-full w-full"
@@ -340,7 +344,7 @@ export default function AddHospitals() {
               </div>
 
               <form className="space-y-6">
-                <h3 className="text-lg font-medium leading-6 text-gray-900 text-center font-semibold text-2xl">
+                <h3 className=" leading-6 text-gray-900 text-center font-semibold text-2xl">
                   Add New Hospital
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
