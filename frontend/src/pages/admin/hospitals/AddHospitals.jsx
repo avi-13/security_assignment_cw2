@@ -355,7 +355,7 @@ export default function AddHospitals() {
                     <input
                       onChange={changeHospitalName}
                       type="text"
-                      className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                      className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
                       required
                     />
                   </div>
@@ -369,7 +369,7 @@ export default function AddHospitals() {
                     <input
                       onChange={changeHospitalContact}
                       type="number"
-                      className="mt-1 block w-full  border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                      className="mt-1 block w-full  border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
                       required
                     />
                   </div>
@@ -380,7 +380,7 @@ export default function AddHospitals() {
                     <input
                       onChange={changeHospitalType}
                       type="text"
-                      className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                      className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
                       required
                     />
                   </div>
@@ -399,7 +399,7 @@ export default function AddHospitals() {
                         setLatitude(formattedValue);
                       }}
                       type="number"
-                      className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                      className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
                       required
                     />
                   </div>
@@ -418,7 +418,7 @@ export default function AddHospitals() {
                         setLongitude(formattedValue);
                       }}
                       type="number"
-                      className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                      className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
                       required
                     />
                   </div>
@@ -428,7 +428,7 @@ export default function AddHospitals() {
                     </label>
                     <textarea
                       onChange={changeHospitalServices}
-                      className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                      className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
                       rows="4"
                       required
                     ></textarea>

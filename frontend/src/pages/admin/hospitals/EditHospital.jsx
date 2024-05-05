@@ -120,7 +120,7 @@ const EditHospital = () => {
                 value={hospitalName}
                 onChange={changeHospitalName}
                 type="text"
-                className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
                 required
               />
             </div>
@@ -138,7 +138,7 @@ const EditHospital = () => {
                 value={hospitalContactNumber}
                 onChange={changeHospitalContact}
                 type="number"
-                className="mt-1 block w-full  border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                className="mt-1 block w-full  border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
                 required
               />
             </div>
@@ -150,7 +150,7 @@ const EditHospital = () => {
                 value={hospitalType}
                 onChange={changeHospitalType}
                 type="text"
-                className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
                 required
               />
             </div>
@@ -167,7 +167,7 @@ const EditHospital = () => {
                   setLatitude(formattedValue);
                 }}
                 type="number"
-                className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
                 required
               />
             </div>
@@ -184,7 +184,7 @@ const EditHospital = () => {
                   setLongitude(formattedValue);
                 }}
                 type="number"
-                className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
                 required
               />
             </div>
@@ -195,7 +195,7 @@ const EditHospital = () => {
               <textarea
                 value={hospitalServices}
                 onChange={changeHospitalServices}
-                className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
                 rows="4"
                 required
               ></textarea>

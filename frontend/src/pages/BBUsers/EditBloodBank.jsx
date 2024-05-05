@@ -137,7 +137,7 @@ const EditBloodBank = () => {
                 value={bbName}
                 onChange={changebbName}
                 type="text"
-                className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
                 required
               />
             </div>
@@ -155,7 +155,7 @@ const EditBloodBank = () => {
                 value={bbContact}
                 onChange={changebbContact}
                 type="number"
-                className="mt-1 block w-full  border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                className="mt-1 block w-full  border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
                 required
               />
             </div>
@@ -173,7 +173,7 @@ const EditBloodBank = () => {
                 value={operatingHours}
                 type="text"
                 onChange={changeOperatingHours}
-                className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
                 rows="4"
                 required
               ></input>
@@ -186,7 +186,7 @@ const EditBloodBank = () => {
                 value={socialMediaLinks}
                 onChange={changeSocialMediaLinks}
                 type="text"
-                className="mt-1 block w-full  border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                className="mt-1 block w-full  border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
                 required
               />
             </div>
@@ -203,7 +203,7 @@ const EditBloodBank = () => {
                   setLatitude(formattedValue);
                 }}
                 type="number"
-                className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
                 required
               />
             </div>
@@ -220,7 +220,7 @@ const EditBloodBank = () => {
                   setLongitude(formattedValue);
                 }}
                 type="number"
-                className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
                 required
               />
             </div>
@@ -232,7 +232,7 @@ const EditBloodBank = () => {
                 value={serviceOffered}
                 onChange={(e) => setServiceOffered(e.target.value)}
                 type="text"
-                className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
                 required
               />
             </div>
@@ -244,7 +244,7 @@ const EditBloodBank = () => {
                 value={specialInstructions}
                 onChange={(e) => setSpecialInstructions(e.target.value)}
                 type="text"
-                className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
                 required
               />
             </div>
@@ -258,7 +258,7 @@ const EditBloodBank = () => {
               rows={5}
               onChange={(e) => setAdditionalNotes(e.target.value)}
               type="text"
-              className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
+              className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
               required
             />
           </div>

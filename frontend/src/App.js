@@ -34,6 +34,7 @@ import BloodBankUserRoutes from "./protected/BloodBankUserRoutes";
 import UserRoutes from "./protected/UserRoutes";
 import BBDashBoard from "./pages/BBUsers/BBDashBoard";
 import EditBloodRequests from "./pages/users/blood_request/EditBloodRequests";
+import ReqForBB from "./pages/users/blood_request/ReqForBB";
 
 function App() {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -79,6 +80,7 @@ function App() {
 
         <Route element={<UserRoutes />}>
           <Route path="/view_all_donors" element={<Users />} />
+          <Route path="/req_for_bb/:id" element={<ReqForBB />} />
           <Route path="/be-a-donor/:id" element={<BeADonor />} />
           <Route path="/edit-request/:id" element={<EditBloodRequests />} />
           <Route path="/add_blood_requests" element={<AddBloodRequests />} />

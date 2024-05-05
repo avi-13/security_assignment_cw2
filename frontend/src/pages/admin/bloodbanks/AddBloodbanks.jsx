@@ -410,7 +410,7 @@ export default function AddBloodBanks() {
                     <input
                       onChange={changebbName}
                       type="text"
-                      className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                      className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
                       required
                     />
                   </div>
@@ -424,7 +424,7 @@ export default function AddBloodBanks() {
                     <input
                       onChange={changebbContact}
                       type="number"
-                      className="mt-1 block w-full  border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                      className="mt-1 block w-full  border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
                       required
                     />
                   </div>
@@ -438,7 +438,7 @@ export default function AddBloodBanks() {
                     <input
                       type="text"
                       onChange={changeOperatingHours}
-                      className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                      className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
                       rows="4"
                       required
                     ></input>
@@ -450,7 +450,7 @@ export default function AddBloodBanks() {
                     <input
                       onChange={changeSocialMediaLinks}
                       type="text"
-                      className="mt-1 block w-full  border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                      className="mt-1 block w-full  border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
                       required
                     />
                   </div>
@@ -469,7 +469,7 @@ export default function AddBloodBanks() {
                         setLatitude(formattedValue);
                       }}
                       type="number"
-                      className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                      className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
                       required
                     />
                   </div>
@@ -488,7 +488,7 @@ export default function AddBloodBanks() {
                         setLongitude(formattedValue);
                       }}
                       type="number"
-                      className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                      className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
                       required
                     />
                   </div>
@@ -499,7 +499,7 @@ export default function AddBloodBanks() {
                     <input
                       onChange={(e) => setServiceOffered(e.target.value)}
                       type="text"
-                      className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                      className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
                       required
                     />
                   </div>
@@ -510,7 +510,7 @@ export default function AddBloodBanks() {
                     <input
                       onChange={(e) => setSpecialInstructions(e.target.value)}
                       type="text"
-                      className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                      className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
                       required
                     />
                   </div>
@@ -523,7 +523,7 @@ export default function AddBloodBanks() {
                     rows={5}
                     onChange={(e) => setAdditionalNotes(e.target.value)}
                     type="text"
-                    className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                    className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
                     required
                   />
                 </div>

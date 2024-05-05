@@ -1,7 +1,7 @@
 import "leaflet/dist/leaflet.css";
 import React, { useEffect, useState } from "react";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { fetchSingleBloodBankApi } from "../../../apis/api";
 
 const SingleBloodbank = () => {
@@ -83,9 +83,12 @@ const SingleBloodbank = () => {
                       Our Services: {bloodbank.serviceOffered}
                     </p>
                     <div class="flex items-center gap-3">
-                      <button class="text-center w-full px-5 py-4 rounded-lg bg-gray-900 flex items-center justify-center font-semibold text-lg text-white shadow-sm transition-all duration-500 hover:bg-red-800 hover:shadow-red-800">
-                        Buy Now
-                      </button>
+                      <Link
+                        class="text-center w-full px-4 py-4 rounded-lg bg-gray-900 flex items-center justify-center font-semibold text-lg text-white shadow-sm transition-all duration-500 hover:bg-red-800 hover:shadow-red-800"
+                        to={`/req_for_bb/${bloodbank._id}`}
+                      >
+                        Request Blood
+                      </Link>
                     </div>
                   </div>
                 </div>

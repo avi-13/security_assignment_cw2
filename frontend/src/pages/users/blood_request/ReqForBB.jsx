@@ -1,141 +1,101 @@
 import { CircularProgress } from "@mui/material";
 import React, { useState } from "react";
-import { toast } from "react-toastify";
-import { createBloodBankApi } from "../apis/api";
-import DistrictList from "../components/DistrictsList";
-import MultiSelectBG from "../components/MultiSeletctBG";
+import { useParams } from "react-router-dom";
+import BloodGroupLists from "../../../components/BloodGroupsList";
 
-export default function ForBloodbank() {
-  // useEffect for fetching all the products and showing in table
+export default function ReqForBB() {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const { bbId } = useParams();
 
-  const [bbName, setbbName] = useState("");
-  const [bbAddress, setbbAddress] = useState("");
-  const [bbContact, setbbContact] = useState("");
-  const [operatingHours, setOperatingHours] = useState("");
-  const [serviceOffered, setServiceOffered] = useState("");
-  const [specialInstructions, setSpecialInstructions] = useState("");
-  const [additionalNotes, setAdditionalNotes] = useState("");
-  const [availableBloodGroups, setAvailableBloodGroups] = useState([]);
-  const [socialMediaLinks, setSocialMediaLinks] = useState("");
+  const [patientName, setPatientName] = useState("");
+  const [patientAge, setPatientAge] = useState("");
+  const [patientBloodType, setPatientBloodType] = useState("");
+  const [components, setComponents] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [hospitalName, sethospitalName] = useState("");
+  const [hospitalAddress, setHospitalAddress] = useState("");
+  const [quantity, setQuantity] = useState("");
+  const [urgency, setUrgency] = useState("");
+  const [reason, setReason] = useState("");
+  const [date, setDate] = useState("");
+  const [instruction, setInstruction] = useState("");
+  const [anyPrecautions, setPrecautions] = useState("");
+  const [contactPerson, setContactPerson] = useState("");
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
-  const [contactEmail, setContactEmail] = useState("");
-  const [bbImage, setBloodBankImage] = useState(null);
+
   const [isLoading, setIsLoading] = useState(false);
 
-  const changebbName = (e) => {
-    setbbName(e.target.value);
-  };
-
-  const changebbAddress = (e) => {
-    setbbAddress(e.target.value);
-  };
-
-  const changebbContact = (e) => {
-    setbbContact(e.target.value);
-  };
-
-  const changeOperatingHours = (e) => {
-    setOperatingHours(e.target.value);
-  };
-  const changeAvailableBloodGroups = (selectedOptions) => {
-    const selectedValues = selectedOptions.map((option) => option.value);
-    setAvailableBloodGroups(selectedValues);
-  };
-  const changeSocialMediaLinks = (e) => {
-    setSocialMediaLinks(e.target.value);
-  };
-
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0]; //files not file
-
-    setBloodBankImage(file);
-    setImagePreview(URL?.createObjectURL(file));
-  };
   const handleSubmit = (e) => {
     setIsLoading(true);
     e.preventDefault();
-
+    console.log("afsafasgagasgsa", bbId);
     const formData = new FormData();
-
-    formData.append("bName", bbName);
-    formData.append("bAddress", bbAddress);
-    formData.append("bContact", bbContact);
-    formData.append("oHours", operatingHours);
-    formData.append("bgavailable", availableBloodGroups);
-    formData.append("serviceOffered", serviceOffered);
-    formData.append("specialInstructions", specialInstructions);
-    formData.append("additionalNotes", additionalNotes);
-    formData.append("socialLinks", socialMediaLinks);
+    formData.append("patientName", patientName);
+    formData.append("patientName", patientName);
+    formData.append("patientAge", patientAge);
+    formData.append("patientBloodType", patientBloodType);
+    formData.append("components", components);
+    formData.append("phoneNumber", phoneNumber);
+    formData.append("hospitalName", hospitalName);
+    formData.append("hospitalAddress", hospitalAddress);
+    formData.append("quantity", quantity);
+    formData.append("urgency", urgency);
+    formData.append("reason", reason);
+    formData.append("date", date);
+    formData.append("instruction", instruction);
+    formData.append("anyPrecautions", anyPrecautions);
+    formData.append("contactPerson", contactPerson);
     formData.append("latitude", latitude);
     formData.append("longitude", longitude);
-    formData.append("bbImage", bbImage);
-    formData.append("contactEmail", contactEmail);
-
-    createBloodBankApi(formData)
-      .then((res) => {
-        console.log(res.data);
-
-        if (res.data.success == false) {
-          toast.error(res.data.message);
-        } else {
-          toast.success(res.data.message);
-        }
-      })
-      .catch((e) => {
-        toast.error(e.message);
-        console.log(e);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    formData.append("userId", user._id);
+    setIsLoading(false);
   };
-
-  const [imagePreview, setImagePreview] = useState(null);
 
   return (
     <>
       <div className="mx-auto mt-24 mb-4 p-5 border w-1/2 shadow-lg rounded-md bg-white">
         <form className="space-y-6">
           <h3 className="leading-6 text-gray-900 text-center font-semibold text-2xl">
-            Add New BloodBank
+            Request Blood For BloodBank
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div>
               <label className="block text-sm font-medium text-gray-900">
-                BloodBank Name
+                Patient Name
               </label>
               <input
-                onChange={changebbName}
+                placeholder="Patient Name"
                 type="text"
+                onChange={(e) => setPatientName(e.target.value)}
                 className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
                 required
               />
             </div>
             <div>
-              <DistrictList onChange={changebbAddress} />
-            </div>
-            <div>
               <label className="block text-sm font-medium text-gray-900">
-                BLood Bank Contact
+                Patient Age
               </label>
               <input
-                onChange={changebbContact}
+                onChange={(e) => setPatientAge(e.target.value)}
                 type="number"
                 className="mt-1 block w-full  border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
                 required
               />
             </div>
             <div>
-              <MultiSelectBG onChange={changeAvailableBloodGroups} />
+              <BloodGroupLists
+                label={"Select Patient Blood Group"}
+                onChange={(e) => setPatientBloodType(e.target.value)}
+              />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-900">
-                BloodBank Operating Hours
+                Required Blood Quantity
               </label>
               <input
                 type="text"
-                onChange={changeOperatingHours}
+                onChange={(e) => setQuantity(e.target.value)}
                 className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
                 rows="4"
                 required
@@ -143,10 +103,21 @@ export default function ForBloodbank() {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-900">
-                SocialMedia Links
+                Hospital/Clinic Name
               </label>
               <input
-                onChange={changeSocialMediaLinks}
+                onChange={(e) => sethospitalName(e.target.value)}
+                type="text"
+                className="mt-1 block w-full  border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-900">
+                Hospital/Clinic Address
+              </label>
+              <input
+                onChange={(e) => setHospitalAddress(e.target.value)}
                 type="text"
                 className="mt-1 block w-full  border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
                 required
@@ -188,10 +159,10 @@ export default function ForBloodbank() {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-900">
-                Types of Service
+                Contact Number
               </label>
               <input
-                onChange={(e) => setServiceOffered(e.target.value)}
+                onChange={(e) => setPhoneNumber(e.target.value)}
                 type="text"
                 className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
                 required
@@ -199,66 +170,87 @@ export default function ForBloodbank() {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-900">
-                Special Instruction
+                Contact Person
               </label>
               <input
-                onChange={(e) => setSpecialInstructions(e.target.value)}
+                onChange={(e) => setContactPerson(e.target.value)}
                 type="text"
                 className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-900">
+                Required Date
+              </label>
+              <input
+                className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                type="text"
+                placeholder="Date of Request"
+                onFocus={(e) => (e.target.type = "date")}
+                onBlur={(e) => (e.target.type = "text")}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-900">
+                Reason
+              </label>
+              <input
+                onChange={(e) => setReason(e.target.value)}
+                type="text"
+                className="mt-1 block w-full  border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-900">
+                Urgency
+              </label>
+              <input
+                onChange={(e) => setUrgency(e.target.value)}
+                type="text"
+                className="mt-1 block w-full  border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-900">
+                Any Specific Components Required
+              </label>
+              <input
+                onChange={(e) => setComponents(e.target.value)}
+                type="text"
+                className="mt-1 block w-full  border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
                 required
               />
             </div>
           </div>
           <div className="col-lg-12">
             <label className="block text-sm font-medium text-gray-900">
+              Any Precautions
+            </label>
+            <textarea
+              rows={5}
+              onChange={(e) => setPrecautions(e.target.value)}
+              type="text"
+              className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
+              required
+            />
+          </div>
+
+          <div className="col-lg-12">
+            <label className="block text-sm font-medium text-gray-900">
               Additional Note
             </label>
             <textarea
               rows={5}
-              onChange={(e) => setAdditionalNotes(e.target.value)}
+              onChange={(e) => setInstruction(e.target.value)}
               type="text"
               className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
               required
             />
-          </div>
-          <div className="col-lg-12">
-            <label className="block text-sm font-medium text-gray-900">
-              Contact Email
-            </label>
-            <input
-              onChange={(e) => setContactEmail(e.target.value)}
-              type="text"
-              className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
-              required
-            />
-            <div className="text-red-500 text-sm mt-1">
-              Please enter a valid email address the password and email of your
-              account is sent here ...
-            </div>
-          </div>
-          <div>
-            <label
-              htmlFor="bloodbankImage"
-              className="block text-sm font-medium  text-gray-900"
-            >
-              BloodBank Image
-            </label>
-            <input
-              required
-              type="file"
-              accept="image/*"
-              className="mt-1 block w-full text-sm text-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-              onChange={handleImageUpload}
-            />
-            {imagePreview && (
-              <div className="mt-4 d-flex flex-row justify-content-center">
-                <img
-                  src={imagePreview}
-                  className="rounded-md object-contain"
-                  width={300}
-                />
-              </div>
-            )}
           </div>
           <button
             onClick={handleSubmit}

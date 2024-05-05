@@ -1,6 +1,6 @@
 import React from "react";
 
-const BloodGroupLists = ({ onChange, dynamicValue }) => {
+const BloodGroupLists = ({ onChange, dynamicValue,label}) => {
   const getBloodGroups = () => {
     // List of blood groups
     const bloodGroups = ["AB+", "AB-", "B-", "B+", "O+", "O-", "A+", "A-"];
@@ -9,9 +9,9 @@ const BloodGroupLists = ({ onChange, dynamicValue }) => {
   };
 
   return (
-    <div className="mb-4">
+    <div className="">
       <label className="block text-sm font-medium text-gray-900 mb-2">
-        Select Blood Group:
+        { label ? label : "Select Blood Group"}
       </label>
       <div className="relative">
         <select
