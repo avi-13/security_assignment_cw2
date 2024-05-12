@@ -1,6 +1,6 @@
 import React from "react";
 
-const DistrictList = ({ onChange ,dynamicValue}) => {
+const DistrictList = ({ onChange,label ,dynamicValue}) => {
   const getDistricts = () => {
     // List of districts
     const districts = [
@@ -84,9 +84,9 @@ const DistrictList = ({ onChange ,dynamicValue}) => {
     return districts;
   };
   return (
-    <div className="mb-4">
+    <div className="mb-1">
       <label className="block text-sm font-medium text-gray-900 mb-2">
-        Select District:
+        {label ? label : "Select District:"}
       </label>
       <div className="relative">
         <select

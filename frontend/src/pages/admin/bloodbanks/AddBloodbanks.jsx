@@ -33,6 +33,8 @@ export default function AddBloodBanks() {
   const [bbImage, setBloodBankImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  const [requestII, setRequestII] = useState("");
+
   const fetchBloodBanks = async () => {
     try {
       const response = await getallBloodBankApi(
@@ -62,6 +64,15 @@ export default function AddBloodBanks() {
   const [additionalNotes, setAdditionalNotes] = useState("");
   const [availableBloodGroups, setAvailableBloodGroups] = useState([]);
   const [socialMediaLinks, setSocialMediaLinks] = useState("");
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [imagePreview, setImagePreview] = useState(null);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+  const [isdeleteModalOpen, setdeleteIsModalOpen] = useState(false);
+  const opendeleteModal = () => setdeleteIsModalOpen(true);
+  const closedeleteModal = () => setdeleteIsModalOpen(false);
 
   const handleSort = (column) => {
     setSortBy(column);
@@ -128,6 +139,7 @@ export default function AddBloodBanks() {
         } else {
           closeModal();
           toast.success(res.data.message);
+          fetchBloodBanks();
         }
       })
       .catch((e) => {
@@ -145,35 +157,26 @@ export default function AddBloodBanks() {
     deleteBloodBankApi(id).then((res) => {
       if (res.data.success == true) {
         toast.success(res.data.message);
-        window.location.reload();
+        closedeleteModal(true);
+        fetchBloodBanks();
       } else {
         toast.error(res.data.message);
       }
     });
   };
 
-    // delete
-    const sendInfo = (id) => {
-      // make Api call
-      sendInfoApi(id).then((res) => {
-        if (res.data.success == true) {
-          toast.success(res.data.message);
-          window.location.reload();
-        } else {
-          toast.error(res.data.message);
-        }
-      });
-    };
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [imagePreview, setImagePreview] = useState(null);
-
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
-  const [isdeleteModalOpen, setdeleteIsModalOpen] = useState(false);
-  const opendeleteModal = () => setdeleteIsModalOpen(true);
-  const closedeleteModal = () => setdeleteIsModalOpen(false);
-
+  // delete
+  const sendInfo = (id) => {
+    // make Api call
+    sendInfoApi(id).then((res) => {
+      if (res.data.success == true) {
+        toast.success(res.data.message);
+        window.location.reload();
+      } else {
+        toast.error(res.data.message);
+      }
+    });
+  };
   return (
     <>
       <div className="w-full sm:px-6">
@@ -236,7 +239,9 @@ export default function AddBloodBanks() {
                   <th className="font-normal text-left pl-20">
                     SocialMedia Links
                   </th>
-                  <th className="font-normal text-left pl-20">Is Verifiied ?</th>
+                  <th className="font-normal text-left pl-20">
+                    Is Verifiied ?
+                  </th>
                   <th className="font-normal text-left pl-12">
                     <button
                       onClick={() => handleSort("createdAt")}
@@ -329,7 +334,10 @@ export default function AddBloodBanks() {
                         {/* Delete Button */}
                         <Link
                           className="focus:outline-none py-2 px-4 bg-[#ff0000] hover:!bg-[#000000] rounded-lg cursor-pointer"
-                          onClick={opendeleteModal}
+                          onClick={() => {
+                            opendeleteModal();
+                            setRequestII(item._id);
+                          }}
                           title="Delete Item"
                         >
                           <FontAwesomeIcon
@@ -358,7 +366,7 @@ export default function AddBloodBanks() {
                               </h6>
                               <div className="flex flex-wrap items-center justify-between mx-auto w-full">
                                 <button
-                                  onClick={() => handleDelete(item._id)}
+                                  onClick={() => handleDelete(requestII)}
                                   className="w-1/3 text-white bg-red-500 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm text-center py-2.5"
                                 >
                                   Delete

@@ -139,3 +139,40 @@ export const newsAPi = (data) =>
     "https://newsdata.io/api/1/news?apikey=pub_3882905bc0f7ab80ee7df6334e62ac3b05d3a&q=health&country=np",
     data
   );
+
+
+// ======================================> Request For Blood Bank API <===============================
+export const addRequestBBApi = (formData) =>
+  Api.post("/api/req_bb/add_request_bb", formData);   
+
+export const viewRequestBBApi = (data) =>
+  Api.get("/api/req_bb/all_requests_bb", data);
+
+export const getSingleRequestBBApi = (id) =>
+  Api.get(`/api/req_bb/request_bb/${id}`);
+
+export const deleteRequestBBApi = (id) =>
+  Api.delete(`/api/req_bb/delete_request_bb/${id}`);
+
+export const updateRequestBBApi = (id, data) =>
+  Api.put(`/api/req_bb/update_request_bb/${id}`, data);
+
+// export const getMyRequestBBApi = (id) =>
+//   Api.get(`/api/requestForBB/get_my_request/${id}`);
+
+// ======================================> Campaign API <===============================
+export const addCampaignApi = (data) =>
+  Api.post("/api/campaign/add_campaign", data);
+
+export const viewCampaignApi = (data) =>
+  Api.get("/api/campaign/get_all_campaign", data);
+
+export const getSingleCampaignApi = (id) =>
+  Api.get(`/api/campaign/single_campaign/${id}`);
+
+export const deleteCampaignApi = (id) =>
+  Api.delete(`/api/campaign/delete_campaign/${id}`);
+
+export const updateCampaignApi = (id, data) =>
+  Api.put(`/api/campaign/update_campaign/${id}`, data);
+

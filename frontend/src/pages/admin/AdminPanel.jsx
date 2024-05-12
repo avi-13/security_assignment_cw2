@@ -11,6 +11,7 @@ import AddBloodBanks from "./bloodbanks/AddBloodbanks";
 import ViewDonors from "./donors/Donors";
 import AddHospitals from "./hospitals/AddHospitals";
 import AddNews from "./news/AddNews";
+import AddCampaigns from "../BBUsers/Campaigns/AddCampaigns";
 function AdminPanel() {
   const storedPage = localStorage.getItem("currentPage");
   // Initialize the current page with the stored value or the default value
@@ -48,6 +49,13 @@ function AdminPanel() {
       break;
     case "AddHospitals":
       content = <AddHospitals />;
+      break;
+    case "AddCampaigns":
+      {
+        users.isBloodBank
+          ? (content = <AddCampaigns />)
+          : (content = null);
+      }
       break;
     case "Blood Requests":
       content = <BBRequests />;
@@ -157,10 +165,10 @@ function AdminPanel() {
             {users.isBloodBank ? (
               <li
                 className={`adminLi ${
-                  currentPage === "AddNews" ? "active" : ""
+                  currentPage === "AddCampaigns" ? "active" : ""
                 }`}
               >
-                <button onClick={() => setCurrentPage("AddNews")} tabIndex="5">
+                <button onClick={() => setCurrentPage("AddCampaigns")} tabIndex="5">
                   Add Campaigns
                 </button>
               </li>

@@ -1,34 +1,40 @@
 import React, { useEffect, useState } from "react";
+import { viewRequestBBApi } from "../../apis/api";
 import CustomCircularProgress from "../../components/CustomCircularProgress";
 
 const BBRequests = () => {
-    const [newsData, setNewsData] = useState([]);
+  const [bloodRequests, setBloodRequest] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const apiKey = "pub_388315c80e0c4fa3e9c2a9fbeba0625cce9fe";
-
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          `https://newsdata.io/api/1/news?apikey=${apiKey}&q=health&country=np`
-        );
-        const data = await response.json();
-        if (response?.ok) {
-          setNewsData(data?.results);
-        } else {
-          setError(data?.results);
-        }
-      } catch (error) {
-        setError("Error fetching news. Please try again later.");
-      } finally {
+    try {
+      viewRequestBBApi().then((res) => {
+        setIsLoading(true);
+        console.log(res.data);
+        setBloodRequest(res.data.requestList);
+        console.log(res.data.requestList);
         setIsLoading(false);
-      }
-    };
-
-    fetchData();
+      });
+    } catch (error) {
+      setIsLoading(false);
+      setError(true);
+    }
   }, []);
+
+  // !userId ||
+  //   !patientName ||
+  //   !patientBloodType ||
+  //   !phoneNumber ||
+  //   !hospitalName ||
+  //   !hospitalAddress ||
+  //   !quantity ||
+  //   !urgency ||
+  //   !date ||
+  //   !contactPerson ||
+  //   !latitude ||
+  //   !longitude ||
+  //   !bloodbank
 
   return (
     <div>
@@ -40,48 +46,38 @@ const BBRequests = () => {
       )}
       {!isLoading && !error && (
         <div className="container">
-          <h1 className="text-center">Health News</h1>
+          <h1 className="text-center">Blood Requests</h1>
           <div className="overflow-y-auto">
             <table className="table table-striped">
               <thead>
                 <tr>
-                  <th>Image</th>
-                  <th>Title</th>
-                  <th>Published Date</th>
-                  <th>Category</th>
-                  <th>Language</th>
-                  <th>Creator</th>
+                  <th>Patient Name</th>
+                  <th>Patient Blood Type</th>
+                  <th>Phone Number</th>
+                  <th>Hospital Name</th>
+                  <th>Hospital Address</th>
+                  <th>Quantity</th>
+                  <th>Urgency</th>
+                  <th>Reason</th>
+                  <th>Date</th>
+                  <th>Contact Person</th>
+                  <th>Requested By</th>
                 </tr>
               </thead>
               <tbody>
-                {newsData?.map((newsItem, index) => (
+                {bloodRequests?.map((requests, index) => (
                   <tr key={index}>
-                    <td>
-                      {newsItem.image_url ? (
-                        <img src={newsItem.image_url} height={50} width={50} />
-                      ) : (
-                        "No Image"
-                      )}
-                    </td>
-                    <td>
-                      {newsItem?.title ? newsItem?.title : "Not Available"}
-                    </td>
-                    <td>
-                      {newsItem?.pubDate ? newsItem?.pubDate : "Not Available"}
-                    </td>
-                    <td>
-                      {newsItem?.category
-                        ? newsItem?.category
-                        : "Not Available"}
-                    </td>
-                    <td>
-                      {newsItem?.language
-                        ? newsItem?.language
-                        : "Not Available"}
-                    </td>
-                    <td>
-                      {newsItem?.creator ? newsItem?.creator : "Not Available"}
-                    </td>
+                    <td>{requests.patientName}</td>
+                    <td>{requests?.patientBloodType}</td>
+                    <td>{requests?.phoneNumber}</td>
+                    <td>{requests?.hospitalName}</td>
+                    <td>{requests?.hospitalAddress}</td>
+                    <td>{requests?.quantity}</td>
+                    <td>{requests?.urgency}</td>
+                    <td>{requests?.reason}</td>
+                    <td>{requests?.date}</td>
+                    <td>{requests?.contactPerson}</td>
+                    <td>{requests?.userId.fullName}</td>
                   </tr>
                 ))}
               </tbody>

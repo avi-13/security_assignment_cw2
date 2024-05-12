@@ -71,6 +71,14 @@ const UserRequestSchema = mongoose.Schema(
           ref: "user",
           required: true,
         },
+        bloodbank: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "bloodbank",
+          required: true,
+        },
       },
       { timestamps: true }
 );
+
+const UserRequest = mongoose.model("UserRequest", UserRequestSchema);
+module.exports = UserRequest;

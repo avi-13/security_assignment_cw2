@@ -1,11 +1,14 @@
 import { CircularProgress } from "@mui/material";
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import BloodGroupLists from "../../../components/BloodGroupsList";
+import { addRequestBBApi } from "../../../apis/api";
+import { toast } from "react-toastify";
 
 export default function ReqForBB() {
   const user = JSON.parse(localStorage.getItem("user"));
-  const { bbId } = useParams();
+  const { id } = useParams();
+  const navigate = useNavigate();
 
   const [patientName, setPatientName] = useState("");
   const [patientAge, setPatientAge] = useState("");
@@ -23,15 +26,12 @@ export default function ReqForBB() {
   const [contactPerson, setContactPerson] = useState("");
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
-
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = (e) => {
     setIsLoading(true);
     e.preventDefault();
-    console.log("afsafasgagasgsa", bbId);
     const formData = new FormData();
-    formData.append("patientName", patientName);
     formData.append("patientName", patientName);
     formData.append("patientAge", patientAge);
     formData.append("patientBloodType", patientBloodType);
@@ -49,8 +49,18 @@ export default function ReqForBB() {
     formData.append("latitude", latitude);
     formData.append("longitude", longitude);
     formData.append("userId", user._id);
+    formData.append("bloodbank", id);
     setIsLoading(false);
-  };
+
+    addRequestBBApi(formData).then((res) => {  
+      if (res.data.success == false) {
+        toast.error(res.data.message);
+      } else {
+        toast.success(res.data.message)
+        navigate(`/single-bloodbank/${id}`)
+      }
+    }
+  )};
 
   return (
     <>

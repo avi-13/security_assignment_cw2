@@ -31,7 +31,7 @@ const fetchALLcontacts = async (req, res) => {
     const contacts = await Contact.find();
     res.status(200).json({ success: true, contacts });
   } catch (error) {
-    res.status(400).json({ success: false, message: "Server Error" });
+    res.status(500).json({ success: false, message: "Server Error" });
   }
 };
 module.exports = { createContact, fetchALLcontacts };

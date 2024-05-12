@@ -50,7 +50,11 @@ app.use("/api/hospital", require("./routes/hospitalRoutes"));
 // add request server
 app.use("/api/blood_request", require("./routes/bloodRequestRoute"));
 
+app.use("/api/req_bb", require("./routes/requestForBBRoute"));
+
 app.use("/api/contact", require("./routes/contactRoutes"));
+
+app.use("/api/campaign", require("./routes/campaignRoutes"));
 
 module.exports = {
   connectDB,
