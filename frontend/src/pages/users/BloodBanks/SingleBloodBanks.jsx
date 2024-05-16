@@ -1,18 +1,51 @@
+import { faCalendar, faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "leaflet/dist/leaflet.css";
 import React, { useEffect, useState } from "react";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { Link, useParams } from "react-router-dom";
-import { fetchSingleBloodBankApi } from "../../../apis/api";
+import { fetchSingleBloodBankApi, viewCampaignApi } from "../../../apis/api";
 
 const SingleBloodbank = () => {
+  const users = JSON.parse(localStorage.getItem("user"));
   const { id } = useParams();
   const [bloodbank, setBloodbank] = useState("");
+  const [campaign, setCampaign] = useState([]);
 
   useEffect(() => {
     fetchSingleBloodBankApi(id).then((res) => {
       setBloodbank(res.data.bloodbank);
     });
   }, [id]);
+
+  useEffect(() => {
+    viewCampaignApi().then((res) => {
+      setCampaign(res.data.allCampaigns);
+    });
+  }, [id]);
+
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+
+    // Add leading zeros if necessary
+    month = month < 10 ? "0" + month : month;
+    day = day < 10 ? "0" + day : day;
+
+    return `${year}-${month}-${day}`;
+  }
+
+  const [currentIndexevent, setCurrentIndexevent] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndexevent((prevIndex) => (prevIndex + 1) % campaign.length);
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [currentIndexevent, campaign.length]);
 
   if (!bloodbank) {
     return <div>Loading...</div>;
@@ -29,7 +62,7 @@ const SingleBloodbank = () => {
                   <div class="img-box h-full max-lg:mx-auto ">
                     <img
                       src={bloodbank.bbImageUrl}
-                      alt="Yellow Tropical Printed Shirt image"
+                      alt="red Tropical Printed Shirt image"
                       class="max-lg:mx-auto lg:ml-auto h-full"
                     />
                   </div>
@@ -83,12 +116,19 @@ const SingleBloodbank = () => {
                       Our Services: {bloodbank.serviceOffered}
                     </p>
                     <div class="flex items-center gap-3">
-                      <Link
-                        class="text-center w-full px-4 py-4 rounded-lg bg-gray-900 flex items-center justify-center font-semibold text-lg text-white shadow-sm transition-all duration-500 hover:bg-red-800 hover:shadow-red-800"
-                        to={`/req_for_bb/${bloodbank._id}`}
-                      >
-                        Request Blood
-                      </Link>
+                      {users ? (
+                        <Link
+                          class="text-center w-full px-4 py-4 rounded-lg bg-gray-900 flex items-center justify-center font-semibold text-lg text-white shadow-sm transition-all duration-500 hover:bg-red-800 hover:shadow-red-800"
+                          to={`/req_for_bb/${bloodbank._id}`}
+                        >
+                          Request Blood
+                        </Link>
+                      ) : (
+                        <Link
+                          class="text-center w-full px-4 py-4 rounded-lg bg-gray-900 flex items-center justify-center font-semibold text-lg text-white shadow-sm transition-all duration-500 hover:bg-red-800 hover:shadow-red-800" >
+                          Please Login to Request Blood
+                        </Link>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -98,6 +138,77 @@ const SingleBloodbank = () => {
           <p class="text-gray-900 text-base font-normal mb-5">
             {bloodbank.additionalNotes}
           </p>
+          <div className="bg-gray-100 py-12 w-full">
+            <div className="container mx-auto px-6">
+              <div className="flex flex-col w-full md:w-1/4 mx-auto">
+                <h2 className="text-4xl font-bold text-center text-gray-800 mb-8 mt-2">
+                  Upcoming Campaigns
+                  <div className="border-2 border-solid border-dark mt-2"></div>
+                </h2>
+              </div>
+              <div className="relative w-full mx-auto justify-center items-center overflow-hidden">
+                <div className="flex gap-8 mb-1">
+                  {campaign &&
+                    campaign.map((eachCamp, index) => (
+                      <div
+                        key={index}
+                        className="md:w-[450px] w-[95%] flex-shrink-0 md:ml-8 shadow-lg rounded-lg p-4 text-left flex flex-col justify-start items-start gap-4"
+                        style={{
+                          transform: `translateX(calc(${0.01 * index}% - ${
+                            index * 4
+                          }px - ${currentIndexevent * (100 + 4)}%))`,
+                          transition: "transform 1s ease-in-out",
+                        }}
+                      >
+                        <div className="relative">
+                          <span className="bg-red-800 text-black py-1 px-3 rounded-br-lg capitalize">
+                            Free
+                          </span>
+                        </div>
+                        <div className="w-full overflow-hidden px-6 py-4">
+                          <div className="font-bold text-2xl mb-2">
+                            {eachCamp.campaignName}
+                          </div>
+                          <p className="text-gray-700 text-base">
+                            {eachCamp.campaignGoal}
+                          </p>
+                        </div>
+                        <div className="flex justify-between  w-full px-4 py-4">
+                          <span className="inline-block rounded-full px-3 py-1 text-sm font-semibold text-gray-700">
+                            <FontAwesomeIcon
+                              icon={faCalendar}
+                              className="mr-2"
+                            />
+                            {formatDate(eachCamp.campaignStartDate)}
+                            {"  --  "}
+                            <span className="text-red-500">
+                              {formatDate(eachCamp.campaignEndDate)}
+                            </span>
+                          </span>
+                          <span className="inline-block  rounded-full px-3 py-1 text-sm font-semibold text-gray-700 capitalize">
+                            <FontAwesomeIcon
+                              icon={faMapMarkerAlt}
+                              className="mr-2"
+                            />
+                            {eachCamp.campaignLocation}
+                          </span>
+                        </div>
+                        <div className="flex ml-auto pr-6 pb-6">
+                          {
+                            <Link
+                              to={`/event-booking?id=${eachCamp._id}`}
+                              className="bg-red-800 text-black-500  py-2 px-4 rounded md:ml-auto"
+                            >
+                              Register
+                            </Link>
+                          }
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              </div>
+            </div>
+          </div>
           <div className="row">
             <div className="col-12 p-0">
               <MapContainer

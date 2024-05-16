@@ -13,6 +13,7 @@ const addCampaign = async (req, res) => {
     campaignDonations,
     latitude,
     longitude,
+    user,
   } = req.body;
 
   console.log(req.body);
@@ -31,9 +32,7 @@ const addCampaign = async (req, res) => {
     !campaignEndDate ||
     !campaignLocation ||
     !campaignGoal ||
-    // !campaignRaised ||
-    // !campaignDonors ||
-    // !campaignDonations ||
+    !user ||
     !latitude ||
     !longitude
   ) {
@@ -51,7 +50,6 @@ const addCampaign = async (req, res) => {
         crop: "scale",
       }
     );
-
     const newCampaign = new Campaign({
       campaignName: campaignName,
       campaignStartDate: campaignStartDate,
@@ -60,6 +58,7 @@ const addCampaign = async (req, res) => {
       campaignGoal: campaignGoal,
       latitude: latitude,
       longitude: longitude,
+      user: user,
       campaignRaised: campaignRaised ? campaignRaised : 0,
       campaignDonors: campaignDonors ? campaignDonors : 0,
       campaignDonations: campaignDonations ? campaignDonations : 0,
@@ -81,7 +80,23 @@ const addCampaign = async (req, res) => {
 
 const viewAllCampaigns = async (req, res) => {
   try {
-    const allCampaigns = await Campaign.find().sort({ createdAt: -1 });
+    const allCampaigns = await Campaign.find().populate("user").sort({ createdAt: -1 });
+    res.status(200).json({
+      success: true,
+      allCampaigns: allCampaigns,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Cannot get Campaigns",
+    });
+  }
+};
+
+
+const getCampaignByBB = async (req, res) => {
+  try {
+    const allCampaigns = await Campaign.find().populate("user").sort({ createdAt: -1 });
     res.status(200).json({
       success: true,
       allCampaigns: allCampaigns,
@@ -207,7 +222,7 @@ const updateCampaigns = async (req, res) => {
       res.status(200).json({
         success: true,
         message: "Campaign has been updated",
-        campaign: updatedCampaign
+        campaign: updatedCampaign,
       });
     } else {
       const updatedCampaign = {

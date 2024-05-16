@@ -28,6 +28,7 @@ export default function AddCampaigns() {
     try {
       const response = await viewCampaignApi();
       setCampaignss(response.data.allCampaigns);
+      console.log(response.data.allCampaigns.user);
     } catch (error) {
       console.error("Error Fetching BloodBanks", error);
     }
@@ -192,7 +193,7 @@ export default function AddCampaigns() {
                 </tr>
               </thead>
               <tbody className="w-full">
-                {campaigns.map((item) => (
+                {campaigns && campaigns?.map((item) => (
                   <tr
                     key={item._id}
                     className="h-20 text-sm leading-none text-gray-800 bg-white hover:bg-gray-100 border-b border-t border-gray-100"

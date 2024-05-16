@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const user = require("./userModel");
 
 const campaignSchema = mongoose.Schema(
   {
@@ -40,6 +41,11 @@ const campaignSchema = mongoose.Schema(
     },
     longitude: {
       type: Number,
+      required: true,
+    },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user",
       required: true,
     },
   },

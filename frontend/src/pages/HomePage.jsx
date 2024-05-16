@@ -1,5 +1,5 @@
 import { React, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "../../src/style/homepage.css";
 import "../../src/style/navbar.css";
 import {
@@ -267,6 +267,73 @@ const HomePage = ({ history }) => {
           ))}
         </div>
       )}
+
+      <section id="campaigns" class="w-full py-12 md:py-24 lg:py-32">
+        <div class="container grid grid-cols-1 gap-6 px-4 md:grid-cols-2 lg:grid-cols-3 md:px-6">
+          <div
+            class="rounded-lg border bg-card text-card-foreground shadow-sm"
+            data-v0-t="card"
+          >
+            <img
+              src="/placeholder.svg"
+              width="400"
+              height="200"
+              alt="Campaign 1"
+              class="aspect-[2/1] overflow-hidden rounded-t-xl object-cover"
+            />
+            <div class="space-y-2 p-4">
+              <h3 class="text-lg font-bold">Campaign 1</h3>
+              <div class="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="h-4 w-4"
+                >
+                  <path d="M8 2v4"></path>
+                  <path d="M16 2v4"></path>
+                  <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+                  <path d="M3 10h18"></path>
+                </svg>
+                <span>May 15, 2023</span>
+              </div>
+              <div class="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="h-4 w-4"
+                >
+                  <line x1="2" x2="5" y1="12" y2="12"></line>
+                  <line x1="19" x2="22" y1="12" y2="12"></line>
+                  <line x1="12" x2="12" y1="2" y2="5"></line>
+                  <line x1="12" x2="12" y1="19" y2="22"></line>
+                  <circle cx="12" cy="12" r="7"></circle>
+                </svg>
+                <span>New York, NY</span>
+              </div>
+              <a
+                class="inline-flex h-9 items-center justify-center rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-gray-50 shadow transition-colors hover:bg-gray-900/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-50/90 dark:focus-visible:ring-gray-300"
+                href="#"
+              >
+                Learn More
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {isLoading && <CustomCircularProgress />}
       {error && (
