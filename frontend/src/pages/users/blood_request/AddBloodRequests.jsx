@@ -253,7 +253,7 @@ const AddBloodRequests = () => {
                   value={anyPrecautions}
                   onChange={(e) => setPrecautions(e.target.value)}
                   placeholder="Any special precations to be taken"
-                  type="number"
+                  type="text"
                   required
                 />
                 <div className="underline"></div>

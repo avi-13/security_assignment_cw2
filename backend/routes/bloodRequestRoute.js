@@ -12,4 +12,6 @@ router.get("/request/:id", requestController.getSingleRequest);
 
 router.put("/update_request/:id", requestController.updateRequest);
 
+router.put("/update_show_request", requestController.updateShowRequest);
+
 module.exports = router;

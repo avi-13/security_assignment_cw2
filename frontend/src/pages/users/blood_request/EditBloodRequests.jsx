@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { getSingleRequestApi, updateRequestApi } from "../../../apis/api";
 import CustomCircularProgress from "../../../components/CustomCircularProgress";
 
 const EditBloodRequests = () => {
   const { id } = useParams();
+
+  const navigate = useNavigate();
 
   const user = JSON.parse(localStorage.getItem("user"));
 
@@ -79,6 +81,7 @@ const EditBloodRequests = () => {
           toast.error(res.data.message);
         } else {
           toast.success(res.data.message);
+          navigate("/get_my_request/660b89dc0bce07c59f91ac2d")
         }
       })
       .catch((e) => {

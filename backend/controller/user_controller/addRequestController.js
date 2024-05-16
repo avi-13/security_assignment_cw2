@@ -79,7 +79,7 @@ const addRequests = async (req, res) => {
 
 const getAllRequest = async (req, res) => {
   try {
-    const requestList = await Request.find().sort({ createdAt: -1 });
+    const requestList = await Request.find({showRequest : true}).sort({ createdAt: -1 });
     const limitedRequestList = requestList.slice(0, 5);
     const categorizedData = {
       critical: [],
@@ -265,10 +265,39 @@ const getSingleRequest = async (req, res) => {
   }
 };
 
+const updateShowRequest = async (req, res) => {
+  const { id, showRequest } = req.body;
+
+  try {
+    const updatedRequest = await Request.findByIdAndUpdate(
+      id,
+      { showRequest },
+      { new: true }
+    );
+
+    if (!updatedRequest) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Request not found" });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "showRequest updated successfully",
+      data: updatedRequest,
+    });
+  } catch (error) {
+    console.error("Error updating showRequest:", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
+  }
+};
 module.exports = {
   addRequests,
   getAllRequest,
   updateRequest,
   deleteRequest,
   getSingleRequest,
+  updateShowRequest,
 };

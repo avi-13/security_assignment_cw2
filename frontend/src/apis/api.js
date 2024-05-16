@@ -126,6 +126,9 @@ export const deleteRequestApi = (id) =>
 export const updateRequestApi = (id, data) =>
   Api.put(`/api/blood_request/update_request/${id}`, data);
 
+export const updateShowRequestApi = (data) =>
+  Api.put(`/api/blood_request/update_show_request`, data);
+
 // ======================================> Contact US API <===============================
 
 export const sendMessageApi = (data) =>

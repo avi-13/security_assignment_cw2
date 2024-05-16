@@ -66,6 +66,10 @@ const RequestSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
+     showRequest: {
+      type: Boolean,
+      default: true,
+    },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "user",

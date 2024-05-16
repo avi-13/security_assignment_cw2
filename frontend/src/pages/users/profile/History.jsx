@@ -6,8 +6,13 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import ReactSwitch from "react-switch";
 import { toast } from "react-toastify";
-import { deleteRequestApi, getMyRequestApi } from "../../../apis/api";
+import {
+  deleteRequestApi,
+  getMyRequestApi,
+  updateShowRequestApi,
+} from "../../../apis/api";
 
 const History = () => {
   const { id } = useParams();
@@ -16,6 +21,27 @@ const History = () => {
   const opendeleteModal = () => setdeleteIsModalOpen(true);
   const closedeleteModal = () => setdeleteIsModalOpen(false);
   const [requestII, setRequestII] = useState("");
+  const [showRequest, setShowRequest] = useState(false);
+
+  const handleChange = async (checked, requestId) => {
+    try {
+      setShowRequest(checked);
+      updateShowRequestApi({
+        id: requestId,
+        showRequest: checked,
+      });
+      setRequests((prevRequests) =>
+        prevRequests.map((request) =>
+          request._id === requestId
+            ? { ...request, showRequest: checked }
+            : request
+        )
+      );
+      toast.success("Request updated successfully");
+    } catch (error) {
+      console.error("Error updating Request:", error);
+    }
+  };
 
   // delete
   const handleDelete = (id) => {
@@ -72,6 +98,7 @@ const History = () => {
                 <th scope="col">Instruction</th>
                 <th scope="col">Any Precautions</th>
                 <th scope="col">Contact Person</th>
+                <th scope="col">Show/Hide Request</th>
                 <th scope="col"> Action </th>
               </tr>
             </thead>
@@ -92,6 +119,14 @@ const History = () => {
                   <td>{request?.instruction}</td>
                   <td>{request?.anyPrecautions}</td>
                   <td>{request?.contactPerson}</td>
+                  <td>
+                    <ReactSwitch
+                      checked={request?.showRequest}
+                      onChange={(checked) =>
+                        handleChange(checked, request?._id)
+                      }
+                    />
+                  </td>
                   {
                     <td className="px-7 2xl:px-0">
                       {/* Edit Button */}
