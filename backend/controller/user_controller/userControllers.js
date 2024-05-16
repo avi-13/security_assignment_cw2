@@ -298,7 +298,7 @@ const beAdonor = async (req, res) => {
 //  fetching all the users
 const getAllUsers = async (req, res) => {
   try {
-    const userList = await User.find({isAdmin: false});
+    const userList = await User.find({ isAdmin: false });
     res.json({
       success: true,
       users: userList,
@@ -632,14 +632,21 @@ const forgetPassword = async (req, res) => {
 const searchUsers = async (req, res) => {
   try {
     const { district, bloodGroup } = req.query;
-    const query = {};
+    let query = {};
     if (district) {
       query.currentAddress = { $regex: district, $options: "i" };
     }
     if (bloodGroup) {
-      query.bloodGroup = bloodGroup;
+      query.bloodGroup = new RegExp("^" + bloodGroup.replace("+", "\\+").replace("-", "\\-") + "?");
     }
-    const users = await User.find(query);
+    const users = await User.find({
+      $and: [
+        query,
+        { isADonor: true }
+      ]
+    });
+    console.log(users)
+
     res.json({
       success: true,
       users: users,

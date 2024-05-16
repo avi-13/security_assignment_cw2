@@ -1,9 +1,9 @@
 import { CircularProgress } from "@mui/material";
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import BloodGroupLists from "../../../components/BloodGroupsList";
-import { addRequestBBApi } from "../../../apis/api";
 import { toast } from "react-toastify";
+import { addRequestBBApi } from "../../../apis/api";
+import BloodGroupLists from "../../../components/BloodGroupsList";
 
 export default function ReqForBB() {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -52,15 +52,15 @@ export default function ReqForBB() {
     formData.append("bloodbank", id);
     setIsLoading(false);
 
-    addRequestBBApi(formData).then((res) => {  
+    addRequestBBApi(formData).then((res) => {
       if (res.data.success == false) {
         toast.error(res.data.message);
       } else {
-        toast.success(res.data.message)
-        navigate(`/single-bloodbank/${id}`)
+        toast.success(res.data.message);
+        navigate(`/single-bloodbank/${id}`);
       }
-    }
-  )};
+    });
+  };
 
   return (
     <>
@@ -173,7 +173,7 @@ export default function ReqForBB() {
               </label>
               <input
                 onChange={(e) => setPhoneNumber(e.target.value)}
-                type="text"
+                type="number"
                 className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
                 required
               />

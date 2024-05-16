@@ -12,7 +12,7 @@ const CustomCircularProgress = () => {
       }}
     >
       <p className="align-items-center">
-        <CircularProgress color="error" size={100} thickness={4} />
+        <CircularProgress color="error" size={70} thickness={2} />
       </p>
     </div>
   );
