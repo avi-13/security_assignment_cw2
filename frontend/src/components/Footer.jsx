@@ -10,10 +10,10 @@ const Footer = () => {
           <ul>
             <li>
               <h3>Resources</h3>
-              <a href={"/home"}>Usage</a>
-              <a href={"/home"}>Docs</a>
-              <a href={"/home"}>Support</a>
-              <a href={"/home"}>Hardware</a>
+              <a href={"/home"}>Home</a>
+              <a href={"/services"}>Our Services</a>
+              <a href={"/about-us"}>About Us</a>
+              <a href={"/contact-us"}>Contact Us</a>
             </li>
             <li>
               <h3>Pricing</h3>

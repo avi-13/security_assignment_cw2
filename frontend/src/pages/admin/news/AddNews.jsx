@@ -12,7 +12,7 @@ const AddNews = () => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `https://newsdata.io/api/1/news?apikey=${apiKey}&q=health&country=np`
+          `https://newsdata.io/api/1/news?apikey=${apiKey}&q=nepali%20news&country=np`
         );
         const data = await response.json();
         if (response?.ok) {

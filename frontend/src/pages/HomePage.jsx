@@ -55,7 +55,7 @@ const HomePage = ({ history }) => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `https://newsdata.io/api/1/news?apikey=${apiKey}&q=health&country=np`
+          `https://newsdata.io/api/1/news?apikey=${apiKey}&q=nepali%20news&country=np`
         );
         const data = await response.json();
         if (response?.ok) {
@@ -166,35 +166,48 @@ const HomePage = ({ history }) => {
         </div>
       </section>
 
-      <div className="row justify-content-center mb-6">
-        <div className="col-md-8">
-          <div className="card mt-5">
-            <div className="card-body">
-              <h5 className="card-title text-center mb-4">Search Users</h5>
-              <form id="userSearchForm">
-                <div className="form-group">
-                  <DistrictList
-                    value={district}
-                    onChange={(e) => setDistrict(e.target.value)}
-                  />
-                </div>
-                <div className="form-group">
-                  <BloodGroupLists
-                    value={bloodGroup}
-                    onChange={(e) => setBloodGroup(e.target.value)}
-                  />
-                </div>
-                <button
-                  onClick={handleSearch}
-                  className="btn btn-primary btn-block"
-                >
-                  Search
-                </button>
-              </form>
+      <section className="bg-white p-0  mt-14">
+        <div className="container p-0">
+          <div className="row align-items-center justify-content-between">
+            <div className="hidden md:block col-xl-5 col-xxl-6 d-none d-xl-block text-center">
+              <img
+                className="img-fluid rounded-3"
+                src="assets/images/search.png"
+                alt="..."
+              />
+            </div>
+            <div className="col-lg-8 col-xl-7 col-xxl-6">
+              <div className=" text-center text-xl-start">
+              <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-center">
+            Search Users
+          </h2>
+                <form id="userSearchForm" className="flex flex-col space-y-4">
+                  <div className="form-group">
+                    <DistrictList
+                      value={district}
+                      onChange={(e) => setDistrict(e.target.value)}
+                      className="w-full p-2 border rounded"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <BloodGroupLists
+                      value={bloodGroup}
+                      onChange={(e) => setBloodGroup(e.target.value)}
+                      className="w-full p-2 border rounded"
+                    />
+                  </div>
+                  <button
+                    onClick={handleSearch}
+                    className="btn btn-primary w-full py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
+                  >
+                    Search
+                  </button>
+                </form>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
       {bloodbankData && (
         <div className="hospitals-container m-4 mt-5 p-2 border-primary">
@@ -268,10 +281,10 @@ const HomePage = ({ history }) => {
         </div>
       )}
 
-      <section id="campaigns" class="w-full py-12 md:py-24 lg:py-32">
-        <div class="container grid grid-cols-1 gap-6 px-4 md:grid-cols-2 lg:grid-cols-3 md:px-6">
+      <section id="campaigns" className="w-full py-12 md:py-24 lg:py-32">
+        <div className="container grid grid-cols-1 gap-6 px-4 md:grid-cols-2 lg:grid-cols-3 md:px-6">
           <div
-            class="rounded-lg border bg-card text-card-foreground shadow-sm"
+            className="rounded-lg border bg-card text-card-foreground shadow-sm"
             data-v0-t="card"
           >
             <img
@@ -279,11 +292,11 @@ const HomePage = ({ history }) => {
               width="400"
               height="200"
               alt="Campaign 1"
-              class="aspect-[2/1] overflow-hidden rounded-t-xl object-cover"
+              className="aspect-[2/1] overflow-hidden rounded-t-xl object-cover"
             />
-            <div class="space-y-2 p-4">
-              <h3 class="text-lg font-bold">Campaign 1</h3>
-              <div class="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
+            <div className="space-y-2 p-4">
+              <h3 className="text-lg font-bold">Campaign 1</h3>
+              <div className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -294,7 +307,7 @@ const HomePage = ({ history }) => {
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  class="h-4 w-4"
+                  className="h-4 w-4"
                 >
                   <path d="M8 2v4"></path>
                   <path d="M16 2v4"></path>
@@ -303,7 +316,7 @@ const HomePage = ({ history }) => {
                 </svg>
                 <span>May 15, 2023</span>
               </div>
-              <div class="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
+              <div className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -314,7 +327,7 @@ const HomePage = ({ history }) => {
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  class="h-4 w-4"
+                  className="h-4 w-4"
                 >
                   <line x1="2" x2="5" y1="12" y2="12"></line>
                   <line x1="19" x2="22" y1="12" y2="12"></line>
@@ -325,7 +338,7 @@ const HomePage = ({ history }) => {
                 <span>New York, NY</span>
               </div>
               <a
-                class="inline-flex h-9 items-center justify-center rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-gray-50 shadow transition-colors hover:bg-gray-900/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-50/90 dark:focus-visible:ring-gray-300"
+                className="inline-flex h-9 items-center justify-center rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-gray-50 shadow transition-colors hover:bg-gray-900/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-50/90 dark:focus-visible:ring-gray-300"
                 href="#"
               >
                 Learn More
@@ -342,27 +355,48 @@ const HomePage = ({ history }) => {
         </p>
       )}
       {!isLoading && !error && (
-        <div className="container mt-4">
-          <h2 className="text-center">Latest News</h2>
-          <div className="row">
-            {newsData?.map((item) => (
-              <div key={item.id} className="col-md-6 col-lg-4 mb-4">
-                <div className="card">
+        <section className="w-full py-12 md:py-24 lg:py-32">
+          <div className="w-full">
+            <div className="w-full">
+              <h2 className="text-3xl text-center font-bold tracking-tighter sm:text-4xl md:text-5xl">
+                Latest News
+              </h2>
+              <p className="mt-2 text-center text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
+                Stay up-to-date with the latest trends and insights in the world
+                of technology.
+              </p>
+            </div>
+          </div>
+          <div className="container grid items-start gap-6 px-4 md:px-6 lg:grid-cols-[1fr_300px] xl:gap-12">
+            <div className="grid gap-6 sm:grid-cols-2 lg:col-span-2 xl:grid-cols-3 xl:gap-8">
+              {newsData?.map((item) => (
+                <div
+                  key={item.id}
+                  className="group relative overflow-hidden rounded-lg"
+                >
                   <img
-                    src={item?.image_url ?? "https://via.placeholder.com/150"}
-                    className="card-img-top"
-                    alt={item?.title}
+                    src={item?.image_url ?? "assets/images/news.png"}
+                    alt="News Article"
+                    width="400"
+                    height="300"
+                    className="h-full w-full object-cover transition-all duration-300 group-hover:scale-105"
+                    style={{ aspectRatio: "400 / 300;", objectFit: " cover;" }}
                   />
-                  <div className="card-body">
-                    <h5 className="card-title">{item.pubDate}</h5>
-                    <p className="card-text">{item.category}</p>
-                    <p className="card-text">{item.language}</p>
+                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent p-4 transition-all duration-300 group-hover:from-gray-900/60">
+                    <div className="flex h-full flex-col justify-end">
+                      <h3 className="text-lg font-semibold text-white">
+                        {item?.title ?? "No Title Provided"}
+                      </h3>
+                      <p className="mt-2 text-sm text-gray-300 line-clamp-2">
+                        {item?.description ?? "No Description Provided"}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
+        </section>
       )}
     </>
   );
