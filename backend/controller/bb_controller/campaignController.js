@@ -95,8 +95,9 @@ const viewAllCampaigns = async (req, res) => {
 
 
 const getCampaignByBB = async (req, res) => {
+  const userId = req.params.id;
   try {
-    const allCampaigns = await Campaign.find().populate("user").sort({ createdAt: -1 });
+    const allCampaigns = await Campaign.find({user : userId}).populate("user").sort({ createdAt: -1 });
     res.status(200).json({
       success: true,
       allCampaigns: allCampaigns,
@@ -255,6 +256,7 @@ const updateCampaigns = async (req, res) => {
 module.exports = {
   addCampaign,
   viewAllCampaigns,
+  getCampaignByBB,
   deleteCampaign,
   getSingleCampaign,
   updateCampaigns,

@@ -224,7 +224,7 @@ const HomePage = ({ history }) => {
             <div className="hospital-item">
               <img
                 src={
-                  bloodbank.bbImageUrl ??
+                  bloodbank.userImageURL ??
                   "https://www.brookings.edu/wp-content/uploads/2017/05/hospital002.jpg"
                 }
                 alt={bloodbank.bbName}

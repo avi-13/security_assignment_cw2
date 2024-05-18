@@ -211,11 +211,11 @@ const getAllBloodBanks = async (req, res) => {
       };
     }
 
-    const bloodBankList = await BloodBanks.find(query).sort({
+    const bloodBankList = await User.find({$and:[query,{isBloodBank: true}]}).sort({
       [sortBy]: sortOrder,
     });
 
-    const mobbank = await BloodBanks.find();
+    const mobbank = await User.find({isBloodBank : true});
     const fewBloodBanks = bloodBankList.slice(0, 5);
 
     // console.log("BloodBanks List:", bloodBankList);
@@ -237,7 +237,7 @@ const getAllBloodBanks = async (req, res) => {
 const getBloodbankbyId = async (req, res) => {
   try {
     const id = req.params.id;
-    const bloodBanks = await BloodBanks.findById(id);
+    const bloodBanks = await User.findById(id);
 
     if (!bloodBanks) {
       return res.status(404).json({
@@ -391,7 +391,7 @@ const updateBloodBank = async (req, res) => {
 
 const deleteBloodBank = async (req, res) => {
   try {
-    const deletedBloodBank = await BloodBanks.findByIdAndDelete(req.params.id);
+    const deletedBloodBank = await User.findByIdAndDelete(req.params.id);
     if (!deletedBloodBank) {
       return res.json({
         success: false,

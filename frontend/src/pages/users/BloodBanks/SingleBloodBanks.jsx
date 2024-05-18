@@ -1,20 +1,73 @@
-import { faCalendar, faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
+import { faCalendar, faMapMarkerAlt, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "leaflet/dist/leaflet.css";
 import React, { useEffect, useState } from "react";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { Link, useParams } from "react-router-dom";
-import { fetchSingleBloodBankApi, viewCampaignApi } from "../../../apis/api";
+import { fetchSingleBloodBankApi, registerForCampaignApi, viewCampaignApi } from "../../../apis/api";
+import { CircularProgress } from "@mui/material";
+import BloodGroupLists from "../../../components/BloodGroupsList";
+import { toast } from "react-toastify";
 
 const SingleBloodbank = () => {
   const users = JSON.parse(localStorage.getItem("user"));
   const { id } = useParams();
   const [bloodbank, setBloodbank] = useState("");
   const [campaign, setCampaign] = useState([]);
+  const [fetchedBg, setFetchedBG] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  // campaigns, fullName, email, number, bloodGroup
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [number, setNumber] = useState("");
+  const [bloodGroup, setBloodGroup] = useState("");
+  const [campaigns, setCampaigns] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [imagePreview, setImagePreview] = useState(null);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
+  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    // making logical form data
+    const formData = new FormData();
+    formData.append("fullName", fullName);
+    formData.append("email", email);
+    formData.append("number", number);
+    formData.append("bloodGroup", bloodGroup);
+    formData.append("campaigns", id);
+
+    // making Api call
+    registerForCampaignApi(formData)
+      .then((res) => {
+        if (res.data.success == false) {
+          toast.error(res.data.message);
+        } else {
+          closeModal();
+          toast.success(res.data.message);
+        }
+      })
+      .catch((e) => {
+        toast.error("Server Error");
+        console.log(e);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
 
   useEffect(() => {
     fetchSingleBloodBankApi(id).then((res) => {
       setBloodbank(res.data.bloodbank);
+      const bg = res.data.bloodbank.availableBloodGroups;
+      const combinedString = bg[0];
+      const splitValues = combinedString.split(",");
+      setFetchedBG(splitValues);
     });
   }, [id]);
 
@@ -61,7 +114,7 @@ const SingleBloodbank = () => {
                 <div class="img">
                   <div class="img-box h-full max-lg:mx-auto ">
                     <img
-                      src={bloodbank.bbImageUrl}
+                      src={bloodbank.userImageURL}
                       alt="red Tropical Printed Shirt image"
                       class="max-lg:mx-auto lg:ml-auto h-full"
                     />
@@ -79,6 +132,7 @@ const SingleBloodbank = () => {
                       <h6 class="font-manrope font-semibold text-2xl leading-9 text-gray-900 pr-5 sm:border-r border-gray-200 mr-5">
                         Address : {bloodbank.bbAddress}
                       </h6>
+                      a
                       <div class="flex items-center gap-2">
                         <span class=" font-bold leading-7 text-green-600 text-lg ">
                           Contact No. : {bloodbank.bbContact}
@@ -95,13 +149,11 @@ const SingleBloodbank = () => {
                     <div class="w-full pb-8 border-b border-gray-100 flex-wrap">
                       {bloodbank?.availableBloodGroups ? (
                         <div class="grid grid-cols-3 min-[400px]:grid-cols-5 gap-3 max-w-md">
-                          {bloodbank?.availableBloodGroups?.map(
-                            (bloodGroup) => (
-                              <button class="bg-red-800 text-center py-1.5 px-6 w-full font-semibold text-lg leading-8 text-white border border-red-800 flex items-center rounded-full justify-center transition-all duration-300 hover:bg-red-400 hover:!text-gray-900 hover:border-gray-3000">
-                                {bloodGroup}
-                              </button>
-                            )
-                          )}
+                          {fetchedBg?.map((bloodGroup) => (
+                            <button class="bg-red-800 text-center py-1.5 px-6 w-full font-semibold text-lg leading-8 text-white border border-red-800 flex items-center rounded-full justify-center transition-all duration-300 hover:bg-red-400 hover:!text-gray-900 hover:border-gray-3000">
+                              {bloodGroup}
+                            </button>
+                          ))}
                         </div>
                       ) : (
                         <p className="w-full">No Available Blood Groups</p>
@@ -125,7 +177,9 @@ const SingleBloodbank = () => {
                         </Link>
                       ) : (
                         <Link
-                          class="text-center w-full px-4 py-4 rounded-lg bg-gray-900 flex items-center justify-center font-semibold text-lg text-white shadow-sm transition-all duration-500 hover:bg-red-800 hover:shadow-red-800" >
+                          to={"/login"}
+                          class="text-center w-full px-4 py-4 rounded-lg bg-gray-900 flex items-center justify-center font-semibold text-lg text-white shadow-sm transition-all duration-500 hover:bg-red-800 hover:shadow-red-800"
+                        >
                           Please Login to Request Blood
                         </Link>
                       )}
@@ -138,12 +192,12 @@ const SingleBloodbank = () => {
           <p class="text-gray-900 text-base font-normal mb-5">
             {bloodbank.additionalNotes}
           </p>
-          <div className="bg-gray-100 py-12 w-full">
+          <div className="bg-white py-12 w-full">
             <div className="container mx-auto px-6">
               <div className="flex flex-col w-full md:w-1/4 mx-auto">
-                <h2 className="text-4xl font-bold text-center text-gray-800 mb-8 mt-2">
+                <h2 className="text-4xl font-bold text-center text-red-700 mb-8 mt-2">
                   Upcoming Campaigns
-                  <div className="border-2 border-solid border-dark mt-2"></div>
+                  <div className="border-2 border-solid border-red-700 mt-2"></div>
                 </h2>
               </div>
               <div className="relative w-full mx-auto justify-center items-center overflow-hidden">
@@ -158,10 +212,14 @@ const SingleBloodbank = () => {
                             index * 4
                           }px - ${currentIndexevent * (100 + 4)}%))`,
                           transition: "transform 1s ease-in-out",
+                          backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(${eachCamp.campaignImageUrl})`, // Added semi-transparent overlay
+                          backgroundSize: "cover",
+                          backgroundPosition: "center",
+                          color: "white", // Set text color to white
                         }}
                       >
                         <div className="relative">
-                          <span className="bg-red-800 text-black py-1 px-3 rounded-br-lg capitalize">
+                          <span className="bg-red-700 text-white py-1 px-3 rounded-br-lg capitalize">
                             Free
                           </span>
                         </div>
@@ -169,23 +227,31 @@ const SingleBloodbank = () => {
                           <div className="font-bold text-2xl mb-2">
                             {eachCamp.campaignName}
                           </div>
-                          <p className="text-gray-700 text-base">
+                          <p className="text-white text-base">
+                            {" "}
+                            {/* Set text color to white */}
                             {eachCamp.campaignGoal}
                           </p>
                         </div>
-                        <div className="flex justify-between  w-full px-4 py-4">
-                          <span className="inline-block rounded-full px-3 py-1 text-sm font-semibold text-gray-700">
+                        <div className="flex justify-between w-full px-4 py-4">
+                          <span className="inline-block rounded-full px-3 py-1 text-sm font-semibold text-white">
+                            {" "}
+                            {/* Set text color to white */}
                             <FontAwesomeIcon
                               icon={faCalendar}
-                              className="mr-2"
+                              className="mr-2 text-white"
                             />
-                            {formatDate(eachCamp.campaignStartDate)}
+                            <span className="text-green-100">
+                              {formatDate(eachCamp.campaignStartDate)}
+                            </span>
                             {"  --  "}
-                            <span className="text-red-500">
+                            <span className="text-red-100">
                               {formatDate(eachCamp.campaignEndDate)}
                             </span>
                           </span>
-                          <span className="inline-block  rounded-full px-3 py-1 text-sm font-semibold text-gray-700 capitalize">
+                          <span className="inline-block rounded-full px-3 py-1 text-sm font-semibold text-white capitalize">
+                            {" "}
+                            {/* Set text color to white */}
                             <FontAwesomeIcon
                               icon={faMapMarkerAlt}
                               className="mr-2"
@@ -196,8 +262,8 @@ const SingleBloodbank = () => {
                         <div className="flex ml-auto pr-6 pb-6">
                           {
                             <Link
-                              to={`/event-booking?id=${eachCamp._id}`}
-                              className="bg-red-800 text-black-500  py-2 px-4 rounded md:ml-auto"
+                              onClick={openModal}
+                              className="bg-red-700 text-white py-2 px-4 rounded md:ml-auto"
                             >
                               Register
                             </Link>
@@ -208,7 +274,134 @@ const SingleBloodbank = () => {
                 </div>
               </div>
             </div>
+            {isModalOpen && (
+          <div
+            className="fixed inset-0 bg-gray-600 bg-opacity-50 p-44 overflow-y-auto h-full w-full"
+            id="my-modal"
+          >
+            <div className="relative top-3 mx-auto p-5 border w-1/2 shadow-lg rounded-md bg-white">
+              {/* Close button */}
+              <div className="absolute top-0 right-0 pt-4 pr-4">
+                <button
+                  onClick={closeModal}
+                  className="text-black bg-red-500 hover:bg-red-700 rounded-lg text-sm p-2"
+                >
+                  <FontAwesomeIcon icon={faTimes} />
+                </button>
+              </div>
+
+              <form className="space-y-6">
+                <h3 className=" leading-6 text-gray-900 text-center font-semibold text-2xl">
+                  Register For This Campaign
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-900">
+                      Full Name
+                    </label>
+                    <input
+                      onChange={(e) => setFullName(e.target.value)}
+                      type="text"
+                      className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <BloodGroupLists
+                      label={"Select your BloodGroup"}
+                      onChange={(e) => setBloodGroup(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-900">
+                      Email
+                    </label>
+                    <input
+                      onChange={(e) => setEmail(e.target.value)}
+                      type="email"
+                      className="mt-1 block w-full  border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-900">
+                     Number
+                    </label>
+                    <input
+                      onChange={(e) => setNumber(e.target.value)}
+                      type="number"
+                      className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
+                      required
+                    />
+                  </div>
+                  {/* <div>
+                    <label className="block text-sm font-medium text-gray-900">
+                      Latitude
+                    </label>
+                    <input
+                      onChange={(e) => {
+                        const inputValue = e.target.value;
+                        const floatValue = inputValue
+                          ? parseFloat(inputValue)
+                          : null;
+                        const formattedValue =
+                          floatValue !== null ? floatValue.toFixed(2) : "";
+                        setLatitude(formattedValue);
+                      }}
+                      type="number"
+                      className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
+                      required
+                    />
+                  </div> */}
+                  {/* <div>
+                    <label className="block text-sm font-medium text-gray-900">
+                      Longitude
+                    </label>
+                    <input
+                      onChange={(e) => {
+                        const inputValue = e.target.value;
+                        const floatValue = inputValue
+                          ? parseFloat(inputValue)
+                          : null;
+                        const formattedValue =
+                          floatValue !== null ? floatValue.toFixed(2) : "";
+                        setLongitude(formattedValue);
+                      }}
+                      type="number"
+                      className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
+                      required
+                    />
+                  </div> */}
+                  {/* <div>
+                    <label className="block text-sm font-medium text-gray-900">
+                      Campaign Goal
+                    </label>
+                    <textarea
+                      onChange={(e) => setCampaignsGoal(e.target.value)}
+                      className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
+                      rows="4"
+                      required
+                    ></textarea>
+                  </div> */}
+                </div>
+                <button
+                  onClick={handleSubmit}
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full text-white bg-cyan-700 hover:bg-cyan-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                >
+                  {isLoading ? (
+                    <CircularProgress size={20} color="inherit" />
+                  ) : (
+                    "Add Campaign"
+                  )}
+                </button>
+              </form>
+            </div>
           </div>
+        )}
+          </div>
+
           <div className="row">
             <div className="col-12 p-0">
               <MapContainer

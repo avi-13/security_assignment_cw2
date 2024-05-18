@@ -28,7 +28,7 @@ const BloodBanks = () => {
             >
               <img
                 className="image-container"
-                src={bloodbank.bbImageUrl}
+                src={bloodbank.userImageURL}
                 alt={bloodbank.bbName}
                 style={{ height: "20rem",width:"100%", objectFit: "cover"}}
               />

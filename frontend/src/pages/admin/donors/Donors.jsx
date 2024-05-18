@@ -59,21 +59,30 @@ export default function ViewDonors() {
               </tr>
             </thead>
             <tbody>
-              {!users.isAdmin && users?.map((item) => (
-                <tr key={item._id}>
-                  <td>{item.fullName || "Null"}</td>
-                  <td>{item.email || "Null"}</td>
-                  <td>{item.number || "Null"}</td>
-                  <td>{item.currentAddress || "Null"}</td>
-                  <td>{item.isAvailable ? "Yes" : "No"}</td>
-                  <td>{item.isADonor ? "Yes" : "No"}</td>
-                  <td>{item.gender || "Null"}</td>
-                  <td>{item.dob || "Null"}</td>
-                  <td>{item.bloodGroup || "Null"}</td>
-                  <td>{item.noPreviousDonation || "Null"}</td>
-                  <td>{item.emergencyNumber || "Null"}</td>
-                </tr>
-              ))}
+              {!users.isAdmin &&
+                users?.map((item) => (
+                  <tr key={item._id}>
+                    <td>{item.fullName || "Null"}</td>
+                    <td>{item.email || "Null"}</td>
+                    <td>{item.number || "Null"}</td>
+                    <td>{item.currentAddress || "Null"}</td>
+                    {item.isAvailable ? (
+                      <td className="!text-green-400">Yes</td>
+                    ) : (
+                      <td className="!text-red-600">No</td>
+                    )}
+                    {item.isADonor ? (
+                      <td className="!text-green-400">Yes</td>
+                    ) : (
+                      <td className="!text-red-600">No</td>
+                    )}
+                    <td>{item.gender || "Null"}</td>
+                    <td>{item.dob || "Null"}</td>
+                    <td>{item.bloodGroup || "Null"}</td>
+                    <td>{item.noPreviousDonation || "Null"}</td>
+                    <td>{item.emergencyNumber || "Null"}</td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>

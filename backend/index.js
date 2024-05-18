@@ -56,6 +56,8 @@ app.use("/api/contact", require("./routes/contactRoutes"));
 
 app.use("/api/campaign", require("./routes/campaignRoutes"));
 
+app.use("/api/registered_users", require("./routes/registeredUsersRoutes"));
+
 module.exports = {
   connectDB,
 };

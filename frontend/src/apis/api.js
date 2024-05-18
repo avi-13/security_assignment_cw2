@@ -173,9 +173,20 @@ export const viewCampaignApi = (data) =>
 export const getSingleCampaignApi = (id) =>
   Api.get(`/api/campaign/single_campaign/${id}`);
 
+export const getAllCampaignByBBApi = (id) =>
+  Api.get(`/api/campaign/campaign_by_bb/${id}`);
+
 export const deleteCampaignApi = (id) =>
   Api.delete(`/api/campaign/delete_campaign/${id}`);
 
 export const updateCampaignApi = (id, data) =>
   Api.put(`/api/campaign/update_campaign/${id}`, data);
 
+
+// ======================================> Registered Users For Campaigns API <===============================
+
+export const registerForCampaignApi = (data) =>
+  Api.post("/api/registered_users/register_for", data);
+
+export const getRegisteredUsersApi = (id) =>
+  Api.get(`/api/registered_users/registered_users/${id}`);

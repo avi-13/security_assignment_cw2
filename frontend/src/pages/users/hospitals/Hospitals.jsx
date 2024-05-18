@@ -24,34 +24,41 @@ const Hospitals = () => {
     <>
       <div className="hospital-wrapper">
         <h1 className="text-center text-primary">List of all the Hospitals</h1>
-        <div className="hospital-container">
-          {hospitalData.map((hospital) => (
-            <Link
-              className="hospital-card text-decoration-none"
-              key={hospital._id}
-              to={`/single-hospital/${hospital._id}`}
-            >
-              {isLoading ? (
-                <img
-                  className="image-container"
-                  src={
-                    hospital.hospitalImageUrl ??
-                    "https://www.brookings.edu/wp-content/uploads/2017/05/hospital002.jpg"
-                  }
-                  alt="Hospital 1"
-                  height={250}
-                />
-              ) : (
-                <CustomCircularProgress />
-              )}
-              <div className="d-flex flex-row gap-4 justify-content-between">
-                <h3 className="map-h3">{hospital.hospitalName}</h3>
-                <h3 className="map-h3">{hospital.hospitalAddress}</h3>
-              </div>
-            </Link>
-          ))}
-        </div>
       </div>
+      <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4 md:p-6">
+        {hospitalData.map((hospital) => (
+          <Link
+            className="bg-white rounded-lg shadow-lg overflow-hidden"
+            key={hospital._id}
+            to={`/single-hospital/${hospital._id}`}
+          >
+            {isLoading ? (
+              <img
+                src={
+                  hospital.hospitalImageUrl ??
+                  "https://www.brookings.edu/wp-content/uploads/2017/05/hospital002.jpg"
+                }
+                alt="Hospital"
+                className="w-full h-48 object-cover"
+                width="300"
+                height="200"
+                style={{ aspectRatio: "300 / 200", objectFit: "cover" }}
+              />
+            ) : (
+              <CustomCircularProgress />
+            )}
+            <div className="p-4">
+              <h3 className="text-lg text text-gray-800 font-bold mb-2">
+                {hospital.hospitalName}
+              </h3>
+              <p className="text-gray-500 mb-2">{hospital.hospitalAddress}</p>
+              <p className="text-gray-700 line-clamp-3">
+                {hospital.hospitalServices}
+              </p>
+            </div>
+          </Link>
+        ))}
+      </section>
     </>
   );
 };

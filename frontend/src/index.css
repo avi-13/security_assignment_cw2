@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  text-decoration: none !important;
+}
 body {
   margin: 0;
   font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;

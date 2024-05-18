@@ -223,24 +223,23 @@ export default function AddBloodBanks() {
                   <th className="font-normal text-left pl-4">
                     BloodBank Image
                   </th>
-                  <th className="font-normal text-left pl-4">BloodBank Name</th>
+                  <th className="font-normal text-left pl-12">
+                    BloodBank Name
+                  </th>
                   <th className="font-normal text-left pl-12">
                     BloodBank Address
                   </th>
                   <th className="font-normal text-left pl-12">
                     BloodBank Contact
                   </th>
-                  <th className="font-normal text-left pl-20">
+                  <th className="font-normal text-left pl-12">
                     Operating Hours
                   </th>
-                  <th className="font-normal text-left pl-20">
+                  <th className="font-normal text-left pl-12">
                     BLoodGroups Available
                   </th>
-                  <th className="font-normal text-left pl-20">
+                  <th className="font-normal text-left pl-12">
                     SocialMedia Links
-                  </th>
-                  <th className="font-normal text-left pl-20">
-                    Is Verifiied ?
                   </th>
                   <th className="font-normal text-left pl-12">
                     <button
@@ -267,7 +266,7 @@ export default function AddBloodBanks() {
                           <div className="w-10 h-10">
                             <img
                               className="w-full h-full"
-                              src={item.bbImageUrl}
+                              src={item.userImageURL}
                               alt="BloodBank Image"
                             />
                           </div>
@@ -284,17 +283,17 @@ export default function AddBloodBanks() {
                       <td className="pl-12">
                         <p className="font-medium">{item.bbContact}</p>
                       </td>
-                      <td className="pl-20">
+                      <td className="pl-12">
                         <p className="font-medium">{item.operatingHours}</p>
                       </td>
-                      <td className="pl-20">
+                      <td className="pl-12">
                         <p className="font-medium">
                           {item.availableBloodGroups}
                         </p>
                       </td>
 
                       <td
-                        className="pl-20"
+                        className="pl-12"
                         style={{
                           maxWidth: "200px",
                           overflow: "hidden",
@@ -310,27 +309,12 @@ export default function AddBloodBanks() {
                             : item.socialMediaLinks}
                         </p>
                       </td>
-
-                      <td className="pl-20 overflow-y max-w-[200px] truncate">
+                      <td className="pl-12 overflow-y max-w-[200px] truncate">
                         <p className="font-medium">
                           {new Date(item.createdAt).toLocaleDateString()}
                         </p>
                       </td>
-                      <td className="pl-7 2xl:px-0">
-                        {/* Edit Button */}
-                        <Link
-                          className="focus:outline-none py-2 me-1 px-4 bg-[#008000] hover:!bg-[#000000] rounded-lg cursor-pointer"
-                          title="Accept BloodBank Request"
-                          onClick={() => sendInfo(item._id)}
-                        >
-                          <FontAwesomeIcon
-                            icon={faCheck}
-                            color="white"
-                            className="text-[#ffffff] cursor-pointer"
-                            title="Accept BloodBank Request"
-                          />
-                        </Link>
-
+                      <td className="pl-12">
                         {/* Delete Button */}
                         <Link
                           className="focus:outline-none py-2 px-4 bg-[#ff0000] hover:!bg-[#000000] rounded-lg cursor-pointer"

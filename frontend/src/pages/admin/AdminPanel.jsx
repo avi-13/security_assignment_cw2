@@ -135,7 +135,7 @@ function AdminPanel() {
                   onClick={() => setCurrentPage("AddBloodBanks")}
                   tabIndex="3"
                 >
-                  AddBloodBanks
+                  BloodBanks
                 </button>
               </li>
             ) : null}
@@ -158,7 +158,7 @@ function AdminPanel() {
                 }`}
               >
                 <button onClick={() => setCurrentPage("AddNews")} tabIndex="5">
-                  AddNews
+                  News Section
                 </button>
               </li>
             ) : null}

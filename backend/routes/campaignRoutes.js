@@ -10,6 +10,8 @@ router.delete("/delete_campaign/:id", campaignController.deleteCampaign);
 
 router.get("/single_campaign/:id", campaignController.getSingleCampaign);
 
+router.get("/campaign_by_bb/:id", campaignController.getCampaignByBB);
+
 router.put("/update_campaign/:id", campaignController.updateCampaigns);
 
 module.exports = router;

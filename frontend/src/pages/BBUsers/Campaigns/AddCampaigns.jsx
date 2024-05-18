@@ -12,12 +12,12 @@ import { toast } from "react-toastify";
 import {
   addCampaignApi,
   deleteCampaignApi,
-  viewCampaignApi,
+  getAllCampaignByBBApi,
 } from "../../../apis/api";
 import DistrictList from "../../../components/DistrictsList";
 
 export default function AddCampaigns() {
-  const users = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem("user"));
 
   const [campaigns, setCampaignss] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -26,7 +26,8 @@ export default function AddCampaigns() {
 
   const fetchCampaigns = async () => {
     try {
-      const response = await viewCampaignApi();
+      console.log(user._id)
+      const response = await getAllCampaignByBBApi(user._id);
       setCampaignss(response.data.allCampaigns);
       console.log(response.data.allCampaigns.user);
     } catch (error) {
