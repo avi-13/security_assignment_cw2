@@ -21,9 +21,7 @@ const SingleBloodbank = () => {
   const [email, setEmail] = useState("");
   const [number, setNumber] = useState("");
   const [bloodGroup, setBloodGroup] = useState("");
-  const [campaigns, setCampaigns] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [imagePreview, setImagePreview] = useState(null);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);

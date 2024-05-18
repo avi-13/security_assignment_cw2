@@ -1,5 +1,6 @@
 const Campaign = require("../../model/campaignModel");
 const cloudinary = require("cloudinary");
+const RegisteredUsers = require("../../model/registeredUsersForCampaign");
 
 const addCampaign = async (req, res) => {
   const {
@@ -16,7 +17,7 @@ const addCampaign = async (req, res) => {
     user,
   } = req.body;
 
-  console.log(req.body);
+  // console.log(req.body);
   if (!req.files || !req.files.campaignImage) {
     return res.json({
       success: false,
@@ -98,6 +99,9 @@ const getCampaignByBB = async (req, res) => {
   const userId = req.params.id;
   try {
     const allCampaigns = await Campaign.find({user : userId}).populate("user").sort({ createdAt: -1 });
+    const allRegisteredUsers = await RegisteredUsers.find({campaigns: allCampaigns._id});
+    console.log("meantt",meanttt);
+    console.log("allCampaigns",allCampaigns);
     res.status(200).json({
       success: true,
       allCampaigns: allCampaigns,
