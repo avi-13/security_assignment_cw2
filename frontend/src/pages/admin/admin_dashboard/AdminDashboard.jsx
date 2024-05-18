@@ -2,27 +2,22 @@ import React, { useEffect, useState } from "react";
 import {
   Bar,
   BarChart,
-  Cell,
   Legend,
   Line,
   LineChart,
-  Pie,
-  PieChart,
-  PolarAngleAxis,
-  PolarGrid,
-  PolarRadiusAxis,
-  Radar,
-  RadarChart,
   Tooltip,
   XAxis,
   YAxis,
 } from "recharts";
-import { getallBloodBankApi, getallhospitalsApi } from "../../../apis/api";
+import { fetchAllUsersApi, getallBloodBankApi, getallhospitalsApi, viewCampaignApi } from "../../../apis/api";
 
 const AdminDashboard = () => {
   const [bloodBank, setBloodBank] = useState([]);
   const [hospital, setHospital] = useState([]);
-  const [bbLength, setBBlength] = useState([]);
+  const [bbLength, setBBlength] = useState("");
+  const [usLength, setUsLength] = useState("");
+  const [hospitalLength, setHospitalLength] = useState("");
+  const [camLength, setCampLength] = useState("");
 
   const currentYear = new Date().getFullYear();
   const bloodBankByMonth = bloodBank.reduce((acc, app) => {
@@ -43,11 +38,30 @@ const AdminDashboard = () => {
     return acc;
   }, {});
 
+  useEffect(() => {
+    getallBloodBankApi().then((res) => {
+      setBloodBank(res.data.mobbank);
+      setBBlength(bloodBank.length)
+    });
+  }, []);
+
+  useEffect(() => {
+    fetchAllUsersApi().then((res) => {
+      setUsLength(res?.data?.users.length)
+    });
+  }, []);
+
+  useEffect(() => {
+    viewCampaignApi().then((res) => {
+      setCampLength(res?.data?.allCampaigns.length)
+    });
+  }, []);
+
 
   useEffect(() => {
     getallBloodBankApi().then((res) => {
       setBloodBank(res.data.mobbank);
-      console.log(res.data.mobbank.length)
+      setBBlength(bloodBank.length)
     });
   }, []);
 
@@ -69,8 +83,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     getallhospitalsApi().then((res) => {
       setHospital(res.data.allHospitals);
-      console.log(res.data.allHospitals.length)
-      setBBlength(hospital.length);
+      setHospitalLength(hospital.length);
     });
   }, []);
 
@@ -81,7 +94,7 @@ const AdminDashboard = () => {
     { name: "Apr", hospitalsAdded: hospitalByMonth[3] || 0 },
     { name: "May", hospitalsAdded: hospitalByMonth[4] || 0 },
     { name: "Jun", hospitalsAdded: hospitalByMonth[5] || 0 },
-    { name: "July",hospitalsAdded: hospitalByMonth[6] || 0 },
+    { name: "July", hospitalsAdded: hospitalByMonth[6] || 0 },
     { name: "Aug", hospitalsAdded: hospitalByMonth[7] || 0 },
     { name: "Sep", hospitalsAdded: hospitalByMonth[8] || 0 },
     { name: "Oct", hospitalsAdded: hospitalByMonth[9] || 0 },
@@ -136,7 +149,9 @@ const AdminDashboard = () => {
       <div className="charts d-flex flex-row flex-wrap justify-content-between">
         {/* Hospital Chart */}
         <div className="chart">
-          <h3 className="text-center">BloodBank Data By Month {`(${currentYear})`}</h3>
+          <h3 className="text-center">
+            BloodBank Data By Month {`(${currentYear})`}
+          </h3>
           <LineChart width={500} height={300} data={bloodBankData}>
             <XAxis dataKey="name" />
             <YAxis />
@@ -147,7 +162,9 @@ const AdminDashboard = () => {
         </div>
         {/* Blood Request Chart */}
         <div className="chart">
-          <h3 className="text-center">Hospitals Added By Month {`(${currentYear})`}</h3>
+          <h3 className="text-center">
+            Hospitals Added By Month {`(${currentYear})`}
+          </h3>
           <BarChart width={500} height={300} data={hospitalData}>
             <XAxis dataKey="name" />
             <YAxis />
@@ -157,7 +174,7 @@ const AdminDashboard = () => {
           </BarChart>
         </div>
         {/* Blood Bank Chart */}
-        <div className="chart">
+        {/* <div className="chart">
           <h3 className="text-center">Blood Bank Data</h3>
           <PieChart width={400} height={400}>
             <Pie
@@ -178,9 +195,9 @@ const AdminDashboard = () => {
             </Pie>
             <Tooltip />
           </PieChart>
-        </div>
+        </div> */}
         {/* Donor Chart */}
-        <div className="chart">
+        {/* <div className="chart">
           <h3>Donor Data</h3>
           <RadarChart
             outerRadius={90}
@@ -201,13 +218,13 @@ const AdminDashboard = () => {
             <Tooltip />
             <Legend />
           </RadarChart>
-        </div>
+        </div> */}
       </div>
 
       <section className="bg-white dark:bg-gray-800 py-12 md:py-16">
         <div className="container mx-auto px-4 md:px-6 lg:px-8">
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-50 mb-8">
-            Blood Bank Statistics
+            Statistics
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             <div
@@ -232,10 +249,10 @@ const AdminDashboard = () => {
               </div>
               <div className="p-6">
                 <div className="text-3xl font-bold text-gray-900 dark:text-gray-50">
-                  45,678
+                  {hospitalLength}
                 </div>
                 <p className="text-gray-600 dark:text-gray-400">
-                  Units of Blood Collected
+                  Total Hospitals Registered
                 </p>
               </div>
             </div>
@@ -264,10 +281,10 @@ const AdminDashboard = () => {
               </div>
               <div className="p-6">
                 <div className="text-3xl font-bold text-gray-900 dark:text-gray-50">
-                  12,345
+                  {bbLength}
                 </div>
                 <p className="text-gray-600 dark:text-gray-400">
-                  Registered Donors
+                  Total Blood Banks
                 </p>
               </div>
             </div>
@@ -294,10 +311,10 @@ const AdminDashboard = () => {
               </div>
               <div className="p-6">
                 <div className="text-3xl font-bold text-gray-900 dark:text-gray-50">
-                  85%
+                  {usLength}
                 </div>
                 <p className="text-gray-600 dark:text-gray-400">
-                  Current Blood Inventory
+                  All Registered Donors
                 </p>
               </div>
             </div>
@@ -326,7 +343,7 @@ const AdminDashboard = () => {
               </div>
               <div className="p-6">
                 <div className="text-3xl font-bold text-gray-900 dark:text-gray-50">
-                  24
+                  {camLength}
                 </div>
                 <p className="text-gray-600 dark:text-gray-400">
                   Upcoming Blood Drives
