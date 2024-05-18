@@ -100,8 +100,6 @@ const getCampaignByBB = async (req, res) => {
   const userId = req.params.id;
   try {
     const allCampaigns = await Campaign.find({user : userId}).populate("user").sort({ createdAt: -1 });
-    const allRegisteredUsers = await RegisteredUsers.find({campaigns: allCampaigns._id});
-    console.log("meantt",meanttt);
     console.log("allCampaigns",allCampaigns);
     res.status(200).json({
       success: true,
