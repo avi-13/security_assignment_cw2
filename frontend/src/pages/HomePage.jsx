@@ -1,11 +1,19 @@
+import {
+  faCalendarAlt,
+  faHouseMedical,
+  faLocationCrosshairs,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { React, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import "../../src/style/homepage.css";
 import "../../src/style/navbar.css";
 import {
   fetchHospitalsApi,
   getallBloodBankApi,
   searchUsersApi,
+  viewCampaignApi,
 } from "../apis/api";
 import BloodGroupLists from "../components/BloodGroupsList";
 import CustomCircularProgress from "../components/CustomCircularProgress";
@@ -14,6 +22,7 @@ import DistrictList from "../components/DistrictsList";
 const HomePage = ({ history }) => {
   const [hospitalData, setHospitalData] = useState([]);
   const [bloodbankData, setBloodbankData] = useState([]);
+  const [campaigns, setCampiagns] = useState([]);
   const [district, setDistrict] = useState("");
   const [bloodGroup, setBloodGroup] = useState("");
   const navigate = useNavigate();
@@ -29,6 +38,18 @@ const HomePage = ({ history }) => {
       });
   };
 
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+
+    month = month < 10 ? "0" + month : month;
+    day = day < 10 ? "0" + day : day;
+
+    return `${year}-${month}-${day}`;
+  }
+
   useEffect(() => {
     fetchHospitalsApi().then((res) => {
       if (res.data.success && res.data.hospital.length > 0) {
@@ -41,6 +62,16 @@ const HomePage = ({ history }) => {
     getallBloodBankApi().then((res) => {
       if (res.data.success) {
         setBloodbankData(res?.data?.fewBloodBanks);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    viewCampaignApi().then((res) => {
+      if (res.data.success) {
+        setCampiagns(res?.data?.latestCampaings);
+      } else {
+        toast.error("Error fetching campaigns");
       }
     });
   }, []);
@@ -178,9 +209,9 @@ const HomePage = ({ history }) => {
             </div>
             <div className="col-lg-8 col-xl-7 col-xxl-6">
               <div className=" text-center text-xl-start">
-              <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-center">
-            Search Users
-          </h2>
+                <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-center">
+                  Search Users
+                </h2>
                 <form id="userSearchForm" className="flex flex-col space-y-4">
                   <div className="form-group">
                     <DistrictList
@@ -281,72 +312,71 @@ const HomePage = ({ history }) => {
         </div>
       )}
 
-      <section id="campaigns" className="w-full py-12 md:py-24 lg:py-32">
-        <div className="container grid grid-cols-1 gap-6 px-4 md:grid-cols-2 lg:grid-cols-3 md:px-6">
-          <div
-            className="rounded-lg border bg-card text-card-foreground shadow-sm"
-            data-v0-t="card"
-          >
-            <img
-              src="/placeholder.svg"
-              width="400"
-              height="200"
-              alt="Campaign 1"
-              className="aspect-[2/1] overflow-hidden rounded-t-xl object-cover"
-            />
-            <div className="space-y-2 p-4">
-              <h3 className="text-lg font-bold">Campaign 1</h3>
-              <div className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  className="h-4 w-4"
-                >
-                  <path d="M8 2v4"></path>
-                  <path d="M16 2v4"></path>
-                  <rect width="18" height="18" x="3" y="4" rx="2"></rect>
-                  <path d="M3 10h18"></path>
-                </svg>
-                <span>May 15, 2023</span>
-              </div>
-              <div className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  className="h-4 w-4"
-                >
-                  <line x1="2" x2="5" y1="12" y2="12"></line>
-                  <line x1="19" x2="22" y1="12" y2="12"></line>
-                  <line x1="12" x2="12" y1="2" y2="5"></line>
-                  <line x1="12" x2="12" y1="19" y2="22"></line>
-                  <circle cx="12" cy="12" r="7"></circle>
-                </svg>
-                <span>New York, NY</span>
-              </div>
-              <a
-                className="inline-flex h-9 items-center justify-center rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-gray-50 shadow transition-colors hover:bg-gray-900/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-50/90 dark:focus-visible:ring-gray-300"
-                href="#"
-              >
-                Learn More
-              </a>
-            </div>
+      {campaigns && (
+        <section id="campaigns" className="w-full py-12 md:py-24 lg:py-32">
+          <div className="flex flex-col w-full md:w-1/4 mx-auto">
+            <h2 className="text-4xl font-bold text-center text-red-700 mb-8 mt-2">
+              Upcoming Campaigns
+              <div className="border-2 border-solid border-red-700 mt-2"></div>
+            </h2>
           </div>
-        </div>
-      </section>
+          <div className="container grid grid-cols-1 gap-6 px-4 md:grid-cols-2 lg:grid-cols-3 md:px-6">
+            {campaigns.map((campaign) => (
+              <div
+                className="rounded-lg border bg-card text-card-foreground shadow-sm"
+                data-v0-t="card"
+              >
+                <img
+                  src={campaign.campaignImageUrl}
+                  width="400"
+                  height="200"
+                  alt="Campaign"
+                  className="aspect-[2/1] overflow-hidden rounded-t-xl object-cover"
+                />
+                <div className="space-y-2 p-4">
+                  <h3 className="text-lg font-bold">{campaign.campaignName}</h3>
+                  <div className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
+                    <span className="inline-block rounded-full py-1 text-sm font-semibold text-white">
+                      {" "}
+                      <FontAwesomeIcon
+                        icon={faCalendarAlt}
+                        className="mr-2 text-gray-800"
+                      />
+                      <span className="text-gray-800 pe-2">
+                        {formatDate(campaign.campaignStartDate)}
+                      </span>
+                      <span className="text-gray-800">----</span>
+                      <span className="text-gray-800  ps-2">
+                        {formatDate(campaign.campaignEndDate)}
+                      </span>
+                    </span>
+                  </div>
+                  <div className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
+                    <FontAwesomeIcon
+                      icon={faLocationCrosshairs}
+                      className="mr-2 text-gray-800"
+                    />
+                    <span>{campaign.campaignLocation}</span>
+                  </div>
+                  <div className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
+                    <FontAwesomeIcon
+                      icon={faHouseMedical}
+                      className="mr-2 text-gray-800"
+                    />
+                    <span>{campaign.user.fullName}</span>
+                  </div>
+                  <a
+                    className="inline-flex h-9 items-center justify-center rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-gray-50 shadow transition-colors hover:bg-gray-900/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-50/90 dark:focus-visible:ring-gray-300"
+                    href="#"
+                  >
+                    Learn More
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {isLoading && <CustomCircularProgress />}
       {error && (

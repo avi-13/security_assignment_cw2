@@ -83,9 +83,11 @@ const addCampaign = async (req, res) => {
 const viewAllCampaigns = async (req, res) => {
   try {
     const allCampaigns = await Campaign.find().populate("user").sort({ createdAt: -1 });
+    const latestCampaings = await Campaign.find().populate("user").sort({ createdAt: -1 }).limit(3);
     res.status(200).json({
       success: true,
       allCampaigns: allCampaigns,
+      latestCampaings:latestCampaings,
     });
   } catch (error) {
     res.status(500).json({

@@ -27,9 +27,7 @@ const RequestDetails = () => {
   const [requestDetails, setRequestDetails] = useState("");
 
   useEffect(() => {
-    // Fetch details based on the requestId
     getSingleRequestApi(id).then((res) => {
-      // console.log(res.data);
       setRequestDetails(res.data.requestblood);
     });
   }, [id]);

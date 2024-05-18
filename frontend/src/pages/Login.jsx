@@ -46,6 +46,7 @@ const Login = () => {
             return;
           } else if (userAdmin.isAdmin == false && userAdmin.isBloodBank == true) {
             navigate("/bb/dashboard");
+            window.location.reload();
           } else {
             navigate("/admin/dashboard");
             window.location.reload();

@@ -99,6 +99,11 @@ export default function AddCampaigns() {
       });
   };
 
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return new Intl.DateTimeFormat('en-US', options).format(new Date(dateString));
+  };
+  
   // delete
   const handleDelete = (id) => {
     deleteCampaignApi(id).then((res) => {
@@ -175,9 +180,9 @@ export default function AddCampaigns() {
                   <th className="font-normal text-left pl-12">End Date</th>
                   <th className="font-normal text-left pl-20">Location</th>
                   <th className="font-normal text-left pl-20">Goal</th>
-                  <th className="font-normal text-left pl-20">Raised</th>
-                  <th className="font-normal text-left pl-20">Donors</th>
-                  <th className="font-normal text-left pl-20">Donations</th>
+                  {/* <th className="font-normal text-left pl-20">Raised</th> */}
+                  {/* <th className="font-normal text-left pl-20">Donors</th> */}
+                  {/* <th className="font-normal text-left pl-20">Donations</th> */}
                   <th className="font-normal text-left pl-12">
                     <button
                       onClick={() => handleSort("createdAt")}
@@ -218,10 +223,10 @@ export default function AddCampaigns() {
                         </p>
                       </td>
                       <td className="pl-12">
-                        <p className="font-medium">{item.campaignStartDate}</p>
+                        <p className="font-medium">{formatDate(item.campaignStartDate)}</p>
                       </td>
                       <td className="pl-20">
-                        <p className="font-medium">{item.campaignEndDate}</p>
+                        <p className="font-medium">{formatDate(item.campaignEndDate)}</p>
                       </td>
                       <td className="pl-20">
                         <p className="font-medium">{item.campaignLocation}</p>
@@ -229,7 +234,7 @@ export default function AddCampaigns() {
                       <td className="pl-20 overflow-y max-w-[200px] truncate">
                         <p className="font-medium">{item.campaignGoal}</p>
                       </td>
-                      <td className="pl-20 overflow-y max-w-[200px] truncate">
+                      {/* <td className="pl-20 overflow-y max-w-[200px] truncate">
                         <p className="font-medium">{item.campaignRaised}</p>
                       </td>
                       <td className="pl-20 overflow-y max-w-[200px] truncate">
@@ -238,7 +243,7 @@ export default function AddCampaigns() {
 
                       <td className="pl-20 overflow-y max-w-[200px] truncate">
                         <p className="font-medium">{item.campaignDonations}</p>
-                      </td>
+                      </td> */}
 
                       <td className="pl-20 overflow-y max-w-[200px] truncate">
                         <p className="font-medium">

@@ -1,13 +1,21 @@
-import { faCalendar, faMapMarkerAlt, faTimes } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCalendar,
+  faMapMarkerAlt,
+  faTimes,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { CircularProgress } from "@mui/material";
 import "leaflet/dist/leaflet.css";
 import React, { useEffect, useState } from "react";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { Link, useParams } from "react-router-dom";
-import { fetchSingleBloodBankApi, registerForCampaignApi, viewCampaignApi } from "../../../apis/api";
-import { CircularProgress } from "@mui/material";
-import BloodGroupLists from "../../../components/BloodGroupsList";
 import { toast } from "react-toastify";
+import {
+  fetchSingleBloodBankApi,
+  registerForCampaignApi,
+  viewCampaignApi,
+} from "../../../apis/api";
+import BloodGroupLists from "../../../components/BloodGroupsList";
 
 const SingleBloodbank = () => {
   const users = JSON.parse(localStorage.getItem("user"));
@@ -26,7 +34,6 @@ const SingleBloodbank = () => {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -57,7 +64,6 @@ const SingleBloodbank = () => {
         setIsLoading(false);
       });
   };
-
 
   useEffect(() => {
     fetchSingleBloodBankApi(id).then((res) => {
@@ -212,7 +218,7 @@ const SingleBloodbank = () => {
                           backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(${eachCamp.campaignImageUrl})`, // Added semi-transparent overlay
                           backgroundSize: "cover",
                           backgroundPosition: "center",
-                          color: "white", // Set text color to white
+                          color: "white", 
                         }}
                       >
                         <div className="relative">
@@ -272,66 +278,66 @@ const SingleBloodbank = () => {
               </div>
             </div>
             {isModalOpen && (
-          <div
-            className="fixed inset-0 bg-gray-600 bg-opacity-50 p-44 overflow-y-auto h-full w-full"
-            id="my-modal"
-          >
-            <div className="relative top-3 mx-auto p-5 border w-1/2 shadow-lg rounded-md bg-white">
-              {/* Close button */}
-              <div className="absolute top-0 right-0 pt-4 pr-4">
-                <button
-                  onClick={closeModal}
-                  className="text-black bg-red-500 hover:bg-red-700 rounded-lg text-sm p-2"
-                >
-                  <FontAwesomeIcon icon={faTimes} />
-                </button>
-              </div>
+              <div
+                className="fixed inset-0 bg-gray-600 bg-opacity-50 p-44 overflow-y-auto h-full w-full"
+                id="my-modal"
+              >
+                <div className="relative top-3 mx-auto p-5 border w-1/2 shadow-lg rounded-md bg-white">
+                  {/* Close button */}
+                  <div className="absolute top-0 right-0 pt-4 pr-4">
+                    <button
+                      onClick={closeModal}
+                      className="text-black bg-red-500 hover:bg-red-700 rounded-lg text-sm p-2"
+                    >
+                      <FontAwesomeIcon icon={faTimes} />
+                    </button>
+                  </div>
 
-              <form className="space-y-6">
-                <h3 className=" leading-6 text-gray-900 text-center font-semibold text-2xl">
-                  Register For This Campaign
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-900">
-                      Full Name
-                    </label>
-                    <input
-                      onChange={(e) => setFullName(e.target.value)}
-                      type="text"
-                      className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <BloodGroupLists
-                      label={"Select your BloodGroup"}
-                      onChange={(e) => setBloodGroup(e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-900">
-                      Email
-                    </label>
-                    <input
-                      onChange={(e) => setEmail(e.target.value)}
-                      type="email"
-                      className="mt-1 block w-full  border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-900">
-                     Number
-                    </label>
-                    <input
-                      onChange={(e) => setNumber(e.target.value)}
-                      type="number"
-                      className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
-                      required
-                    />
-                  </div>
-                  {/* <div>
+                  <form className="space-y-6">
+                    <h3 className=" leading-6 text-gray-900 text-center font-semibold text-2xl">
+                      Register For This Campaign
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-900">
+                          Full Name
+                        </label>
+                        <input
+                          onChange={(e) => setFullName(e.target.value)}
+                          type="text"
+                          className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <BloodGroupLists
+                          label={"Select your BloodGroup"}
+                          onChange={(e) => setBloodGroup(e.target.value)}
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-900">
+                          Email
+                        </label>
+                        <input
+                          onChange={(e) => setEmail(e.target.value)}
+                          type="email"
+                          className="mt-1 block w-full  border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-900">
+                          Number
+                        </label>
+                        <input
+                          onChange={(e) => setNumber(e.target.value)}
+                          type="number"
+                          className="mt-1 block w-full border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
+                          required
+                        />
+                      </div>
+                      {/* <div>
                     <label className="block text-sm font-medium text-gray-900">
                       Latitude
                     </label>
@@ -350,7 +356,7 @@ const SingleBloodbank = () => {
                       required
                     />
                   </div> */}
-                  {/* <div>
+                      {/* <div>
                     <label className="block text-sm font-medium text-gray-900">
                       Longitude
                     </label>
@@ -369,7 +375,7 @@ const SingleBloodbank = () => {
                       required
                     />
                   </div> */}
-                  {/* <div>
+                      {/* <div>
                     <label className="block text-sm font-medium text-gray-900">
                       Campaign Goal
                     </label>
@@ -380,23 +386,23 @@ const SingleBloodbank = () => {
                       required
                     ></textarea>
                   </div> */}
+                    </div>
+                    <button
+                      onClick={handleSubmit}
+                      type="submit"
+                      disabled={isLoading}
+                      className="w-full text-white bg-cyan-700 hover:bg-cyan-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    >
+                      {isLoading ? (
+                        <CircularProgress size={20} color="inherit" />
+                      ) : (
+                        "Add Campaign"
+                      )}
+                    </button>
+                  </form>
                 </div>
-                <button
-                  onClick={handleSubmit}
-                  type="submit"
-                  disabled={isLoading}
-                  className="w-full text-white bg-cyan-700 hover:bg-cyan-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                >
-                  {isLoading ? (
-                    <CircularProgress size={20} color="inherit" />
-                  ) : (
-                    "Add Campaign"
-                  )}
-                </button>
-              </form>
-            </div>
-          </div>
-        )}
+              </div>
+            )}
           </div>
 
           <div className="row">
