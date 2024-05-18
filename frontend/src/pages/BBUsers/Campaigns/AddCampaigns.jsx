@@ -26,7 +26,7 @@ export default function AddCampaigns() {
 
   const fetchCampaigns = async () => {
     try {
-      console.log(user._id)
+      console.log(user._id);
       const response = await getAllCampaignByBBApi(user._id);
       setCampaignss(response.data.allCampaigns);
       console.log(response.data.allCampaigns.user);
@@ -52,7 +52,7 @@ export default function AddCampaigns() {
   const [sortBy, setSortBy] = useState("createdAt");
   const [sortOrder, setSortOrder] = useState("desc");
   const [campaignDelId, setCampaignDelId] = useState("");
-  
+
   const [isdeleteModalOpen, setdeleteIsModalOpen] = useState(false);
   const opendeleteModal = () => setdeleteIsModalOpen(true);
   const closedeleteModal = () => setdeleteIsModalOpen(false);
@@ -77,6 +77,7 @@ export default function AddCampaigns() {
     formData.append("latitude", latitude);
     formData.append("longitude", longitude);
     formData.append("campaignImage", campaignImage);
+    formData.append("user", user._id);
 
     // making Api call
     addCampaignApi(formData)
@@ -194,118 +195,119 @@ export default function AddCampaigns() {
                 </tr>
               </thead>
               <tbody className="w-full">
-                {campaigns && campaigns?.map((item) => (
-                  <tr
-                    key={item._id}
-                    className="h-20 text-sm leading-none text-gray-800 bg-white hover:bg-gray-100 border-b border-t border-gray-100"
-                  >
-                    <td className="pl-4 cursor-pointer">
-                      <div className="flex items-center">
-                        <div className="w-10 h-10">
-                          <img
-                            className="w-full h-full"
-                            src={item.campaignImageUrl}
-                            alt="Thumbnail Image"
-                          />
-                        </div>
-                      </div>
-                    </td>
-                    <td className="pl-12">
-                      <p className="text-sm font-medium leading-none text-gray-800">
-                        {item.campaignName}
-                      </p>
-                    </td>
-                    <td className="pl-12">
-                      <p className="font-medium">{item.campaignStartDate}</p>
-                    </td>
-                    <td className="pl-20">
-                      <p className="font-medium">{item.campaignEndDate}</p>
-                    </td>
-                    <td className="pl-20">
-                      <p className="font-medium">{item.campaignLocation}</p>
-                    </td>
-                    <td className="pl-20 overflow-y max-w-[200px] truncate">
-                      <p className="font-medium">{item.campaignGoal}</p>
-                    </td>
-                    <td className="pl-20 overflow-y max-w-[200px] truncate">
-                      <p className="font-medium">{item.campaignRaised}</p>
-                    </td>
-                    <td className="pl-20 overflow-y max-w-[200px] truncate">
-                      <p className="font-medium">{item.campaignDonors}</p>
-                    </td>
-
-                    <td className="pl-20 overflow-y max-w-[200px] truncate">
-                      <p className="font-medium">{item.campaignDonations}</p>
-                    </td>
-
-                    <td className="pl-20 overflow-y max-w-[200px] truncate">
-                      <p className="font-medium">
-                        {new Date(item.createdAt).toLocaleDateString()}
-                      </p>
-                    </td>
-                    <td className="px-7 2xl:px-0">
-                      {/* Edit Button */}
-                      <Link
-                        className="focus:outline-none py-2 px-4"
-                        to={`/update_campaign/${item._id}`}
-                      >
-                        <FontAwesomeIcon
-                          icon={faEdit}
-                          className="text-blue-500 hover:text-blue-700 cursor-pointer"
-                        />
-                      </Link>
-
-                      {/* Delete Button */}
-                      <button
-                        onClick={() => {
-                          opendeleteModal();
-                          setCampaignDelId(item._id);
-                        }}
-                        className="focus:outline-none ml-2 "
-                      >
-                        <FontAwesomeIcon
-                          icon={faTrash}
-                          className="text-red-500 hover:text-red-700 cursor-pointer "
-                        />
-                      </button>
-                    </td>
-                    {isdeleteModalOpen && (
-                      <div
-                        className="fixed inset-0 flex items-center justify-center bg-opacity-20 overflow-y-auto h-full w-full"
-                        id="my-modal"
-                      >
-                        <div className="relative mx-auto p-5 border  shadow-sm w-1/4 rounded-md bg-white space-y-8 justify-center items-center flex flex-col">
-                          <h6 className="font-medium w-3/4 mx-auto text-center">
-                            <FontAwesomeIcon
-                              className="me-4"
-                              icon={faExclamationTriangle}
-                            />
+                {campaigns &&
+                  campaigns?.map((item) => (
+                    <tr
+                      key={item._id}
+                      className="h-20 text-sm leading-none text-gray-800 bg-white hover:bg-gray-100 border-b border-t border-gray-100"
+                    >
+                      <td className="pl-4 cursor-pointer">
+                        <div className="flex items-center">
+                          <div className="w-10 h-10">
                             <img
-                              src="../assets/images/sure_about_that.jpg"
-                              alt=""
+                              className="w-full h-full"
+                              src={item.campaignImageUrl}
+                              alt="Thumbnail Image"
                             />
-                            Are you sure about that 👁️👁️?
-                          </h6>
-                          <div className="flex flex-wrap items-center justify-between mx-auto w-full">
-                            <button
-                              onClick={() => handleDelete(campaignDelId)}
-                              className="w-1/3 text-white bg-red-500 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm text-center py-2.5"
-                            >
-                              Delete
-                            </button>
-                            <button
-                              type="submit"
-                              className="w-1/3 text-white bg-gray-500 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm py-2.5"
-                              onClick={closedeleteModal}
-                            >
-                              Cancel
-                            </button>
                           </div>
                         </div>
-                      </div>
-                    )}
-                  </tr>
-                ))}
+                      </td>
+                      <td className="pl-12">
+                        <p className="text-sm font-medium leading-none text-gray-800">
+                          {item.campaignName}
+                        </p>
+                      </td>
+                      <td className="pl-12">
+                        <p className="font-medium">{item.campaignStartDate}</p>
+                      </td>
+                      <td className="pl-20">
+                        <p className="font-medium">{item.campaignEndDate}</p>
+                      </td>
+                      <td className="pl-20">
+                        <p className="font-medium">{item.campaignLocation}</p>
+                      </td>
+                      <td className="pl-20 overflow-y max-w-[200px] truncate">
+                        <p className="font-medium">{item.campaignGoal}</p>
+                      </td>
+                      <td className="pl-20 overflow-y max-w-[200px] truncate">
+                        <p className="font-medium">{item.campaignRaised}</p>
+                      </td>
+                      <td className="pl-20 overflow-y max-w-[200px] truncate">
+                        <p className="font-medium">{item.campaignDonors}</p>
+                      </td>
+
+                      <td className="pl-20 overflow-y max-w-[200px] truncate">
+                        <p className="font-medium">{item.campaignDonations}</p>
+                      </td>
+
+                      <td className="pl-20 overflow-y max-w-[200px] truncate">
+                        <p className="font-medium">
+                          {new Date(item.createdAt).toLocaleDateString()}
+                        </p>
+                      </td>
+                      <td className="px-7 2xl:px-0">
+                        {/* Edit Button */}
+                        <Link
+                          className="focus:outline-none py-2 px-4"
+                          to={`/update_campaign/${item._id}`}
+                        >
+                          <FontAwesomeIcon
+                            icon={faEdit}
+                            className="text-blue-500 hover:text-blue-700 cursor-pointer"
+                          />
+                        </Link>
+
+                        {/* Delete Button */}
+                        <button
+                          onClick={() => {
+                            opendeleteModal();
+                            setCampaignDelId(item._id);
+                          }}
+                          className="focus:outline-none ml-2 "
+                        >
+                          <FontAwesomeIcon
+                            icon={faTrash}
+                            className="text-red-500 hover:text-red-700 cursor-pointer "
+                          />
+                        </button>
+                      </td>
+                      {isdeleteModalOpen && (
+                        <div
+                          className="fixed inset-0 flex items-center justify-center bg-opacity-20 overflow-y-auto h-full w-full"
+                          id="my-modal"
+                        >
+                          <div className="relative mx-auto p-5 border  shadow-sm w-1/4 rounded-md bg-white space-y-8 justify-center items-center flex flex-col">
+                            <h6 className="font-medium w-3/4 mx-auto text-center">
+                              <FontAwesomeIcon
+                                className="me-4"
+                                icon={faExclamationTriangle}
+                              />
+                              <img
+                                src="../assets/images/sure_about_that.jpg"
+                                alt=""
+                              />
+                              Are you sure about that 👁️👁️?
+                            </h6>
+                            <div className="flex flex-wrap items-center justify-between mx-auto w-full">
+                              <button
+                                onClick={() => handleDelete(campaignDelId)}
+                                className="w-1/3 text-white bg-red-500 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm text-center py-2.5"
+                              >
+                                Delete
+                              </button>
+                              <button
+                                type="submit"
+                                className="w-1/3 text-white bg-gray-500 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm py-2.5"
+                                onClick={closedeleteModal}
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>

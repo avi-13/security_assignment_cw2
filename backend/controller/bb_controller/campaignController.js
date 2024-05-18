@@ -3,6 +3,7 @@ const cloudinary = require("cloudinary");
 const RegisteredUsers = require("../../model/registeredUsersForCampaign");
 
 const addCampaign = async (req, res) => {
+  console.log(req.body);
   const {
     campaignName,
     campaignStartDate,
