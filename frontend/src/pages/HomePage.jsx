@@ -313,7 +313,7 @@ const HomePage = ({ history }) => {
       )}
 
       {campaigns && (
-        <section id="campaigns" className="w-full py-12 md:py-24 lg:py-32">
+        <section id="campaigns" className="w-full pt-2 md:py-24 lg:py-32">
           <div className="flex flex-col w-full md:w-1/4 mx-auto">
             <h2 className="text-4xl font-bold text-center text-red-700 mb-8 mt-2">
               Upcoming Campaigns
@@ -328,7 +328,6 @@ const HomePage = ({ history }) => {
               >
                 <img
                   src={campaign.campaignImageUrl}
-                  width="400"
                   height="200"
                   alt="Campaign"
                   className="aspect-[2/1] overflow-hidden rounded-t-xl object-cover"
@@ -365,12 +364,12 @@ const HomePage = ({ history }) => {
                     />
                     <span>{campaign.user.fullName}</span>
                   </div>
-                  <a
+                  {/* <a
                     className="inline-flex h-9 items-center justify-center rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-gray-50 shadow transition-colors hover:bg-gray-900/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-50/90 dark:focus-visible:ring-gray-300"
                     href="#"
                   >
                     Learn More
-                  </a>
+                  </a> */}
                 </div>
               </div>
             ))}
@@ -385,7 +384,7 @@ const HomePage = ({ history }) => {
         </p>
       )}
       {!isLoading && !error && (
-        <section className="w-full py-12 md:py-24 lg:py-32">
+        <section className="w-full pt-2 md:py-24 lg:py-32">
           <div className="w-full">
             <div className="w-full">
               <h2 className="text-3xl text-center font-bold tracking-tighter sm:text-4xl md:text-5xl">
