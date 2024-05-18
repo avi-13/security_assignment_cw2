@@ -87,7 +87,7 @@ const EditBloodBank = () => {
 
     updateBloodBankApi(id, formData)
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         if (res.data.success == false) {
           toast.error(res.data.message);
         } else {

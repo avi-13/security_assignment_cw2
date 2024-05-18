@@ -24,7 +24,6 @@ const BeADonor = () => {
   useEffect(() => {
     //API call
     getSingleUserApi(id).then((res) => {
-      console.log(res.data);
       setFullName(res.data.user.fullName);
       setEmail(res.data.user.email);
       setNumber(res.data.user.number);

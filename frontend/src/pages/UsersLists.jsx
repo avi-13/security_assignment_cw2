@@ -14,7 +14,7 @@ const UsersLists = () => {
     if (searchedUsers && searchedUsers?.length > 0) {
       const nonAdminUsers = searchedUsers.filter((user) => !user.isAdmin);
       setUsers(nonAdminUsers);
-      console.log(searchedUsers);
+      // console.log(searchedUsers);
       setLoading(false);
     } else {
       setTimeout(() => {}, 2000);

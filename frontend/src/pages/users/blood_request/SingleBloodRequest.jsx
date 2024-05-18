@@ -29,7 +29,7 @@ const RequestDetails = () => {
   useEffect(() => {
     // Fetch details based on the requestId
     getSingleRequestApi(id).then((res) => {
-      console.log(res.data);
+      // console.log(res.data);
       setRequestDetails(res.data.requestblood);
     });
   }, [id]);

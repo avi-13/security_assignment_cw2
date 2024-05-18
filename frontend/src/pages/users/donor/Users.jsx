@@ -7,7 +7,6 @@ const Users = () => {
   const [users, setUsers] = useState([]);
   useEffect(() => {
     fetchAllUsersApi().then((res) => {
-      console.log(res.data);
       setUsers(res.data.users);
     });
   }, []);

@@ -79,7 +79,6 @@ const Profile = ({ updateFullName }) => {
     // making API call
     updateUser(id, data)
       .then((res) => {
-        console.log(data);
         if (res.data.success === false) {
           toast.error(res.data.message);
         } else {
@@ -87,7 +86,6 @@ const Profile = ({ updateFullName }) => {
           setReloadPage((prev) => !prev);
           setPreviewImage(null);
           // Update local storage with the new full name
-          console.log(res.data.updateUser);
           const updatedFullName = res.data.updateUser.fullName;
 
           localStorage.setItem(

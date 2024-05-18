@@ -74,7 +74,7 @@ export default function ForBloodbank() {
 
     createBloodBankApi(formData)
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
 
         if (res.data.success == false) {
           toast.error(res.data.message);

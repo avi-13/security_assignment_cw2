@@ -18,7 +18,7 @@ const ViewBloodRequest = () => {
 
   useEffect(() => {
     viewRequestApi().then((res) => {
-      console.log(res.data);
+      // console.log(res.data);
       setBloodRequest(res.data.categorizedData);
     });
   }, []);
@@ -28,7 +28,6 @@ const ViewBloodRequest = () => {
     setShow(true);
     setActiveDivId(id);
     setPatientName(patientName);
-    console.log(patientName);
   };
 
   const filterRequests = (requests) => {

@@ -82,7 +82,9 @@ const addRequestsBB = async (req, res) => {
 
 const getAllRequestBB = async (req, res) => {
   try {
-    const requestList = await RequestForBB.find().sort({ createdAt: -1 }).populate("userId");
+    const requestList = await RequestForBB.find()
+      .sort({ createdAt: -1 })
+      .populate("userId");
 
     res.status(200).json({
       success: true,
@@ -190,6 +192,7 @@ const deleteRequestBB = async (req, res) => {
     });
   }
 };
+
 const getSingleRequestBB = async (req, res) => {
   const id = req.params.id;
 
@@ -240,10 +243,77 @@ const getSingleRequestBB = async (req, res) => {
   }
 };
 
+const getRequestsofUser = async (req, res) => {
+  const userId = req.params.id;
+
+  if (!userId) {
+    return res.json({
+      success: false,
+      message: "Invalid request ID",
+    });
+  }
+
+  await RequestForBB.find({ userId: userId })
+    .populate("bloodbank", "bbName")
+    .then((requests) => {
+      console.log(requests);
+      if (!requests) {
+        return res.status(404).json({
+          success: false,
+          message: "Request not found",
+        });
+      }
+
+      res.status(200).json({
+        success: true,
+        message: "",
+        userReq: requests,
+      });
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(500).json({
+        success: false,
+        message: "Internal server error",
+        error: error.message,
+      });
+    });
+};
+
+const updateStatus = async (req, res) => {
+  const { id, isAccepted } = req.body;
+
+  try {
+    const updatedRequest = await RequestForBB.findByIdAndUpdate(
+      id,
+      { isAccepted: isAccepted },
+      { new: true }
+    );
+
+    if (!updatedRequest) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Request not found" });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Request updated successfully",
+      data: updatedRequest,
+    });
+  } catch (error) {
+    console.error("Error updating showRequest:", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
+  }
+};
 module.exports = {
   addRequestsBB,
   getAllRequestBB,
   updateRequestBB,
   deleteRequestBB,
+  getRequestsofUser,
   getSingleRequestBB,
+  updateStatus,
 };

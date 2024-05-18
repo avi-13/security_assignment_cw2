@@ -130,7 +130,6 @@ const SingleBloodbank = () => {
                       <h6 class="font-manrope font-semibold text-2xl leading-9 text-gray-900 pr-5 sm:border-r border-gray-200 mr-5">
                         Address : {bloodbank.bbAddress}
                       </h6>
-                      a
                       <div class="flex items-center gap-2">
                         <span class=" font-bold leading-7 text-green-600 text-lg ">
                           Contact No. : {bloodbank.bbContact}

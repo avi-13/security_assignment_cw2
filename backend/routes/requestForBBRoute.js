@@ -12,4 +12,9 @@ router.get("/request_bb/:id", reqForBBController.getSingleRequestBB);
 
 router.put("/update_request_bb/:id", reqForBBController.updateRequestBB);
 
+router.get("/get_user_request/:id", reqForBBController.getRequestsofUser);
+
+router.put("/update_status", reqForBBController.updateStatus);
+
+
 module.exports = router;

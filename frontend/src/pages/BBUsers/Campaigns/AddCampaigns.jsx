@@ -26,10 +26,10 @@ export default function AddCampaigns() {
 
   const fetchCampaigns = async () => {
     try {
-      console.log(user._id);
+      // console.log(user._id);
       const response = await getAllCampaignByBBApi(user._id);
       setCampaignss(response.data.allCampaigns);
-      console.log(response.data.allCampaigns.user);
+      // console.log(response.data.allCampaigns.user);
     } catch (error) {
       console.error("Error Fetching BloodBanks", error);
     }

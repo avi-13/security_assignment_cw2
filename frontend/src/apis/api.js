@@ -154,11 +154,18 @@ export const viewRequestBBApi = (data) =>
 export const getSingleRequestBBApi = (id) =>
   Api.get(`/api/req_bb/request_bb/${id}`);
 
+
+export const getReqOfUserApi = (id) =>
+  Api.get(`/api/req_bb/get_user_request/${id}`);
+
 export const deleteRequestBBApi = (id) =>
   Api.delete(`/api/req_bb/delete_request_bb/${id}`);
 
 export const updateRequestBBApi = (id, data) =>
   Api.put(`/api/req_bb/update_request_bb/${id}`, data);
+
+export const  updateStatusApi= (data) =>
+  Api.put(`/api/req_bb/update_status`, data);
 
 // export const getMyRequestBBApi = (id) =>
 //   Api.get(`/api/requestForBB/get_my_request/${id}`);

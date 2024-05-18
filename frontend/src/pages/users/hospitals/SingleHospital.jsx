@@ -46,7 +46,6 @@ const SingleHospital = () => {
           </div>
           <div className="row">
             <div className="col-12 p-0">
-              {console.log(hospital.latitude, hospital.longitude)}
               <MapContainer
                 className="req-map-container"
                 center={[hospital.latitude, hospital.longitude]}

@@ -24,11 +24,11 @@ const Register = () => {
   const [otp, setOtp] = useState("");
 
   const sendOtp = async () => {
-    console.log("Sending OTP to:", email);
+    // console.log("Sending OTP to:", email);
     const data = { email: email };
     sendOtpApi(data)
       .then((res) => {
-        console.log(data);
+        // console.log(data);
         if (res.data.success == false) {
           toast.error(res.data.message);
         } else {
@@ -36,7 +36,7 @@ const Register = () => {
           toast.success(res.data.message);
           setOtp(res?.data?.otp);
 
-          console.log("OTP:", res.data.otp);
+          // console.log("OTP:", res.data.otp);
         }
       })
       .catch((err) => {
@@ -183,7 +183,7 @@ const Register = () => {
     // making API call
     createUserApi(data)
       .then((res) => {
-        console.log(data);
+        // console.log(data);
         if (res.data.success == false) {
           toast.error(res.data.message);
         } else {
