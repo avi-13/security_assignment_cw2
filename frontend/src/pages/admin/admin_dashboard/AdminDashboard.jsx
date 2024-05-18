@@ -43,7 +43,7 @@ const AdminDashboard = () => {
       setBloodBank(res.data.mobbank);
       setBBlength(bloodBank.length)
     });
-  }, []);
+  }, [bloodBank]);
 
   useEffect(() => {
     fetchAllUsersApi().then((res) => {
@@ -54,14 +54,6 @@ const AdminDashboard = () => {
   useEffect(() => {
     viewCampaignApi().then((res) => {
       setCampLength(res?.data?.allCampaigns.length)
-    });
-  }, []);
-
-
-  useEffect(() => {
-    getallBloodBankApi().then((res) => {
-      setBloodBank(res.data.mobbank);
-      setBBlength(bloodBank.length)
     });
   }, []);
 
@@ -85,7 +77,7 @@ const AdminDashboard = () => {
       setHospital(res.data.allHospitals);
       setHospitalLength(hospital.length);
     });
-  }, []);
+  }, [hospital]);
 
   const hospitalData = [
     { name: "Jan", hospitalsAdded: hospitalByMonth[0] || 0 },
