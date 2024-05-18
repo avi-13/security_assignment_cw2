@@ -137,12 +137,15 @@ const getAllHospitals = async (req, res) => {
       [sortBy]: sortOrder,
     });
 
+    const allHospitals = await Hospital.find();
+
     const fewHospitals = hospitalLists.slice(-5);
 
     res.status(200).json({
       success: true,
       hospital: hospitalLists,
       fewHospitals: fewHospitals,
+      allHospitals : allHospitals,
     });
   } catch (error) {
     res.status(400).json(error);

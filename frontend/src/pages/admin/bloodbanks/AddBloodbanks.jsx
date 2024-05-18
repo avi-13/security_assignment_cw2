@@ -13,7 +13,6 @@ import {
   createBloodBankApi,
   deleteBloodBankApi,
   getallBloodBankApi,
-  sendInfoApi,
 } from "../../../apis/api";
 import BloodGroupLists from "../../../components/BloodGroupsList";
 import DistrictList from "../../../components/DistrictsList";
@@ -165,18 +164,6 @@ export default function AddBloodBanks() {
     });
   };
 
-  // delete
-  const sendInfo = (id) => {
-    // make Api call
-    sendInfoApi(id).then((res) => {
-      if (res.data.success == true) {
-        toast.success(res.data.message);
-        window.location.reload();
-      } else {
-        toast.error(res.data.message);
-      }
-    });
-  };
   return (
     <>
       <div className="w-full sm:px-6">
