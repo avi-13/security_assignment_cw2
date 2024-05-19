@@ -1,20 +1,24 @@
 import {
   faEdit,
   faExclamationTriangle,
+  faEye,
   faTimes,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CircularProgress } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import { confirmAlert } from "react-confirm-alert";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
   addCampaignApi,
   deleteCampaignApi,
   getAllCampaignByBBApi,
+  getRegisteredUsersApi,
 } from "../../../apis/api";
 import DistrictList from "../../../components/DistrictsList";
+import InterestedUsers from "./InterestedUsers";
 
 export default function AddCampaigns() {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -22,22 +26,37 @@ export default function AddCampaigns() {
   const [campaigns, setCampaignss] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [latitude, setLatitude] = useState("");
+  const [interestedUsers, setInterestedUsers] = useState([]);
   const [longitude, setLongitude] = useState("");
 
   const fetchCampaigns = async () => {
     try {
-      // console.log(user._id);
       const response = await getAllCampaignByBBApi(user._id);
       setCampaignss(response.data.allCampaigns);
-      // console.log(response.data.allCampaigns.user);
     } catch (error) {
       console.error("Error Fetching BloodBanks", error);
     }
   };
 
+  const getAllInterestedUsers = (id) => {
+    confirmAlert({
+      customUI: ({ onClose }) => {
+        return (
+          <InterestedUsers
+            onClose={onClose}
+            interestedUsers={interestedUsers}
+          />
+        );
+      },
+    });
+  };
+
   useEffect(() => {
+    getRegisteredUsersApi(user._id).then((res) => {
+      setInterestedUsers(res.data.registeredUsers);
+    });
     fetchCampaigns();
-  }, []);
+  }, [user._id]);
 
   const handleSort = (column) => {
     setSortBy(column);
@@ -100,10 +119,12 @@ export default function AddCampaigns() {
   };
 
   const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    return new Intl.DateTimeFormat('en-US', options).format(new Date(dateString));
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    return new Intl.DateTimeFormat("en-US", options).format(
+      new Date(dateString)
+    );
   };
-  
+
   // delete
   const handleDelete = (id) => {
     deleteCampaignApi(id).then((res) => {
@@ -223,10 +244,14 @@ export default function AddCampaigns() {
                         </p>
                       </td>
                       <td className="pl-12">
-                        <p className="font-medium">{formatDate(item.campaignStartDate)}</p>
+                        <p className="font-medium">
+                          {formatDate(item.campaignStartDate)}
+                        </p>
                       </td>
                       <td className="pl-20">
-                        <p className="font-medium">{formatDate(item.campaignEndDate)}</p>
+                        <p className="font-medium">
+                          {formatDate(item.campaignEndDate)}
+                        </p>
                       </td>
                       <td className="pl-20">
                         <p className="font-medium">{item.campaignLocation}</p>
@@ -253,6 +278,17 @@ export default function AddCampaigns() {
                       <td className="px-7 2xl:px-0">
                         {/* Edit Button */}
                         <Link
+                          onClick={() => getAllInterestedUsers(item._id)}
+                          title="View Interested Users"
+                          className="focus:outline-none py-2 px-4"
+                        >
+                          <FontAwesomeIcon
+                            icon={faEye}
+                            className="text-blue-500 hover:text-blue-700 cursor-pointer"
+                          />
+                        </Link>
+                        <Link
+                          title="Edit Campaign"
                           className="focus:outline-none py-2 px-4"
                           to={`/update_campaign/${item._id}`}
                         >
@@ -261,9 +297,9 @@ export default function AddCampaigns() {
                             className="text-blue-500 hover:text-blue-700 cursor-pointer"
                           />
                         </Link>
-
                         {/* Delete Button */}
                         <button
+                          title="Delete Campaign"
                           onClick={() => {
                             opendeleteModal();
                             setCampaignDelId(item._id);

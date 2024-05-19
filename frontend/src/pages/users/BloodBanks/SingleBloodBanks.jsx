@@ -12,8 +12,8 @@ import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
   fetchSingleBloodBankApi,
+  getAllCampaignByBBApi,
   registerForCampaignApi,
-  viewCampaignApi,
 } from "../../../apis/api";
 import BloodGroupLists from "../../../components/BloodGroupsList";
 
@@ -75,11 +75,19 @@ const SingleBloodbank = () => {
     });
   }, [id]);
 
+  const fetchCampaigns = async () => {
+    console.log(id)
+    try {
+      const response = await getAllCampaignByBBApi(id);
+      setCampaign(response.data.allCampaigns);
+    } catch (error) {
+      console.error("Error Fetching BloodBanks", error);
+    }
+  };
+
   useEffect(() => {
-    viewCampaignApi().then((res) => {
-      setCampaign(res.data.allCampaigns);
-    });
-  }, [id]);
+    fetchCampaigns();
+  }, []);
 
   function formatDate(dateString) {
     const date = new Date(dateString);
@@ -218,7 +226,7 @@ const SingleBloodbank = () => {
                           backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(${eachCamp.campaignImageUrl})`, // Added semi-transparent overlay
                           backgroundSize: "cover",
                           backgroundPosition: "center",
-                          color: "white", 
+                          color: "white",
                         }}
                       >
                         <div className="relative">
@@ -396,7 +404,7 @@ const SingleBloodbank = () => {
                       {isLoading ? (
                         <CircularProgress size={20} color="inherit" />
                       ) : (
-                        "Add Campaign"
+                        "Register tor this Campaign"
                       )}
                     </button>
                   </form>

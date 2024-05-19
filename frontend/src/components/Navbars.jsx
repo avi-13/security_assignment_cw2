@@ -85,7 +85,10 @@ const Navbars = ({ fullName }) => {
           <>
             <ul className="nav-ul">
               <li className="nav-li">
-                <Link to={"/bb/dashboard"} className={activeItem === 0 ? "active" : ""}>
+                <Link
+                  to={"/bb/dashboard"}
+                  className={activeItem === 0 ? "active" : ""}
+                >
                   Home
                 </Link>
               </li>
@@ -213,6 +216,7 @@ const Navbars = ({ fullName }) => {
                   <li style={{ width: "100%" }}>
                     <Link
                       className="dropdown-item"
+                      onClick={handleToggleDropdown}
                       to={`/profile/${users._id}`}
                     >
                       Profile
@@ -223,6 +227,7 @@ const Navbars = ({ fullName }) => {
                     <li style={{ width: "100%" }}>
                       <Link
                         className="dropdown-item"
+                        onClick={handleToggleDropdown}
                         to={`/get_my_request/${users._id}`}
                       >
                         My Requests
@@ -273,7 +278,10 @@ const Navbars = ({ fullName }) => {
               <button
                 type="submit"
                 className="w-1/3 text-white bg-gray-500 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm py-2.5"
-                onClick={cancel}
+                onClick={() => {
+                  cancel();
+                  handleToggleDropdown();
+                }}
               >
                 Cancel
               </button>

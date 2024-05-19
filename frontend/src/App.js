@@ -36,6 +36,7 @@ import BBDashBoard from "./pages/BBUsers/BBDashBoard";
 import EditBloodRequests from "./pages/users/blood_request/EditBloodRequests";
 import ReqForBB from "./pages/users/blood_request/ReqForBB";
 import EditCampaigns from "./pages/BBUsers/Campaigns/EditCampaigns";
+import InterestedUsers from "./pages/BBUsers/Campaigns/InterestedUsers";
 
 function App() {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -59,6 +60,7 @@ function App() {
           <Route path="/bb/dashboard" element={<AdminPanel />} />
           <Route path="/maindash" element={<BBDashBoard />} />
           <Route path="/update_campaign/:id" element={<EditCampaigns />} />
+          <Route path="/registered_users/:id" element={<InterestedUsers />} />
         </Route>
 
         <Route path="/home" element={<HomePage />} />

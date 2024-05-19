@@ -3,7 +3,7 @@ const cloudinary = require("cloudinary");
 const RegisteredUsers = require("../../model/registeredUsersForCampaign");
 
 const addCampaign = async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   const {
     campaignName,
     campaignStartDate,
@@ -82,12 +82,17 @@ const addCampaign = async (req, res) => {
 
 const viewAllCampaigns = async (req, res) => {
   try {
-    const allCampaigns = await Campaign.find().populate("user").sort({ createdAt: -1 });
-    const latestCampaings = await Campaign.find().populate("user").sort({ createdAt: -1 }).limit(3);
+    const allCampaigns = await Campaign.find()
+      .populate("user")
+      .sort({ createdAt: -1 });
+    const latestCampaings = await Campaign.find()
+      .populate("user")
+      .sort({ createdAt: -1 })
+      .limit(3);
     res.status(200).json({
       success: true,
       allCampaigns: allCampaigns,
-      latestCampaings:latestCampaings,
+      latestCampaings: latestCampaings,
     });
   } catch (error) {
     res.status(500).json({
@@ -97,12 +102,13 @@ const viewAllCampaigns = async (req, res) => {
   }
 };
 
-
 const getCampaignByBB = async (req, res) => {
   const userId = req.params.id;
   try {
-    const allCampaigns = await Campaign.find({user : userId}).populate("user").sort({ createdAt: -1 });
-    console.log("allCampaigns",allCampaigns);
+    const allCampaigns = await Campaign.find({ user: userId })
+      .populate("user")
+      .sort({ createdAt: -1 });
+    // console.log("allCampaigns",allCampaigns);
     res.status(200).json({
       success: true,
       allCampaigns: allCampaigns,
@@ -176,8 +182,6 @@ const updateCampaigns = async (req, res) => {
 
   const campaignImage = req.files;
   const campaignId = req.params.id;
-
-
 
   if (!campaignId) {
     return res.json({

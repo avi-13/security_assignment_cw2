@@ -1,6 +1,48 @@
-import React from "react";
+import { faCalendar, faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useEffect, useState } from "react";
+import { getAllCampaignByBBApi } from "../../apis/api";
 
 const BBDashBoard = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const [campaignss, setCampaignss] = useState([]);
+
+  const fetchCampaigns = async () => {
+    try {
+      const response = await getAllCampaignByBBApi(user._id);
+      setCampaignss(response.data.allCampaigns);
+    } catch (error) {
+      console.error("Error Fetching BloodBanks", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCampaigns();
+  }, []);
+
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+
+    // Add leading zeros if necessary
+    month = month < 10 ? "0" + month : month;
+    day = day < 10 ? "0" + day : day;
+
+    return `${year}-${month}-${day}`;
+  }
+
+  const [currentIndexevent, setCurrentIndexevent] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndexevent((prevIndex) => (prevIndex + 1) % campaignss.length);
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [currentIndexevent, campaignss.length]);
+
   return (
     <>
       <div className="flex flex-col min-h-screen">
@@ -136,87 +178,81 @@ const BBDashBoard = () => {
             </div>
           </div>
         </section>
-        <section className="bg-white dark:bg-gray-800 py-12 md:py-16">
-          <div className="container mx-auto px-4 md:px-6 lg:px-8">
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-50 mb-8">
-              Upcoming Blood Drives
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              <div
-                className="rounded-lg border bg-card text-card-foreground shadow-sm"
-                data-v0-t="card"
-              >
-                <div className="flex flex-col space-y-1.5 p-6">
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-gray-50">
-                    Downtown Blood Drive
-                  </h3>
-                  <p className="text-gray-600 dark:text-gray-400">
-                    May 15, 2023 | 10am - 4pm
-                  </p>
-                </div>
-                <div className="p-6">
-                  <p className="text-gray-600 dark:text-gray-400">
-                    123 Main St, Anytown USA
-                  </p>
-                  <a
-                    className="inline-flex items-center justify-center px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-medium rounded-md transition-colors duration-300 mt-4"
-                    href="#"
-                  >
-                    Register
-                  </a>
-                </div>
-              </div>
-              <div
-                className="rounded-lg border bg-card text-card-foreground shadow-sm"
-                data-v0-t="card"
-              >
-                <div className="flex flex-col space-y-1.5 p-6">
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-gray-50">
-                    Community Center Blood Drive
-                  </h3>
-                  <p className="text-gray-600 dark:text-gray-400">
-                    June 5, 2023 | 9am - 3pm
-                  </p>
-                </div>
-                <div className="p-6">
-                  <p className="text-gray-600 dark:text-gray-400">
-                    456 Oak St, Anytown USA
-                  </p>
-                  <a
-                    className="inline-flex items-center justify-center px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-medium rounded-md transition-colors duration-300 mt-4"
-                    href="#"
-                  >
-                    Register
-                  </a>
-                </div>
-              </div>
-              <div
-                className="rounded-lg border bg-card text-card-foreground shadow-sm"
-                data-v0-t="card"
-              >
-                <div className="flex flex-col space-y-1.5 p-6">
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-gray-50">
-                    Hospital Blood Drive
-                  </h3>
-                  <p className="text-gray-600 dark:text-gray-400">
-                    July 1, 2023 | 11am - 5pm
-                  </p>
-                </div>
-                <div className="p-6">
-                  <p className="text-gray-600 dark:text-gray-400">
-                    789 Elm St, Anytown USA
-                  </p>
-                  <a
-                    className="inline-flex items-center justify-center px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-medium rounded-md transition-colors duration-300 mt-4"
-                    href="#"
-                  >
-                    Register
-                  </a>
+        {campaignss && (
+          <section className="bg-white dark:bg-gray-800 py-12 md:py-16">
+            <div className="container mx-auto px-4 md:px-6 lg:px-8">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-50 mb-8">
+                Upcoming Blood Drives
+              </h2>
+              <div className="bg-white py-12 w-full">
+                <div className="container mx-auto px-6">
+                  <div className="relative w-full mx-auto justify-center items-center overflow-hidden">
+                    <div className="flex gap-8 mb-1">
+                      {campaignss.map((eachCamp, index) => (
+                        <div
+                          key={index}
+                          className="md:w-[450px] w-[95%] flex-shrink-0 md:ml-8 shadow-lg rounded-lg p-4 text-left flex flex-col justify-start items-start gap-4"
+                          style={{
+                            transform: `translateX(calc(${0.01 * index}% - ${
+                              index * 4
+                            }px - ${currentIndexevent * (100 + 4)}%))`,
+                            transition: "transform 1s ease-in-out",
+                            backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(${eachCamp.campaignImageUrl})`, // Added semi-transparent overlay
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                            color: "white",
+                          }}
+                        >
+                          <div className="relative">
+                            <span className="bg-red-700 text-white py-1 px-3 rounded-br-lg capitalize">
+                              Free
+                            </span>
+                          </div>
+                          <div className="w-full overflow-hidden px-6 py-4">
+                            <div className="font-bold text-2xl mb-2">
+                              {eachCamp.campaignName}
+                            </div>
+                            <p className="text-white text-base">
+                              {" "}
+                              {/* Set text color to white */}
+                              {eachCamp.campaignGoal}
+                            </p>
+                          </div>
+                          <div className="flex justify-between w-full px-4 py-4">
+                            <span className="inline-block rounded-full px-3 py-1 text-sm font-semibold text-white">
+                              {" "}
+                              {/* Set text color to white */}
+                              <FontAwesomeIcon
+                                icon={faCalendar}
+                                className="mr-2 text-white"
+                              />
+                              <span className="text-green-100">
+                                {formatDate(eachCamp.campaignStartDate)}
+                              </span>
+                              {"  --  "}
+                              <span className="text-red-100">
+                                {formatDate(eachCamp.campaignEndDate)}
+                              </span>
+                            </span>
+                            <span className="inline-block rounded-full px-3 py-1 text-sm font-semibold text-white capitalize">
+                              {" "}
+                              {/* Set text color to white */}
+                              <FontAwesomeIcon
+                                icon={faMapMarkerAlt}
+                                className="mr-2"
+                              />
+                              {eachCamp.campaignLocation}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
       </div>
     </>
   );
