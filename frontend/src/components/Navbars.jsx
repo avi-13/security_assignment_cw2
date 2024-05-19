@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FiMenu } from "react-icons/fi";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import "../style/navbar.css";
+import { toast } from "react-toastify";
 
 const Navbars = ({ fullName }) => {
   const [activeItem, setActiveItem] = useState(null);
@@ -24,6 +25,7 @@ const Navbars = ({ fullName }) => {
     e.preventDefault();
     localStorage.clear();
     navigate("/login");
+    toast.success("Logged Out Successfully");
   };
   useEffect(() => {
     const pathname = location.pathname;
@@ -97,7 +99,7 @@ const Navbars = ({ fullName }) => {
                   to={"/blood_requests"}
                   className={activeItem === 2 ? "active" : ""}
                 >
-                  View Blood Requests
+                  View Requests
                 </Link>
               </li>
               <li className="nav-li">
@@ -152,7 +154,7 @@ const Navbars = ({ fullName }) => {
                     to={"/add_blood_requests"}
                     className={activeItem === 6 ? "active" : ""}
                   >
-                    Add Blood Requests
+                    Add Request
                   </Link>
                 </li>
               )}
@@ -161,7 +163,7 @@ const Navbars = ({ fullName }) => {
                   to={"/blood_requests"}
                   className={activeItem === 2 ? "active" : ""}
                 >
-                  View Blood Requests
+                  View Requests
                 </Link>
               </li>
               <li className="nav-li">

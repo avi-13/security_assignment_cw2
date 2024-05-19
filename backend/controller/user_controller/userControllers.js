@@ -52,7 +52,7 @@ const sendVerification = async (req, res) => {
     if (emailSent) {
       res.status(200).json({
         success: true,
-        message: "Email sent successfully.",
+        message: "Otp has been Sent to your email.",
         otp: otp,
       });
     } else {

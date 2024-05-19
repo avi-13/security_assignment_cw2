@@ -24,7 +24,7 @@ const registerUser = async (req, res) => {
 
     return res.json({
       success: true,
-      message: "User Registered Successfully",
+      message: "Registered for campaign Successfull",
     });
   } catch (error) {
     return res.json({

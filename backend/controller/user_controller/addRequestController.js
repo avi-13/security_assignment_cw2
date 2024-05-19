@@ -79,7 +79,7 @@ const addRequests = async (req, res) => {
 
 const getAllRequest = async (req, res) => {
   try {
-    const requestList = await Request.find({showRequest : true}).sort({ createdAt: -1 });
+    const requestList = await Request.find({showRequest : true}).sort({ createdAt: -1 }).populate("userId","fullName");
     const limitedRequestList = requestList.slice(0, 5);
     const categorizedData = {
       critical: [],

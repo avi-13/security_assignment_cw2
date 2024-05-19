@@ -9,6 +9,7 @@ const UsersLists = () => {
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState([]);
   const [searchName, setSearchName] = useState("");
+  const [availabilityFilter, setAvailabilityFilter] = useState("");
 
   useEffect(() => {
     if (searchedUsers && searchedUsers?.length > 0) {
@@ -22,10 +23,18 @@ const UsersLists = () => {
   }, [searchedUsers]);
 
   useEffect(() => {
-    if (searchedUsers && searchedUsers?.length > 0) {
-      const filteredUsers = searchedUsers.filter((user) =>
+    if (searchedUsers && searchedUsers.length > 0) {
+      let filteredUsers = searchedUsers.filter((user) =>
         user.fullName.toLowerCase().includes(searchName.toLowerCase())
       );
+
+      if (availabilityFilter) {
+        const isAvailable = availabilityFilter === "available";
+        filteredUsers = filteredUsers.filter(
+          (user) => user.isAvailable === isAvailable
+        );
+      }
+
       setUsers(filteredUsers);
       setLoading(false);
     } else {
@@ -33,7 +42,7 @@ const UsersLists = () => {
         setLoading(false);
       }, 2000);
     }
-  }, [searchedUsers, searchName]);
+  }, [searchedUsers, searchName, availabilityFilter]);
 
   return (
     <>
@@ -42,15 +51,26 @@ const UsersLists = () => {
       </header>
       <div className="container mx-auto py-4 px-4">
         <div className="flex items-center space-x-4">
-          <label htmlFor="searchName">Search By Name:</label>
+          <label hidden htmlFor="searchName">Search By Name:</label>
           <input
-          className="border border-gray-300 rounded-md p-2"
+            className="border w-1/2 border-gray-300 rounded-md p-2"
             id="searchName"
             type="text"
             value={searchName}
             onChange={(e) => setSearchName(e.target.value)}
-            placeholder="Enter name..."
+            placeholder="Search By Name..."
           />
+          <label hidden htmlFor="availabilityFilter">Filter By Availability:</label>
+          <select
+            className="border w-1/2 border-gray-300 rounded-md p-2"
+            id="availabilityFilter"
+            value={availabilityFilter}
+            onChange={(e) => setAvailabilityFilter(e.target.value)}
+          >
+            <option value="">Filter By Availability</option>
+            <option value="available">Available</option>
+            <option value="notAvailable">Not Available</option>
+          </select>
         </div>
       </div>
       <main className="container mx-auto py-12 px-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
@@ -68,7 +88,7 @@ const UsersLists = () => {
                       <span className="sr-only">View User</span>
                     </div>
                     <img
-                      src={user.userImageURL}
+                      src={user?.userImageURL}
                       alt="User Avatar"
                       width="400"
                       height="400"
@@ -77,17 +97,20 @@ const UsersLists = () => {
                     />
                     <div className="p-6 space-y-2">
                       <h2 className="text-xl text-center font-semibold">
-                        {user.fullName}
+                        {user?.fullName}
                       </h2>
-                      <p className="text-gray-500">Email : {user.email}</p>
+                      <p className="text-gray-500">Email : {user?.email}</p>
                       <p className="text-gray-500">
-                        Contact Number: {user.number}
+                        Contact Number: {user?.number}
                       </p>
-                      <p className="text-gray-500">Gender: {user.gender}</p>
+                      <p className="text-gray-500">Gender: {user?.gender}</p>
                       <p className="text-gray-500">
-                        BloodGroup: {user.bloodGroup}
+                        Address: {user?.currentAddress}
                       </p>
-                      {user.isAvailable ? (
+                      <p className="text-gray-500">
+                        BloodGroup: {user?.bloodGroup}
+                      </p>
+                      {user?.isAvailable ? (
                         <p className="text-green-500">Avaiable For Donation</p>
                       ) : (
                         <p className="text-red-500">
@@ -110,60 +133,6 @@ const UsersLists = () => {
         )}
       </main>
     </>
-    // <div className="users-container">
-    //   <h1>All Users</h1>
-    //   {loading ? (
-    //     <CustomCircularProgress />
-    //   ) : (
-    //     <>
-    //       {users?.length > 0 ? (
-    //         <ul className="users-list">
-    //           {console.log(users.isAdmin)}
-    //           {users?.map((user) => (
-    //             <li key={user._id} className="user-card">
-    //               <div
-    //                 className={`user-image ${
-    //                   user.isAvailable ? "green-border" : "red-border"
-    //                 }`}
-    //               >
-    //                 <img
-    //                   src={user.userImageURL}
-    //                   alt={user.fullName}
-    //                   className="user-image"
-    //                 />
-    //               </div>
-    //               <div className="user-details">
-    //                 <h3>{user.fullName}</h3>
-    //                 <p>
-    //                   <strong>Email:</strong> {user.email}
-    //                 </p>
-    //                 <p>
-    //                   <strong>Phone Number:</strong> {user.number}
-    //                 </p>
-    //                 <p>
-    //                   <strong>Address:</strong> {user.currentAddress}
-    //                 </p>
-    //                 <p>
-    //                   <strong>Gender:</strong> {user.gender}
-    //                 </p>
-    //                 <p>
-    //                   <strong>Blood Group:</strong> {user.bloodGroup}
-    //                 </p>
-    //               </div>
-    //             </li>
-    //           ))}
-    //         </ul>
-    //       ) : (
-    //         <div className="not-found">
-    //           No Users Found{" "}
-    //           <span role="img" aria-label="sad">
-    //             😢
-    //           </span>
-    //         </div>
-    //       )}
-    //     </>
-    //   )}
-    // </div>
   );
 };
 

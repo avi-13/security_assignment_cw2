@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { addRequestAPI } from "../../../apis/api";
+import DistrictList from "../../../components/DistrictsList";
 import "../../../style/AddBloodRequests.css";
 
 const AddBloodRequests = () => {
@@ -135,12 +136,9 @@ const AddBloodRequests = () => {
                 <div className="underline"></div>
               </div>
               <div className="input-data">
-                <input
-                  value={hospitalAddress}
+                <DistrictList
+                  label={" "}
                   onChange={(e) => setHospitalAddress(e.target.value)}
-                  placeholder="Hospital/Clinic Address"
-                  type="text"
-                  required
                 />
                 <div className="underline"></div>
               </div>

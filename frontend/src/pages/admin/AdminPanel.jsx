@@ -6,12 +6,14 @@ import CustomFaIcons from "../../components/CustomFaIcons";
 import "../../style/AdminPanel.css";
 import BBDashBoard from "../BBUsers/BBDashBoard";
 import BBRequests from "../BBUsers/BBRequests";
+import AddCampaigns from "../BBUsers/Campaigns/AddCampaigns";
+import Campaigns from "./Campaigns";
+import Requests from "./Requests";
 import AdminDashboard from "./admin_dashboard/AdminDashboard";
 import AddBloodBanks from "./bloodbanks/AddBloodbanks";
 import ViewDonors from "./donors/Donors";
 import AddHospitals from "./hospitals/AddHospitals";
 import AddNews from "./news/AddNews";
-import AddCampaigns from "../BBUsers/Campaigns/AddCampaigns";
 function AdminPanel() {
   const storedPage = localStorage.getItem("currentPage");
   // Initialize the current page with the stored value or the default value
@@ -44,6 +46,10 @@ function AdminPanel() {
     case "Donors":
       content = <ViewDonors />;
       break;
+
+    case "Requests":
+      content = <Requests />;
+      break;
     case "AddBloodBanks":
       content = <AddBloodBanks />;
       break;
@@ -52,16 +58,16 @@ function AdminPanel() {
       break;
     case "AddCampaigns":
       {
-        users.isBloodBank
-          ? (content = <AddCampaigns />)
-          : (content = null);
+        users.isBloodBank ? (content = <AddCampaigns />) : (content = null);
+      }
+      break;
+    case "Campaigns":
+      {
+        users.isAdmin ? (content = <Campaigns />) : (content = null);
       }
       break;
     case "Blood Requests":
       content = <BBRequests />;
-      break;
-    case "AddNews":
-      content = <AddNews />;
       break;
     case "AddNews":
       content = <AddNews />;
@@ -80,16 +86,16 @@ function AdminPanel() {
     <>
       <div className="adminMainContainer">
         <header className="adminHeader">
-          <h1>Blood Bank Admin Panel</h1>
+          <h1>{users.isAdmin ? "Admin Panel" : "Blood Bank Panel"}</h1>
           {
-          // users.isAdmin ? (
+            // users.isAdmin ? (
             <div className="d-flex flex-row align-items-center gap-3">
               <h6 className="m-0 me-2">Welcome, {users.fullName}</h6>
               <button onClick={openLogoutModal} className="logoutBtn">
                 <CustomFaIcons icon={faSignOut} className={"m-0 me-2"} />
               </button>
             </div>
-          // ) : (
+            // ) : (
             // <></>)
           }
         </header>
@@ -152,23 +158,56 @@ function AdminPanel() {
               </button>
             </li>
             {users.isAdmin ? (
-              <li
-                className={`adminLi ${
-                  currentPage === "AddNews" ? "active" : ""
-                }`}
-              >
-                <button onClick={() => setCurrentPage("AddNews")} tabIndex="5">
-                  News Section
-                </button>
-              </li>
+              <>
+                <li
+                  className={`adminLi ${
+                    currentPage === "AddNews" ? "active" : ""
+                  }`}
+                >
+                  <button
+                    onClick={() => setCurrentPage("AddNews")}
+                    tabIndex="5"
+                  >
+                    News Section
+                  </button>
+                </li>
+                <li
+                  className={`adminLi ${
+                    currentPage === "Requests" ? "active" : ""
+                  }`}
+                >
+                  <button
+                    onClick={() => setCurrentPage("Requests")}
+                    tabIndex="5"
+                  >
+                    Requests
+                  </button>
+                </li>
+                <li
+                  className={`adminLi ${
+                    currentPage === "Campaigns" ? "active" : ""
+                  }`}
+                >
+                  <button
+                    onClick={() => setCurrentPage("Campaigns")}
+                    tabIndex="5"
+                  >
+                    Campaigns
+                  </button>
+                </li>
+              </>
             ) : null}
+
             {users.isBloodBank ? (
               <li
                 className={`adminLi ${
                   currentPage === "AddCampaigns" ? "active" : ""
                 }`}
               >
-                <button onClick={() => setCurrentPage("AddCampaigns")} tabIndex="5">
+                <button
+                  onClick={() => setCurrentPage("AddCampaigns")}
+                  tabIndex="5"
+                >
                   Add Campaigns
                 </button>
               </li>

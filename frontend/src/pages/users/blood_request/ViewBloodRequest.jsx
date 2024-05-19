@@ -15,6 +15,7 @@ const ViewBloodRequest = () => {
   const [activeDivId, setActiveDivId] = useState("");
   const [patientName, setPatientName] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [urgencyFilter, setUrgencyFilter] = useState("");
 
   useEffect(() => {
     viewRequestApi().then((res) => {
@@ -31,250 +32,242 @@ const ViewBloodRequest = () => {
   };
 
   const filterRequests = (requests) => {
-    if (!searchTerm) {
-      return requests;
-    }
-    return requests.filter((item) =>
-      item.patientName.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    return requests.filter((item) => {
+      const matchesSearchTerm = item.patientName
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+      const matchesUrgency =
+        !urgencyFilter ||
+        item.urgency.toLowerCase() === urgencyFilter.toLowerCase();
+      return matchesSearchTerm && matchesUrgency;
+    });
   };
 
   return (
     <>
-      {/* Critical Condition Requests */}
-      <div className="critical" style={{ marginTop: "6rem" }}>
-        <h1 className="text-center">Critical Condition Requests</h1>
-        <div className="search-container ml-24">
+      <div className="container pt-36" style={{marginLeft: "70px"}}>
+        <div className="flex items-center space-x-4">
           <input
             type="text"
             placeholder="Search by patient name"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="search-input border border-gray-300 w-50 p-2 rounded-md"
+            className="search-input w-1/2 border border-gray-300 w-50 p-2 rounded-md"
           />
+          <select
+            className="w-1/2 border border-gray-300 rounded-md p-2"
+            value={urgencyFilter}
+            onChange={(e) => setUrgencyFilter(e.target.value)}
+          >
+            <option value="">Filter By Urgency</option>
+            <option value="Critical">Critical</option>
+            <option value="Urgent">Urgent</option>
+            <option value="Normal">Normal</option>
+          </select>
         </div>
+      </div>
+      <div className="critical" style={{ marginTop: "6rem" }}>
         <ul className="cards">
-          {filterRequests(bloodRequest.critical).length > 0 ? (
-            filterRequests(bloodRequest.critical).map((item) => (
-              <li key={item._id}>
-                <a className="card">
-                  <div className="card_details">
-                    <p>
-                      <strong>Patient:</strong> {item.patientName}
-                    </p>
-                    <p>
-                      <strong>Blood Type Needed:</strong>{" "}
-                      {item.patientBloodType}
-                    </p>
-                    <p>
-                      <strong>Units Required:</strong> {item.quantity}
-                    </p>
-                    <p>
-                      <strong>Urgency Level:</strong> {item.urgency}
-                    </p>
-                    <p>
-                      <strong>Additional Notes:</strong> {item.reason}
-                    </p>
-                    <p>
-                      <strong>Hospital:</strong> {item.hospitalName}
-                    </p>
-                    <p>
-                      <strong>Contact Person:</strong> {item.contactPerson}
-                    </p>
-                  </div>
+          {filterRequests(bloodRequest.critical).map((item) => (
+            <li key={item._id}>
+              <a className="card">
+                <div className="card_details">
+                  <p>
+                    <strong>Patient:</strong> {item.patientName}
+                  </p>
+                  <p>
+                    <strong>Blood Type Needed:</strong> {item.patientBloodType}
+                  </p>
+                  <p>
+                    <strong>Units Required:</strong> {item.quantity}
+                  </p>
+                  <p>
+                    <strong>Urgency Level:</strong> {item.urgency}
+                  </p>
+                  <p>
+                    <strong>Additional Notes:</strong> {item.reason}
+                  </p>
+                  <p>
+                    <strong>Hospital:</strong> {item.hospitalName}
+                  </p>
+                  <p>
+                    <strong>Contact Person:</strong> {item.contactPerson}
+                  </p>
+                </div>
+                <div
+                  className="card__overlay"
+                  style={{ backgroundColor: "rgb(128, 16, 16)" }}
+                >
                   <div
-                    className="card__overlay"
+                    className="card__header text-white"
                     style={{ backgroundColor: "rgb(128, 16, 16)" }}
                   >
-                    <div
-                      className="card__header text-white"
-                      style={{ backgroundColor: "rgb(128, 16, 16)" }}
-                    >
-                      <div className="card__header-text">
-                        <h3 className="card__title text-white">
-                          <strong>Person To Contact:</strong>{" "}
-                          {item.contactPerson}
-                        </h3>
-                        <span className="card__status text-white">
-                          {item.date}
-                        </span>
-                      </div>
+                    <div className="card__header-text">
+                      <h3 className="card__title text-white">
+                        <strong>Person To Contact:</strong> {item.contactPerson}
+                      </h3>
+                      <span className="card__status text-white">
+                        {item.date}
+                      </span>
                     </div>
-                    <p className="card__description d-flex justify-content-between gap-2 text-white">
-                      <button
-                        className="btn btn-primary w-50"
-                        onClick={(event) =>
-                          handleShareClick(item._id, event, item.patientName)
-                        }
-                      >
-                        Share
-                      </button>
-                      <Link
-                        to={`/view_request/${item._id}`}
-                        className="btn btn-success w-50"
-                      >
-                        View Request
-                      </Link>
-                    </p>
                   </div>
-                </a>
-              </li>
-            ))
-          ) : (
-            <>No Critical Blood Requests Found</>
-          )}
+                  <p className="card__description d-flex justify-content-between gap-2 text-white">
+                    <button
+                      className="btn btn-primary w-50"
+                      onClick={(event) =>
+                        handleShareClick(item._id, event, item.patientName)
+                      }
+                    >
+                      Share
+                    </button>
+                    <Link
+                      to={`/view_request/${item._id}`}
+                      className="btn btn-success w-50"
+                    >
+                      View Request
+                    </Link>
+                  </p>
+                </div>
+              </a>
+            </li>
+          ))}
         </ul>
       </div>
 
       {/* Urgent Condition Requests */}
       <div className="urgent">
-        <h1 className="text-center">Urgent Condition Requests</h1>
         <ul className="cards">
-          {filterRequests(bloodRequest.urgent).length > 0 ? (
-            filterRequests(bloodRequest.urgent).map((item) => (
-              <li key={item._id}>
-                <a className="card">
-                  <div className="card_details">
-                    <p>
-                      <strong>Patient:</strong> {item.patientName}
-                    </p>
-                    <p>
-                      <strong>Blood Type Needed:</strong>{" "}
-                      {item.patientBloodType}
-                    </p>
-                    <p>
-                      <strong>Units Required:</strong> {item.quantity}
-                    </p>
-                    <p>
-                      <strong>Urgency Level:</strong> {item.urgency}
-                    </p>
-                    <p>
-                      <strong>Additional Notes:</strong> {item.reason}
-                    </p>
-                    <p>
-                      <strong>Hospital:</strong> {item.hospitalName}
-                    </p>
-                    <p>
-                      <strong>Contact Person:</strong> {item.contactPerson}
-                    </p>
-                  </div>
+          {filterRequests(bloodRequest.urgent).map((item) => (
+            <li key={item._id}>
+              <a className="card">
+                <div className="card_details">
+                  <p>
+                    <strong>Patient:</strong> {item.patientName}
+                  </p>
+                  <p>
+                    <strong>Blood Type Needed:</strong> {item.patientBloodType}
+                  </p>
+                  <p>
+                    <strong>Units Required:</strong> {item.quantity}
+                  </p>
+                  <p>
+                    <strong>Urgency Level:</strong> {item.urgency}
+                  </p>
+                  <p>
+                    <strong>Additional Notes:</strong> {item.reason}
+                  </p>
+                  <p>
+                    <strong>Hospital:</strong> {item.hospitalName}
+                  </p>
+                  <p>
+                    <strong>Contact Person:</strong> {item.contactPerson}
+                  </p>
+                </div>
+                <div
+                  className="card__overlay"
+                  style={{ backgroundColor: "#134c79" }}
+                >
                   <div
-                    className="card__overlay"
+                    className="card__header"
                     style={{ backgroundColor: "#134c79" }}
                   >
-                    <div
-                      className="card__header"
-                      style={{ backgroundColor: "#134c79" }}
-                    >
-                      <div className="card__header-text">
-                        <h3 className="card__title text-white">
-                          <strong>Person To Contact:</strong>{" "}
-                          {item.contactPerson}
-                        </h3>
-                        <span className="card__status text-white">
-                          {item.date}
-                        </span>
-                      </div>
+                    <div className="card__header-text">
+                      <h3 className="card__title text-white">
+                        <strong>Person To Contact:</strong> {item.contactPerson}
+                      </h3>
+                      <span className="card__status text-white">
+                        {item.date}
+                      </span>
                     </div>
-                    <p className="card__description d-flex justify-content-between gap-2 text-white">
-                      <button
-                        className="btn btn-primary w-50"
-                        onClick={(event) =>
-                          handleShareClick(item._id, event, item.patientName)
-                        }
-                      >
-                        Share
-                      </button>
-                      <Link
-                        to={`/view_request/${item._id}`}
-                        className="btn btn-success w-50"
-                      >
-                        View Request
-                      </Link>
-                    </p>
                   </div>
-                </a>
-              </li>
-            ))
-          ) : (
-            <>No Urgent Blood Requests Found</>
-          )}
+                  <p className="card__description d-flex justify-content-between gap-2 text-white">
+                    <button
+                      className="btn btn-primary w-50"
+                      onClick={(event) =>
+                        handleShareClick(item._id, event, item.patientName)
+                      }
+                    >
+                      Share
+                    </button>
+                    <Link
+                      to={`/view_request/${item._id}`}
+                      className="btn btn-success w-50"
+                    >
+                      View Request
+                    </Link>
+                  </p>
+                </div>
+              </a>
+            </li>
+          ))}
         </ul>
       </div>
 
-      {/* Normal Condition Requests */}
       <div className="normal">
-        <h1 className="text-center">Normal Condition Requests</h1>
         <ul className="cards">
-          {filterRequests(bloodRequest.normal).length > 0 ? (
-            filterRequests(bloodRequest.normal).map((item) => (
-              <li key={item._id}>
-                <a className="card">
-                  <div className="card_details">
-                    <p>
-                      <strong>Patient:</strong> {item.patientName}
-                    </p>
-                    <p>
-                      <strong>Blood Type Needed:</strong>{" "}
-                      {item.patientBloodType}
-                    </p>
-                    <p>
-                      <strong>Units Required:</strong> {item.quantity}
-                    </p>
-                    <p>
-                      <strong>Urgency Level:</strong> {item.urgency}
-                    </p>
-                    <p>
-                      <strong>Additional Notes:</strong> {item.reason}
-                    </p>
-                    <p>
-                      <strong>Hospital:</strong> {item.hospitalName}
-                    </p>
-                    <p>
-                      <strong>Contact Person:</strong> {item.contactPerson}
-                    </p>
-                  </div>
+          {filterRequests(bloodRequest.normal).map((item) => (
+            <li key={item._id}>
+              <a className="card">
+                <div className="card_details">
+                  <p>
+                    <strong>Patient:</strong> {item.patientName}
+                  </p>
+                  <p>
+                    <strong>Blood Type Needed:</strong> {item.patientBloodType}
+                  </p>
+                  <p>
+                    <strong>Units Required:</strong> {item.quantity}
+                  </p>
+                  <p>
+                    <strong>Urgency Level:</strong> {item.urgency}
+                  </p>
+                  <p>
+                    <strong>Additional Notes:</strong> {item.reason}
+                  </p>
+                  <p>
+                    <strong>Hospital:</strong> {item.hospitalName}
+                  </p>
+                  <p>
+                    <strong>Contact Person:</strong> {item.contactPerson}
+                  </p>
+                </div>
+                <div
+                  className="card__overlay text-white"
+                  style={{ backgroundColor: "#c39715" }}
+                >
                   <div
-                    className="card__overlay text-white"
+                    className="card__header"
                     style={{ backgroundColor: "#c39715" }}
                   >
-                    <div
-                      className="card__header"
-                      style={{ backgroundColor: "#c39715" }}
-                    >
-                      <div className="card__header-text">
-                        <h3 className="card__title text-white">
-                          <strong>Person To Contact:</strong>{" "}
-                          {item.contactPerson}
-                        </h3>
-                        <span className="card__status text-white">
-                          {item.date}
-                        </span>
-                      </div>
+                    <div className="card__header-text">
+                      <h3 className="card__title text-white">
+                        <strong>Person To Contact:</strong> {item.contactPerson}
+                      </h3>
+                      <span className="card__status text-white">
+                        {item.date}
+                      </span>
                     </div>
-                    <p className="card__description d-flex justify-content-between gap-2 text-white">
-                      <button
-                        className="btn btn-primary w-50"
-                        onClick={(event) =>
-                          handleShareClick(item._id, event, item.patientName)
-                        }
-                      >
-                        Share
-                      </button>
-                      <Link
-                        to={`/view_request/${item._id}`}
-                        className="btn btn-success w-50"
-                      >
-                        View Request
-                      </Link>
-                    </p>
                   </div>
-                </a>
-              </li>
-            ))
-          ) : (
-            <>No Normal Blood Requests Found</>
-          )}
+                  <p className="card__description d-flex justify-content-between gap-2 text-white">
+                    <button
+                      className="btn btn-primary w-50"
+                      onClick={(event) =>
+                        handleShareClick(item._id, event, item.patientName)
+                      }
+                    >
+                      Share
+                    </button>
+                    <Link
+                      to={`/view_request/${item._id}`}
+                      className="btn btn-success w-50"
+                    >
+                      View Request
+                    </Link>
+                  </p>
+                </div>
+              </a>
+            </li>
+          ))}
         </ul>
       </div>
 

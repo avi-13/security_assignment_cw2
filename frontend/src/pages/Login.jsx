@@ -42,7 +42,6 @@ const Login = () => {
           const userAdmin = res.data.userData;
           if (userAdmin.isAdmin == false && userAdmin.isBloodBank == false) {
             navigate("/home");
-            window.location.reload();
             return;
           } else if (userAdmin.isAdmin == false && userAdmin.isBloodBank == true) {
             navigate("/bb/dashboard");

@@ -20,6 +20,8 @@ const addBloodBanks = async (req, res) => {
     contactEmail,
   } = req.body;
 
+  console.log(req.body)
+
   if (!req.files || !req.files.bbImage) {
     return res.json({
       success: false,
