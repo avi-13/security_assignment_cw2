@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { addRequestBBApi } from "../../../apis/api";
 import BloodGroupLists from "../../../components/BloodGroupsList";
+import DistrictList from "../../../components/DistrictsList";
 
 export default function ReqForBB() {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -123,14 +124,10 @@ export default function ReqForBB() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-900">
-                Hospital/Clinic Address
-              </label>
-              <input
+              <DistrictList
+                className="w-1/4 !bg-gray-50 border !border-gray-300 !text-gray-900 text-sm rounded-lg !focus:ring-gray-500 focus:!border-gray-500 block p-2.5  dark:!border-gray-600 dark:!placeholder-gray-400 dark:text-white dark:!focus:ring-gray-500 dark:!focus:border-gray-500"
+                label={"Hospital/Clinic Address"}
                 onChange={(e) => setHospitalAddress(e.target.value)}
-                type="text"
-                className="mt-1 block w-full  border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
-                required
               />
             </div>
             <div>
@@ -218,12 +215,20 @@ export default function ReqForBB() {
               <label className="block text-sm font-medium text-gray-900">
                 Urgency
               </label>
-              <input
+              <select
+                className="w-full mt-1 h-10 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block p-2.5  dark:border-gray-400 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
+                value={urgency}
                 onChange={(e) => setUrgency(e.target.value)}
                 type="text"
-                className="mt-1 block w-full  border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
                 required
-              />
+              >
+                <option value="" disabled selected>
+                  Urgency of the request
+                </option>
+                <option value="Critical">Critical</option>
+                <option value="Urgent">Urgent</option>
+                <option value="Normal">Normal</option>
+              </select>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-900">

@@ -1,16 +1,21 @@
 import { faCalendar, faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
-import { getAllCampaignByBBApi } from "../../apis/api";
+import {
+  fetchAllUsersApi,
+  getAllCampaignByBBApi,
+  getallhospitalsApi,
+} from "../../apis/api";
 
 const BBDashBoard = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const [campaignss, setCampaignss] = useState([]);
-
+  const [users, setUsers] = useState([]);
+  const [hospitals, setHospitals] = useState([]);
   const fetchCampaigns = async () => {
     try {
       const response = await getAllCampaignByBBApi(user._id);
-      setCampaignss(response.data.allCampaigns);
+      setCampaignss(response?.data?.allCampaigns);
     } catch (error) {
       console.error("Error Fetching BloodBanks", error);
     }
@@ -19,6 +24,31 @@ const BBDashBoard = () => {
   useEffect(() => {
     fetchCampaigns();
   }, []);
+
+  useEffect(() => {
+    fetchAllUsersApi()
+      .then((res) => {
+        setUsers(res.data.userListForBloodBank);
+      })
+      .catch((error) => {
+        console.error("Error fetching users:", error);
+      });
+  }, []);
+  let availableDonrs = users?.filter((user) => user.isAvailable === true);
+
+  const fetchHospitals = async () => {
+    try {
+      const response = await getallhospitalsApi();
+      setHospitals(response?.data?.allHospitals);
+    } catch (error) {
+      console.error("Error Fetching BloodBanks", error);
+    }
+  };
+  useEffect(() => {
+    fetchHospitals();
+  }, []);
+
+  const totalHospitals = hospitals?.length ?? 0;
 
   function formatDate(dateString) {
     const date = new Date(dateString);
@@ -74,10 +104,10 @@ const BBDashBoard = () => {
                 </div>
                 <div className="p-6">
                   <div className="text-3xl font-bold text-gray-900 dark:text-gray-50">
-                    45,678
+                    {users?.length}
                   </div>
                   <p className="text-gray-600 dark:text-gray-400">
-                    Units of Blood Collected
+                    Total Registered Donors
                   </p>
                 </div>
               </div>
@@ -106,10 +136,10 @@ const BBDashBoard = () => {
                 </div>
                 <div className="p-6">
                   <div className="text-3xl font-bold text-gray-900 dark:text-gray-50">
-                    12,345
+                    {availableDonrs.length}
                   </div>
                   <p className="text-gray-600 dark:text-gray-400">
-                    Registered Donors
+                    Availbale Donors
                   </p>
                 </div>
               </div>
@@ -136,10 +166,10 @@ const BBDashBoard = () => {
                 </div>
                 <div className="p-6">
                   <div className="text-3xl font-bold text-gray-900 dark:text-gray-50">
-                    85%
+                    {totalHospitals}
                   </div>
                   <p className="text-gray-600 dark:text-gray-400">
-                    Current Blood Inventory
+                    Total Hospitals
                   </p>
                 </div>
               </div>
@@ -168,7 +198,7 @@ const BBDashBoard = () => {
                 </div>
                 <div className="p-6">
                   <div className="text-3xl font-bold text-gray-900 dark:text-gray-50">
-                    24
+                    {campaignss.length}
                   </div>
                   <p className="text-gray-600 dark:text-gray-400">
                     Upcoming Blood Drives

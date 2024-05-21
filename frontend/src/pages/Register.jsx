@@ -24,7 +24,6 @@ const Register = () => {
   const [otp, setOtp] = useState("");
 
   const sendOtp = async () => {
-    // console.log("Sending OTP to:", email);
     const data = { email: email };
     sendOtpApi(data)
       .then((res) => {
@@ -58,7 +57,7 @@ const Register = () => {
   function onCloseModal() {
     setOpenModal(false);
   }
-
+  const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
   const [email, setEmail] = useState("");
   const [number, setContact] = useState("");
   const [currentAddress, setCurrentAddress] = useState("");
@@ -122,6 +121,12 @@ const Register = () => {
     }
     if (password.trim() === "") {
       setPasswordError("Password is Required");
+      isValid = false;
+    }
+    if (password.trim() !== "" && !password.match(passwordRegex)) {
+      setPasswordError(
+        "Password must be 6 or more characters with at least one number and one uppercase and lowercase letter"
+      );
       isValid = false;
     }
     if (confirmPassword.trim() === "") {
