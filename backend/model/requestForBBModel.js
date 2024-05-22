@@ -30,6 +30,14 @@ const UserRequestSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    municipality: {
+      type: String,
+      required: true,
+    },
+    wardNo: {
+      type: String,
+      required: true,
+    },
     quantity: {
       type: String,
       required: true,

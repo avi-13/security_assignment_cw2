@@ -10,6 +10,8 @@ const addRequests = async (req, res) => {
     phoneNumber,
     hospitalName,
     hospitalAddress,
+    municipality,
+    wardNo,
     quantity,
     urgency,
     reason,
@@ -30,6 +32,8 @@ const addRequests = async (req, res) => {
     !phoneNumber ||
     !hospitalName ||
     !hospitalAddress ||
+    !municipality ||
+    !wardNo ||
     !quantity ||
     !urgency ||
     !date ||
@@ -52,6 +56,8 @@ const addRequests = async (req, res) => {
       phoneNumber: phoneNumber,
       hospitalName: hospitalName,
       hospitalAddress: hospitalAddress,
+      municipality: municipality,
+      wardNo: wardNo,
       quantity: quantity,
       urgency: urgency,
       reason: reason,
@@ -64,7 +70,6 @@ const addRequests = async (req, res) => {
       longitude: longitude,
     });
     await newRequest.save();
-    // console.log(newRequest);
     res.status(200).json({
       success: true,
       message: "Your Request has been added",
@@ -127,6 +132,8 @@ const updateRequest = async (req, res) => {
     phoneNumber,
     hospitalName,
     hospitalAddress,
+    municipality,
+    wardNo,
     quantity,
     urgency,
     reason,
@@ -147,6 +154,8 @@ const updateRequest = async (req, res) => {
     !phoneNumber ||
     !hospitalName ||
     !hospitalAddress ||
+    !municipality ||
+    !wardNo ||
     !quantity ||
     !urgency ||
     !date ||
@@ -169,6 +178,8 @@ const updateRequest = async (req, res) => {
       phoneNumber: phoneNumber,
       hospitalName: hospitalName,
       hospitalAddress: hospitalAddress,
+      municipality: municipality,
+      wardNo: wardNo,
       quantity: quantity,
       urgency: urgency,
       reason: reason,

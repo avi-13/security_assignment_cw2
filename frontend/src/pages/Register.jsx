@@ -1,7 +1,9 @@
 import {
+  faAddressBook,
   faEnvelope,
   faLocation,
   faLock,
+  faMapLocation,
   faPhone,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
@@ -14,6 +16,7 @@ import { createUserApi, sendOtpApi } from "../apis/api";
 import CustomFaIcons from "../components/CustomFaIcons";
 
 import { Label, Modal, TextInput } from "flowbite-react";
+import DistrictList from "../components/DistrictsList.jsx";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -61,6 +64,8 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [number, setContact] = useState("");
   const [currentAddress, setCurrentAddress] = useState("");
+  const [municipality, setMunicipality] = useState("");
+  const [wardNo, setWardNo] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [userVerificationCode, setUserVerificationCode] = useState("");
@@ -78,7 +83,9 @@ const Register = () => {
 
   //usestate(setting error message)
   const [fnameerror, setFullnameError] = useState("");
-  const [lnameerror, setCurrentAddressError] = useState("");
+  const [addressError, setCurrentAddressError] = useState("");
+  const [municipalityError, setMunicipalityError] = useState("");
+  const [wardNoError, setWardNoError] = useState("");
   const [emailerror, setEmailError] = useState("");
   const [numbererror, setNumberError] = useState("");
   const [passworderror, setPasswordError] = useState("");
@@ -92,6 +99,8 @@ const Register = () => {
     // reset error message
     setFullnameError("");
     setCurrentAddressError("");
+    setMunicipalityError("");
+    setWardNoError("");
     setNumberError("");
     setEmailError("");
     setPasswordError("");
@@ -119,6 +128,17 @@ const Register = () => {
       setCurrentAddressError("Address is Required");
       isValid = false;
     }
+
+    if (municipality.trim() === "") {
+      setMunicipalityError("Municipality is Required");
+      isValid = false;
+    }
+
+    if (wardNo.trim() === "") {
+      setWardNoError("Ward No is Required");
+      isValid = false;
+    }
+
     if (password.trim() === "") {
       setPasswordError("Password is Required");
       isValid = false;
@@ -179,6 +199,8 @@ const Register = () => {
       email: email,
       number: number,
       currentAddress: currentAddress,
+      municipality: municipality,
+      wardNo: wardNo,
       password: password,
       userImage: userImage,
       userVerificationCode: userVerificationCode,
@@ -253,15 +275,40 @@ const Register = () => {
               <i>
                 <CustomFaIcons icon={faLocation} className={"m-0"} />
               </i>
+              <DistrictList className="block px-4 py-2 !border border-!gray-300 rounded-md appearance-none focus:!outline-none focus:!ring focus:!border-gray-300" label={" "} onChange={changeCurrentAddress} style={{
+                width: "10rem !important",
+              }} />
+            </div>
+            {addressError && <p className="text-danger">{addressError}</p>}
+            <div className="registerInputBox">
+              <i>
+                <CustomFaIcons icon={faMapLocation} className={"m-0"} />
+              </i>
               <input
-                onChange={changeCurrentAddress}
+                onChange={(e) => setMunicipality(e.target.value)}
                 type="text"
                 maxLength="26"
                 required
               />
-              <label>Enter Your Current Address</label>
+              <label>Enter Your Municipality</label>
             </div>
-            {lnameerror && <p className="text-danger">{lnameerror}</p>}
+            {municipalityError && (
+              <p className="text-danger">{municipalityError}</p>
+            )}
+
+            <div className="registerInputBox">
+              <i>
+                <CustomFaIcons icon={faAddressBook} className={"m-0"} />
+              </i>
+              <input
+                onChange={(e) => setWardNo(e.target.value)}
+                type="number"
+                maxLength="26"
+                required
+              />
+              <label>Enter Your Ward No</label>
+            </div>
+            {wardNoError && <p className="text-danger">{wardNoError}</p>}
             <div className="registerInputBox">
               <i>
                 <CustomFaIcons icon={faLock} className={"m-0"} />

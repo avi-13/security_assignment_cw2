@@ -10,6 +10,8 @@ const addRequestsBB = async (req, res) => {
     phoneNumber,
     hospitalName,
     hospitalAddress,
+    municipality,
+    wardNo,
     quantity,
     urgency,
     reason,
@@ -31,6 +33,8 @@ const addRequestsBB = async (req, res) => {
     !phoneNumber ||
     !hospitalName ||
     !hospitalAddress ||
+    !municipality ||
+    !wardNo ||
     !quantity ||
     !urgency ||
     !date ||
@@ -54,6 +58,8 @@ const addRequestsBB = async (req, res) => {
       phoneNumber: phoneNumber,
       hospitalName: hospitalName,
       hospitalAddress: hospitalAddress,
+      municipality: municipality,
+      wardNo: wardNo,
       quantity: quantity,
       urgency: urgency,
       reason: reason,
@@ -67,7 +73,6 @@ const addRequestsBB = async (req, res) => {
       bloodbank: bloodbank,
     });
     await newRequest.save();
-    // console.log(newRequest);
     res.status(200).json({
       success: true,
       message: "Your Request has been added",
@@ -104,6 +109,8 @@ const updateRequestBB = async (req, res) => {
     phoneNumber,
     hospitalName,
     hospitalAddress,
+    municipality,
+    wardNo,
     quantity,
     urgency,
     reason,
@@ -124,6 +131,8 @@ const updateRequestBB = async (req, res) => {
     !phoneNumber ||
     !hospitalName ||
     !hospitalAddress ||
+    !municipality ||
+    !wardNo ||
     !quantity ||
     !urgency ||
     !date ||
@@ -146,6 +155,8 @@ const updateRequestBB = async (req, res) => {
       phoneNumber: phoneNumber,
       hospitalName: hospitalName,
       hospitalAddress: hospitalAddress,
+      municipality: municipality,
+      wardNo: wardNo,
       quantity: quantity,
       urgency: urgency,
       reason: reason,

@@ -20,6 +20,8 @@ const EditBloodRequests = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [hospitalName, sethospitalName] = useState("");
   const [hospitalAddress, setHospitalAddress] = useState("");
+  const [municipality, setMunicipality] = useState("");
+  const [wardNo, setWardNo] = useState("");
   const [quantity, setQuantity] = useState("");
   const [urgency, setUrgency] = useState("");
   const [reason, setReason] = useState("");
@@ -39,6 +41,8 @@ const EditBloodRequests = () => {
       setPhoneNumber(res.data.requestblood.phoneNumber);
       sethospitalName(res.data.requestblood.hospitalName);
       setHospitalAddress(res.data.requestblood.hospitalAddress);
+      setMunicipality(res.data.requestblood.municipality);
+      setWardNo(res.data.requestblood.wardNo);
       setQuantity(res.data.requestblood.quantity);
       setUrgency(res.data.requestblood.urgency);
       setReason(res.data.requestblood.reason);
@@ -63,6 +67,8 @@ const EditBloodRequests = () => {
     formData.append("phoneNumber", phoneNumber);
     formData.append("hospitalName", hospitalName);
     formData.append("hospitalAddress", hospitalAddress);
+    formData.append("municipality", municipality);
+    formData.append("wardNo", wardNo);
     formData.append("quantity", quantity);
     formData.append("urgency", urgency);
     formData.append("reason", reason);
@@ -161,6 +167,26 @@ const EditBloodRequests = () => {
               value={hospitalAddress}
               onChange={(e) => setHospitalAddress(e.target.value)}
               placeholder="Hospital/Clinic Address"
+              type="text"
+              required
+            />
+          </div>
+          <div className="mb-4 w-full">
+            <input
+              className="w-full rounded-md border-gray-600 active:border-gray-600 hover:border-gray-600 focus:border-gray-600"
+              value={municipality}
+              onChange={(e) => setMunicipality(e.target.value)}
+              placeholder="Municipality"
+              type="text"
+              required
+            />
+          </div>
+          <div className="mb-4 w-full">
+            <input
+              className="w-full rounded-md border-gray-600 active:border-gray-600 hover:border-gray-600 focus:border-gray-600"
+              value={wardNo}
+              onChange={(e) => setWardNo(e.target.value)}
+              placeholder="Ward No."
               type="text"
               required
             />

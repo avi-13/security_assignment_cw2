@@ -14,7 +14,6 @@ import {
   deletehospitalApi,
   getallhospitalsApi,
 } from "../../../apis/api";
-import BloodGroupLists from "../../../components/BloodGroupsList";
 import DistrictList from "../../../components/DistrictsList";
 
 export default function AddHospitals() {
@@ -30,6 +29,13 @@ export default function AddHospitals() {
   const [sortOrder, setSortOrder] = useState("desc");
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
+
+  const [filteredHospitals, setFilteredhospitals] = useState([]);
+  const [filters, setFilters] = useState({
+    hospitalName: "",
+    hospitalAddress: "",
+    municipality: "",
+  });
 
   const fetchHospitals = async () => {
     try {
@@ -50,6 +56,31 @@ export default function AddHospitals() {
     fetchHospitals();
   }, [addressSearch, bloodGroupsSearch, hospitalSearch, sortBy, sortOrder]);
 
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters({ ...filters, [name]: value });
+  };
+  
+  useEffect(() => {
+    const filtered = hospitals.filter((hospital) => {
+      return (
+        (filters.hospitalName === "" ||
+          hospital.hospitalName
+            .toLowerCase()
+            .includes(filters.hospitalName.toLowerCase())) &&
+        (filters.hospitalAddress === "" ||
+          hospital.hospitalAddress
+            .toLowerCase()
+            .includes(filters.hospitalAddress.toLowerCase())) &&
+        (filters.municipality === "" ||
+          hospital.municipality
+            .toLowerCase()
+            .includes(filters.municipality.toLowerCase()))
+      );
+    });
+    setFilteredhospitals(filtered);
+  }, [filters, hospitals]);
+
   const handleSort = (column) => {
     setSortBy(column);
     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
@@ -57,6 +88,8 @@ export default function AddHospitals() {
 
   const [hospitalName, setHospitalName] = useState("");
   const [hospitalAddress, setHospitalAddress] = useState("");
+  const [municipality, setMunicipality] = useState("");
+  const [wardNo, setWardNo] = useState("");
   const [hospitalContactNumber, setHospitalContactNumber] = useState("");
   const [hospitalType, setHospitalType] = useState("");
   const [hospitalServices, setHospitalServices] = useState("");
@@ -100,6 +133,8 @@ export default function AddHospitals() {
     const formData = new FormData();
     formData.append("hospitalName", hospitalName);
     formData.append("hospitalAddress", hospitalAddress);
+    formData.append("municipality", municipality);
+    formData.append("wardNo", wardNo);
     formData.append("hospitalContactNumber", hospitalContactNumber);
     formData.append("hospitalType", hospitalType);
     formData.append("hospitalServices", hospitalServices);
@@ -168,29 +203,30 @@ export default function AddHospitals() {
         ) : null}
         <div className="bg-white shadow px-4 md:px-10 pt-4 md:pt-7 pb-5 overflow-y-auto">
           <div className="flex flex-col items-center justify-center md:flex-row md:items-start md:justify-between md:gap-4 mb-4 w-full">
-            <div className="w-full md:w-1/3">
-              <BloodGroupLists
-                onChange={(e) => setBloodGroupsSearch(e.target.value)}
-                value={bloodGroupsSearch}
-              />
-            </div>
-            <div className="w-full md:w-1/3 md:mt-0">
-              <DistrictList
-                onChange={(e) => setAddressSearch(e.target.value)}
-              />
-            </div>
-            <div className="w-full md:w-1/3 md:mt-0">
-              <label
-                htmlFor="filterSelect"
-                className="block text-sm font-medium my-1 text-gray-700"
-              >
-                Hospital
-              </label>
+            <div className="flex w-100 my-4 gap-2">
               <input
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300"
+                className="w-1/3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500"
                 type="text"
-                placeholder="Search Hospitals..."
-                onChange={(e) => sethospitalSearch(e.target.value)}
+                name="hospitalName"
+                placeholder="Filter by Hospital Name"
+                value={filters.hospitalName}
+                onChange={handleFilterChange}
+              />
+              <input
+                className="w-1/3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500"
+                type="text"
+                name="hospitalAddress"
+                placeholder="Filter by Hospital District"
+                value={filters.hospitalAddress}
+                onChange={handleFilterChange}
+              />
+              <input
+                className="w-1/3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500"
+                type="text"
+                name="municipality"
+                placeholder="Filter by Municipality"
+                value={filters.municipality}
+                onChange={handleFilterChange}
               />
             </div>
           </div>
@@ -201,7 +237,9 @@ export default function AddHospitals() {
                 <tr className="h-16 w-full text-sm leading-none text-gray-800">
                   <th className="font-normal text-left pl-4">Hospital Image</th>
                   <th className="font-normal text-left pl-4">Hospital Name</th>
-                  <th className="font-normal text-left pl-12">Location</th>
+                  <th className="font-normal text-left pl-12">District</th>
+                  <th className="font-normal text-left pl-12">Municipality</th>
+                  <th className="font-normal text-left pl-12">Ward No.</th>
                   <th className="font-normal text-left pl-12">Contact</th>
                   <th className="font-normal text-left pl-20">Hospital Type</th>
                   <th className="font-normal text-left pl-20">
@@ -226,7 +264,7 @@ export default function AddHospitals() {
                 </tr>
               </thead>
               <tbody className="w-full">
-                {hospitals.map((item) => (
+                {filteredHospitals.map((item) => (
                   <tr
                     key={item._id}
                     className="h-20 text-sm leading-none text-gray-800 bg-white hover:bg-gray-100 border-b border-t border-gray-100"
@@ -249,6 +287,12 @@ export default function AddHospitals() {
                     </td>
                     <td className="pl-12">
                       <p className="font-medium">{item.hospitalAddress}</p>
+                    </td>
+                    <td className="pl-12">
+                      <p className="font-medium">{item.municipality}</p>
+                    </td>
+                    <td className="pl-12">
+                      <p className="font-medium">{item.wardNo}</p>
                     </td>
                     <td className="pl-20">
                       <p className="font-medium">
@@ -369,6 +413,28 @@ export default function AddHospitals() {
                   </div>
                   <div>
                     <DistrictList onChange={changeHospitalAddress} />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-900">
+                      Municipality
+                    </label>
+                    <input
+                      onChange={(e) => setMunicipality(e.target.value)}
+                      type="text"
+                      className="mt-1 block w-full  border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-900">
+                      Ward No.
+                    </label>
+                    <input
+                      onChange={(e) => setWardNo(e.target.value)}
+                      type="number"
+                      className="mt-1 block w-full  border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
+                      required
+                    />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-900">

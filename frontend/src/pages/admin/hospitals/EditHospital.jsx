@@ -6,6 +6,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { fetchSingleHospitalApi, updatehospitalApi } from "../../../apis/api";
 import DistrictList from "../../../components/DistrictsList";
+import e from "cors";
 
 const EditHospital = () => {
   const { id } = useParams();
@@ -13,6 +14,8 @@ const EditHospital = () => {
   const navigate = useNavigate();
   const [hospitalName, setHospitalName] = useState("");
   const [hospitalAddress, setHospitalAddress] = useState("");
+  const [municipality, setMunicipality] = useState("");
+  const [wardNo, setWardNo] = useState("");
   const [hospitalContactNumber, setHospitalContactNumber] = useState("");
   const [hospitalType, setHospitalType] = useState("");
   const [hospitalServices, setHospitalServices] = useState("");
@@ -46,6 +49,8 @@ const EditHospital = () => {
     fetchSingleHospitalApi(id).then((res) => {
       setHospitalName(res.data.hospital.hospitalName);
       setHospitalAddress(res.data.hospital.hospitalAddress);
+      setMunicipality(res.data.hospital.municipality);
+      setWardNo(res.data.hospital.wardNo);
       setHospitalContactNumber(res.data.hospital.hospitalContactNumber);
       setHospitalType(res.data.hospital.hospitalType);
       setHospitalServices(res.data.hospital.hospitalServices);
@@ -61,6 +66,8 @@ const EditHospital = () => {
     const formData = new FormData();
     formData.append("hospitalName", hospitalName);
     formData.append("hospitalAddress", hospitalAddress);
+    formData.append("municipality", municipality);
+    formData.append("wardNo", wardNo);
     formData.append("hospitalContactNumber", hospitalContactNumber);
     formData.append("hospitalType", hospitalType);
     formData.append("hospitalServices", hospitalServices);
@@ -128,6 +135,30 @@ const EditHospital = () => {
               <DistrictList
                 dynamicValue={hospitalAddress}
                 onChange={changeHospitalAddress}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-900">
+                Municipality
+              </label>
+              <input
+                value={municipality}
+                onChange={(e) => setMunicipality(e.target.value)} 
+                type="text"
+                className="mt-1 block w-full  border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-900">
+                Ward No
+              </label>
+              <input
+                value={wardNo}
+                onChange={(e) => setWardNo(e.target.value)}
+                type="number"
+                className="mt-1 block w-full  border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
+                required
               />
             </div>
             <div>

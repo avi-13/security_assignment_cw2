@@ -5,6 +5,8 @@ const addHospitals = async (req, res) => {
   const {
     hospitalName,
     hospitalAddress,
+    municipality,
+    wardNo,
     hospitalContactNumber,
     hospitalType,
     hospitalServices,
@@ -25,6 +27,8 @@ const addHospitals = async (req, res) => {
   if (
     !hospitalName ||
     !hospitalAddress ||
+    !municipality ||
+    !wardNo ||
     !hospitalContactNumber ||
     !hospitalType ||
     !hospitalServices ||
@@ -50,6 +54,8 @@ const addHospitals = async (req, res) => {
       hospitalName: hospitalName,
       hospitalAddress: hospitalAddress,
       hospitalContactNumber: hospitalContactNumber,
+      municipality: municipality,
+      wardNo: wardNo,
       hospitalType: hospitalType,
       hospitalServices: hospitalServices,
       latitude: latitude,
@@ -156,6 +162,8 @@ const updateHospital = async (req, res) => {
   const {
     hospitalName,
     hospitalAddress,
+    municipality,
+    wardNo,
     hospitalContactNumber,
     hospitalType,
     hospitalServices,
@@ -171,6 +179,8 @@ const updateHospital = async (req, res) => {
   if (
     !hospitalName ||
     !hospitalAddress ||
+    !municipality ||
+    !wardNo ||
     !hospitalContactNumber ||
     !hospitalType ||
     !hospitalServices ||
@@ -196,6 +206,8 @@ const updateHospital = async (req, res) => {
       const updatedHospital = {
         hospitalName: hospitalName,
         hospitalAddress: hospitalAddress,
+        municipality: municipality,
+        wardNo: wardNo,
         hospitalContactNumber: hospitalContactNumber,
         hospitalType: hospitalType,
         hospitalServices: hospitalServices,
@@ -213,6 +225,8 @@ const updateHospital = async (req, res) => {
       const updatedHospital = {
         hospitalName: hospitalName,
         hospitalAddress: hospitalAddress,
+        municipality: municipality,
+        wardNo: wardNo,
         hospitalContactNumber: hospitalContactNumber,
         hospitalType: hospitalType,
         hospitalServices: hospitalServices,

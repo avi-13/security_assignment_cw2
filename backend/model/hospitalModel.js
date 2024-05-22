@@ -1,3 +1,4 @@
+const { waitFor } = require("@testing-library/react");
 const mongoose = require("mongoose");
 
 const hospitalSchema = mongoose.Schema(
@@ -9,6 +10,16 @@ const hospitalSchema = mongoose.Schema(
 
     hospitalAddress: {
       type: String,
+      required: true,
+    },
+
+    municipality: {
+      type: String,
+      required: true,
+    },
+
+    wardNo: {
+      type: Number,
       required: true,
     },
 

@@ -4,7 +4,7 @@ import { CircularProgress } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { getSingleCampaignApi, updateCampaignApi, updatehospitalApi } from "../../../apis/api";
+import { getSingleCampaignApi, updateCampaignApi } from "../../../apis/api";
 import DistrictList from "../../../components/DistrictsList";
 
 const EditCampaigns = () => {
@@ -30,9 +30,10 @@ const EditCampaigns = () => {
       setCampaignsEndDate(res.data.campaign.campaignEndDate);
       setCampaignsLocation(res.data.campaign.campaignLocation);
       setCampaignsGoal(res.data.campaign.campaignGoal);
-      setOldImagePreview(res.data.campaign.campaignImageUrl);
+      setOldImagePreview(res.data.campaign.campaignImage);
       setLatitude(res.data.campaign.latitude);
       setLongitude(res.data.campaign.longitude);
+      console.log(res.data.campaign.campaignEndDate);
     });
   }, [id]);
 
@@ -90,7 +91,7 @@ const EditCampaigns = () => {
         </div>
         <form className="space-y-1 m-0">
           <h3 className="mb-4 leading-6 text-gray-900 text-center font-semibold text-2xl">
-            Edit Hospital
+            Edit Campaigns
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div>
@@ -116,11 +117,13 @@ const EditCampaigns = () => {
                 Campaign Start Date
               </label>
               <input
+                className="w-full rounded-md border-gray-600 active:border-gray-600 hover:border-gray-600 focus:border-gray-600"
                 value={campaignStartDate}
                 onChange={(e) => setCampaignStartDate(e.target.value)}
-                type="date"
-                className="mt-1 block w-full  border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
-                required
+                type="text"
+                placeholder="Date of Request"
+                onFocus={(e) => (e.target.type = "date")}
+                onBlur={(e) => (e.target.type = "text")}
               />
             </div>
             <div>
@@ -128,11 +131,13 @@ const EditCampaigns = () => {
                 Campaign End Date
               </label>
               <input
+                className="w-full rounded-md border-gray-600 active:border-gray-600 hover:border-gray-600 focus:border-gray-600"
                 value={campaignEndDate}
                 onChange={(e) => setCampaignsEndDate(e.target.value)}
-                type="date"
-                className="mt-1 block w-full  border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
-                required
+                type="text"
+                placeholder="Date of Request"
+                onFocus={(e) => (e.target.type = "date")}
+                onBlur={(e) => (e.target.type = "text")}
               />
             </div>
             <div>

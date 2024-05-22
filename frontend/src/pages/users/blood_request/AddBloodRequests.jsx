@@ -14,6 +14,8 @@ const AddBloodRequests = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [hospitalName, sethospitalName] = useState("");
   const [hospitalAddress, setHospitalAddress] = useState("");
+  const [municipality, setMunicipality] = useState("");
+  const [wardNo, setWardNo] = useState("");
   const [quantity, setQuantity] = useState("");
   const [urgency, setUrgency] = useState("");
   const [reason, setReason] = useState("");
@@ -36,6 +38,8 @@ const AddBloodRequests = () => {
     formData.append("phoneNumber", phoneNumber);
     formData.append("hospitalName", hospitalName);
     formData.append("hospitalAddress", hospitalAddress);
+    formData.append("municipality", municipality);
+    formData.append("wardNo", wardNo);
     formData.append("quantity", quantity);
     formData.append("urgency", urgency);
     formData.append("reason", reason);
@@ -62,6 +66,8 @@ const AddBloodRequests = () => {
         setQuantity("");
         setComponents("");
         setHospitalAddress("");
+        setWardNo("");
+        setMunicipality("");
         sethospitalName("");
         setPhoneNumber("");
         setPatientBloodType("");
@@ -217,6 +223,28 @@ const AddBloodRequests = () => {
                   value={reason}
                   onChange={(e) => setReason(e.target.value)}
                   placeholder="Reason for Blood Request"
+                  type="text"
+                  required
+                />
+                <div className="underline"></div>
+              </div>
+            </div>
+            <div className="form-row">
+              <div className="input-data">
+                <input
+                  value={municipality}
+                  onChange={(e) => setMunicipality(e.target.value)}
+                  placeholder="Select Municipality"
+                  type="text"
+                  required
+                />
+                <div className="underline"></div>
+              </div>
+              <div className="input-data">
+                <input
+                  value={wardNo}
+                  onChange={(e) => setWardNo(e.target.value)}
+                  placeholder="Ward Number"
                   type="text"
                   required
                 />

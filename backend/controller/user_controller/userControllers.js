@@ -80,7 +80,7 @@ const sendVerification = async (req, res) => {
 
 const createUser = async (req, res) => {
   try {
-    const { fullName, email, number, password, currentAddress, otp } = req.body;
+    const { fullName, email, number, password, currentAddress, otp, municipality, wardNo } = req.body;
     // Check if req.files and req.files.bbImage exist
     // if (!req.files || !req.files.bbImage) {
     //   return res.json({
@@ -99,7 +99,7 @@ const createUser = async (req, res) => {
           message: "Image size too large. Maximum is 10 MB.",
         });
       }
-      if ((!fullName && !email, !number && !password && !currentAddress)) {
+      if ((!fullName && !email, !number && !password && !currentAddress && !municipality && !wardNo)) {
         return res.json({
           success: false,
           message: "Please fill all the details",
@@ -130,10 +130,11 @@ const createUser = async (req, res) => {
         email: email,
         number: number,
         currentAddress: currentAddress,
+        municipality: municipality,
+        wardNo: wardNo,
         password: passwordEncrypted,
         userImageURL: uploadedImage.secure_url,
       });
-      console.log(userVerificationCode, otp);
       if (userVerificationCode == otp) {
         await newUser.save();
 
@@ -164,6 +165,8 @@ const createUser = async (req, res) => {
         email: email,
         number: number,
         currentAddress: currentAddress,
+        municipality: municipality,
+        wardNo: wardNo,
         password: passwordEncrypted,
       });
 
@@ -359,9 +362,9 @@ const updateUser = async (req, res) => {
       );
 
       if (user.isADonor == false) {
-        const { fullName, email, number, currentAddress } = req.body;
+        const { fullName, email, number, currentAddress,municipality, wardNo } = req.body;
 
-        if (!fullName || !email || !number || !currentAddress) {
+        if (!fullName || !email || !number || !currentAddress || !municipality || !wardNo) {
           return res.json({
             success: false,
             message: "Please Enter all the fields",
@@ -372,6 +375,8 @@ const updateUser = async (req, res) => {
           email: email,
           number: number,
           currentAddress: currentAddress,
+          municipality: municipality,
+          wardNo: wardNo,
           userImageURL: uploadedImage.secure_url,
         };
         await User.findByIdAndUpdate(id, updatedUser);
@@ -387,6 +392,8 @@ const updateUser = async (req, res) => {
           email,
           number,
           currentAddress,
+          municipality,
+          wardNo,
           gender,
           dob,
           isAvailable,
@@ -399,6 +406,8 @@ const updateUser = async (req, res) => {
           !email ||
           !number ||
           !currentAddress ||
+          !municipality ||
+          !wardNo ||
           !fullName ||
           !gender ||
           !dob ||
@@ -416,6 +425,8 @@ const updateUser = async (req, res) => {
           email: email,
           number: number,
           currentAddress: currentAddress,
+          municipality: municipality,
+          wardNo: wardNo,
           gender: gender,
           dob: dob,
           bloodGroup: bloodGroup,
@@ -447,6 +458,8 @@ const updateUser = async (req, res) => {
           email: email,
           number: number,
           currentAddress: currentAddress,
+          municipality: municipality,
+          wardNo: wardNo,
         };
         await User.findByIdAndUpdate(id, updatedUser);
 
@@ -461,6 +474,8 @@ const updateUser = async (req, res) => {
           email,
           number,
           currentAddress,
+          municipality,
+          wardNo,
           gender,
           dob,
           isAvailable,
@@ -473,6 +488,8 @@ const updateUser = async (req, res) => {
           !email ||
           !number ||
           !currentAddress ||
+          !municipality ||
+          !wardNo ||
           !fullName ||
           !gender ||
           !dob ||
@@ -490,6 +507,8 @@ const updateUser = async (req, res) => {
           email: email,
           number: number,
           currentAddress: currentAddress,
+          municipality: municipality,
+          wardNo: wardNo,
           gender: gender,
           dob: dob,
           bloodGroup: bloodGroup,
@@ -523,9 +542,9 @@ const updateUserWithoutImage = async (req, res) => {
     console.log(req.body);
 
     if (user.isADonor == false) {
-      const { fullName, email, number, currentAddress } = req.body;
+      const { fullName, email, number, currentAddress,municipality, wardNo } = req.body;
 
-      if (!fullName || !email || !number || !currentAddress) {
+      if (!fullName || !email || !number || !currentAddress || !municipality || !wardNo) {
         return res.status(404).json({
           success: false,
           message: "Please Enter all the fields",
@@ -536,6 +555,8 @@ const updateUserWithoutImage = async (req, res) => {
         email: email,
         number: number,
         currentAddress: currentAddress,
+        municipality: municipality,
+        wardNo: wardNo,
       };
       await User.findByIdAndUpdate(id, updatedUser);
 
@@ -550,6 +571,8 @@ const updateUserWithoutImage = async (req, res) => {
         email,
         number,
         currentAddress,
+        municipality,
+        wardNo,
         gender,
         dob,
         isAvailable,
@@ -562,6 +585,8 @@ const updateUserWithoutImage = async (req, res) => {
         !email ||
         !number ||
         !currentAddress ||
+        !municipality ||
+        !wardNo ||
         !fullName ||
         !gender ||
         !dob ||
@@ -579,6 +604,8 @@ const updateUserWithoutImage = async (req, res) => {
         email: email,
         number: number,
         currentAddress: currentAddress,
+        municipality: municipality,
+        wardNo: wardNo,
         gender: gender,
         dob: dob,
         bloodGroup: bloodGroup,

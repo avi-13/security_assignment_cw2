@@ -1,5 +1,4 @@
 import {
-  faCheck,
   faExclamationCircle,
   faTimes,
   faTrash,
@@ -14,7 +13,6 @@ import {
   deleteBloodBankApi,
   getallBloodBankApi,
 } from "../../../apis/api";
-import BloodGroupLists from "../../../components/BloodGroupsList";
 import DistrictList from "../../../components/DistrictsList";
 import MultiSelectBG from "../../../components/MultiSeletctBG";
 
@@ -31,8 +29,14 @@ export default function AddBloodBanks() {
   const [longitude, setLongitude] = useState("");
   const [bbImage, setBloodBankImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-
   const [requestII, setRequestII] = useState("");
+
+  const [filteredBloodBank, setfilteredBloodBank] = useState([]);
+  const [filters, setFilters] = useState({
+    bbName: "",
+    bbAddress: "",
+    municipality: "",
+  });
 
   const fetchBloodBanks = async () => {
     try {
@@ -53,6 +57,31 @@ export default function AddBloodBanks() {
   useEffect(() => {
     fetchBloodBanks();
   }, [bbAddressSearch, bbNameSearch, bloodGroupsSearch, sortBy, sortOrder]);
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters({ ...filters, [name]: value });
+  };
+
+  useEffect(() => {
+    const filtered = bloodBank.filter((hospital) => {
+      return (
+        (filters.bbName === "" ||
+          hospital.bbName
+            .toLowerCase()
+            .includes(filters.bbName.toLowerCase())) &&
+        (filters.bbAddress === "" ||
+          hospital.bbAddress
+            .toLowerCase()
+            .includes(filters.bbAddress.toLowerCase())) &&
+        (filters.municipality === "" ||
+          hospital.municipality
+            .toLowerCase()
+            .includes(filters.municipality.toLowerCase()))
+      );
+    });
+    setfilteredBloodBank(filtered);
+  }, [filters, bloodBank]);
 
   const [bbName, setbbName] = useState("");
   const [bbAddress, setbbAddress] = useState("");
@@ -175,32 +204,31 @@ export default function AddBloodBanks() {
           </div>
         </div>
         <div className="bg-white shadow px-4 md:px-10 pt-4 md:pt-7 pb-5">
-          <div className="flex flex-col items-center overflow-hidden justify-center md:flex-row md:items-start md:justify-between md:gap-4 mb-4 w-full">
-            <div className="w-full md:w-1/3">
-              <BloodGroupLists
-                onChange={(e) => setBGsearch(e.target.value)}
-                value={bloodGroupsSearch}
-              />
-            </div>
-            <div className="w-full md:w-1/3 md:mt-0">
-              <DistrictList
-                onChange={(e) => setbbAddressSearch(e.target.value)}
-              />
-            </div>
-            <div className="w-full md:w-1/3 md:mt-0">
-              <label
-                htmlFor="filterSelect"
-                className="block text-sm font-medium my-1 text-gray-700"
-              >
-                Blood Bank Name
-              </label>
-              <input
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300"
-                type="text"
-                placeholder="Search Blood Banks..."
-                onChange={searchbyname}
-              />
-            </div>
+          <div className="flex w-100 my-4 gap-2">
+            <input
+              className="w-1/3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500"
+              type="text"
+              name="bbName"
+              placeholder="Filter by BloodBank Name"
+              value={filters.bbName}
+              onChange={handleFilterChange}
+            />
+            <input
+              className="w-1/3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500"
+              type="text"
+              name="bbAddress"
+              placeholder="Filter by District"
+              value={filters.bbAddress}
+              onChange={handleFilterChange}
+            />
+            <input
+              className="w-1/3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500"
+              type="text"
+              name="municipality"
+              placeholder="Filter by Municipality"
+              value={filters.municipality}
+              onChange={handleFilterChange}
+            />
           </div>
 
           <div className="w-full bg-white overflow-y-auto">
@@ -213,6 +241,8 @@ export default function AddBloodBanks() {
                   <th className="font-normal text-left pl-12">
                     BloodBank Name
                   </th>
+                  <th className="font-normal text-left pl-12">Municipality</th>
+                  <th className="font-normal text-left pl-12">Ward No.</th>
                   <th className="font-normal text-left pl-12">
                     BloodBank Address
                   </th>
@@ -245,8 +275,8 @@ export default function AddBloodBanks() {
                 </tr>
               </thead>
               <tbody className="w-full">
-                {bloodBank &&
-                  bloodBank.map((item) => (
+                {filteredBloodBank &&
+                  filteredBloodBank.map((item) => (
                     <tr className="h-20 text-sm leading-none text-gray-800 bg-white hover:bg-gray-100 border-b border-t border-gray-100">
                       <td className="pl-4 cursor-pointer">
                         <div className="flex items-center">
@@ -265,6 +295,16 @@ export default function AddBloodBanks() {
                       <td className="pl-12">
                         <p className="text-sm font-medium leading-none text-gray-800">
                           {item.bbAddress}
+                        </p>
+                      </td>
+                      <td className="pl-12">
+                        <p className="text-sm font-medium leading-none text-gray-800">
+                          {item.municipality}
+                        </p>
+                      </td>
+                      <td className="pl-12">
+                        <p className="text-sm font-medium leading-none text-gray-800">
+                          {item.ward}
                         </p>
                       </td>
                       <td className="pl-12">

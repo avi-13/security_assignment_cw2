@@ -15,9 +15,8 @@ const BBRequests = () => {
     hospitalAddress: "",
     bloodGroup: "",
     urgency: "",
+    municipality: "",
   });
-
-
 
   useEffect(() => {
     try {
@@ -34,12 +33,10 @@ const BBRequests = () => {
     }
   }, []);
 
-  
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters({ ...filters, [name]: value });
   };
-
 
   useEffect(() => {
     const filtered = bloodRequests.filter((request) => {
@@ -56,8 +53,10 @@ const BBRequests = () => {
           request.patientBloodType
             .toLowerCase()
             .includes(filters.bloodGroup.toLowerCase())) &&
-        (filters.urgency === "" ||
-          request.urgency.toLowerCase().includes(filters.urgency.toLowerCase()))
+        (filters.municipality === "" ||
+          request.municipality
+            .toLowerCase()
+            .includes(filters.municipality.toLowerCase()))
       );
     });
     setFilteredRequests(filtered);
@@ -85,50 +84,58 @@ const BBRequests = () => {
         <div className="container">
           <h1 className="text-center">Blood Requests</h1>
           <div className="flex w-100 my-4 gap-2">
-          <input
-            className="w-1/4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500"
-            type="text"
-            name="hospitalName"
-            placeholder="Filter by Hospital Name"
-            value={filters.hospitalName}
-            onChange={handleFilterChange}
-          />
-          <input
-            className="w-1/4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500"
-            type="text"
-            name="hospitalAddress"
-            placeholder="Filter by Hospital Address"
-            value={filters.hospitalAddress}
-            onChange={handleFilterChange}
-          />
-          <select
-            className="w-1/4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500"
-            name="bloodGroup"
-            value={filters.bloodGroup}
-            onChange={handleFilterChange}
-          >
-            <option value="">Select Blood Group</option>
-            <option value="A+">A+</option>
-            <option value="A-">A-</option>
-            <option value="B+">B+</option>
-            <option value="B-">B-</option>
-            <option value="AB+">AB+</option>
-            <option value="AB-">AB-</option>
-            <option value="O+">O+</option>
-            <option value="O-">O-</option>
-          </select>
-          <select
-            className="w-1/4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500"
-            name="urgency"
-            value={filters.urgency}
-            onChange={handleFilterChange}
-          >
-            <option value="">Select Urgency</option>
-            <option value="urgent">Urgent</option>
-            <option value="critical">Critical</option>
-            <option value="normal">Normal</option>
-          </select>
-        </div>
+            <input
+              className="w-1/5 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500"
+              type="text"
+              name="hospitalName"
+              placeholder="Filter by Hospital Name"
+              value={filters.hospitalName}
+              onChange={handleFilterChange}
+            />
+            <input
+              className="w-1/5 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500"
+              type="text"
+              name="hospitalAddress"
+              placeholder="Filter by Hospital District"
+              value={filters.hospitalAddress}
+              onChange={handleFilterChange}
+            />
+            <input
+              className="w-1/5 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500"
+              type="text"
+              name="municipality"
+              placeholder="Filter by Municipality"
+              value={filters.municipality}
+              onChange={handleFilterChange}
+            />
+            <select
+              className="w-1/5 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500"
+              name="bloodGroup"
+              value={filters.bloodGroup}
+              onChange={handleFilterChange}
+            >
+              <option value="">Select Blood Group</option>
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
+            </select>
+            <select
+              className="w-1/5 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500"
+              name="urgency"
+              value={filters.urgency}
+              onChange={handleFilterChange}
+            >
+              <option value="">Select Urgency</option>
+              <option value="urgent">Urgent</option>
+              <option value="critical">Critical</option>
+              <option value="normal">Normal</option>
+            </select>
+          </div>
           <div className="overflow-y-auto">
             <table className="table table-striped">
               <thead>
@@ -138,6 +145,7 @@ const BBRequests = () => {
                   <th>Phone Number</th>
                   <th>Hospital Name</th>
                   <th>Hospital Address</th>
+                  <th>Municipality</th>
                   <th>Quantity</th>
                   <th>Urgency</th>
                   <th>Reason</th>
@@ -155,6 +163,7 @@ const BBRequests = () => {
                     <td>{requests?.phoneNumber}</td>
                     <td>{requests?.hospitalName}</td>
                     <td>{requests?.hospitalAddress}</td>
+                    <td>{requests?.municipality}</td>
                     <td>{requests?.quantity}</td>
                     <td>{requests?.urgency}</td>
                     <td>{requests?.reason}</td>

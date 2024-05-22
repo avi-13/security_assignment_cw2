@@ -12,6 +12,16 @@ const bloodBankSchema = mongoose.Schema(
       type: String,
     },
 
+    municipality: {
+      required: true,
+      type: String,
+    },
+
+    wardNo: {
+      required: true,
+      type: Number,
+    },
+
     bbContact: {
       required: true,
       type: Number,
