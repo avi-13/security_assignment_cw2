@@ -238,7 +238,7 @@ const getAllBloodBanks = async (req, res) => {
 
 const getBloodbankbyId = async (req, res) => {
   try {
-    console.log(req.params.id)
+    // console.log(req.params.id)
     const id = req.params.id;
     const bloodBanks = await User.findById(id);
 

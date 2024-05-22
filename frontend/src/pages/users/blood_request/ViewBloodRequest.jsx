@@ -16,6 +16,7 @@ const ViewBloodRequest = () => {
   const [patientName, setPatientName] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [urgencyFilter, setUrgencyFilter] = useState("");
+  const [searchByAddress , setSearchHospitalAddress] = useState("");
 
   useEffect(() => {
     viewRequestApi().then((res) => {
@@ -36,10 +37,13 @@ const ViewBloodRequest = () => {
       const matchesSearchTerm = item.patientName
         .toLowerCase()
         .includes(searchTerm.toLowerCase());
+      const mathcesHospitalAddress = item.hospitalAddress
+      .toLowerCase()
+      .includes(searchByAddress.toLowerCase());
       const matchesUrgency =
         !urgencyFilter ||
         item.urgency.toLowerCase() === urgencyFilter.toLowerCase();
-      return matchesSearchTerm && matchesUrgency;
+      return matchesSearchTerm && matchesUrgency && mathcesHospitalAddress;
     });
   };
 
@@ -52,10 +56,17 @@ const ViewBloodRequest = () => {
             placeholder="Search by patient name"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="search-input w-1/2 border border-gray-300 w-50 p-2 rounded-md"
+            className="search-input w-1/3 border border-gray-300 w-50 p-2 rounded-md"
+          />
+          <input
+            type="text"
+            placeholder="Search by Address"
+            value={searchByAddress}
+            onChange={(e) => setSearchHospitalAddress(e.target.value)}
+            className="search-input w-1/3 border border-gray-300 w-50 p-2 rounded-md"
           />
           <select
-            className="w-1/2 border border-gray-300 rounded-md p-2"
+            className="w-1/3 border border-gray-300 rounded-md p-2"
             value={urgencyFilter}
             onChange={(e) => setUrgencyFilter(e.target.value)}
           >
@@ -89,6 +100,9 @@ const ViewBloodRequest = () => {
                   </p>
                   <p>
                     <strong>Hospital:</strong> {item.hospitalName}
+                  </p>
+                  <p>
+                    <strong>Hospital Address:</strong> {item.hospitalAddress}
                   </p>
                   <p>
                     <strong>Contact Person:</strong> {item.contactPerson}
@@ -160,6 +174,9 @@ const ViewBloodRequest = () => {
                     <strong>Hospital:</strong> {item.hospitalName}
                   </p>
                   <p>
+                    <strong>Hospital Address:</strong> {item.hospitalAddress}
+                  </p>
+                  <p>
                     <strong>Contact Person:</strong> {item.contactPerson}
                   </p>
                 </div>
@@ -226,6 +243,9 @@ const ViewBloodRequest = () => {
                   </p>
                   <p>
                     <strong>Hospital:</strong> {item.hospitalName}
+                  </p>
+                  <p>
+                    <strong>Hospital Address:</strong> {item.hospitalAddress}
                   </p>
                   <p>
                     <strong>Contact Person:</strong> {item.contactPerson}

@@ -16,7 +16,7 @@ import {
 import "leaflet/dist/leaflet.css";
 import React, { useEffect, useState } from "react";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { getSingleRequestApi } from "../../../apis/api";
 import CustomFaIcons from "../../../components/CustomFaIcons";
 import "../../../style/Hospitals.css";
@@ -255,6 +255,14 @@ const RequestDetails = () => {
             className=" w3-container req-map-wrapper mt-4 mb-8"
             key={requestDetails._id}
           >
+            <div className="row my-5">
+            <div className="flex flex-row justify-between">
+              <h2 className="text-2xl font-semibold text-gray-900">Location</h2>
+              <Link className="text-white bg-cyan-700 hover:bg-cyan-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center" to={"https://maps.app.goo.gl/dmhpATKubPv4BAZw7"}>
+                Google Map
+              </Link>
+            </div>
+          </div>
             <h3 className="map-h3">
               Location of the {requestDetails.hospitalName} hospital
             </h3>

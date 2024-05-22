@@ -301,9 +301,18 @@ const getAllUsers = async (req, res) => {
     const userList = await User.find({
       $and: [{ isAdmin: false }, { isBloodBank: false }],
     }).sort({ createdAt: -1 });
+    const userListForBloodBank = await User.find({
+      $and: [
+        { isAdmin: false },
+        { isADonor: true },
+        { isBloodBank: false },
+      ],
+    }).sort({ createdAt: -1 });
+
     res.json({
       success: true,
       users: userList,
+      userListForBloodBank: userListForBloodBank,
       message: "Success",
     });
   } catch (error) {

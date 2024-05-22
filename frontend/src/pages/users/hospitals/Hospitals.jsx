@@ -23,7 +23,7 @@ const Hospitals = () => {
   return (
     <>
       <div className="hospital-wrapper">
-        <h1 className="text-center text-primary">List of all the Hospitals</h1>
+        <h1 className="text-center text-red-800">List of all the Hospitals</h1>
       </div>
       <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4 md:p-6">
         {hospitalData.map((hospital) => (
@@ -48,11 +48,11 @@ const Hospitals = () => {
               <CustomCircularProgress />
             )}
             <div className="p-4">
-              <h3 className="text-lg text text-gray-800 font-bold mb-2">
+              <h3 className="text-lg text text-gray-800 font-bold mb-2 !no-underline">
                 {hospital.hospitalName}
               </h3>
-              <p className="text-gray-500 mb-2">{hospital.hospitalAddress}</p>
-              <p className="text-gray-700 line-clamp-3">
+              <p className="text-gray-500 mb-2 !no-underline">{hospital.hospitalAddress}</p>
+              <p className="text-gray-700 line-clamp-3 !no-underline">
                 {hospital.hospitalServices}
               </p>
             </div>
