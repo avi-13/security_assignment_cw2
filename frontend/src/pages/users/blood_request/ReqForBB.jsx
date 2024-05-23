@@ -18,6 +18,8 @@ export default function ReqForBB() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [hospitalName, sethospitalName] = useState("");
   const [hospitalAddress, setHospitalAddress] = useState("");
+  const [municipality, setMunicipality] = useState("");
+  const [ward, setWard] = useState("");
   const [quantity, setQuantity] = useState("");
   const [urgency, setUrgency] = useState("");
   const [reason, setReason] = useState("");
@@ -40,6 +42,8 @@ export default function ReqForBB() {
     formData.append("phoneNumber", phoneNumber);
     formData.append("hospitalName", hospitalName);
     formData.append("hospitalAddress", hospitalAddress);
+    formData.append("municipality", municipality);
+    formData.append("wardNo", ward);
     formData.append("quantity", quantity);
     formData.append("urgency", urgency);
     formData.append("reason", reason);
@@ -128,6 +132,28 @@ export default function ReqForBB() {
                 className="w-1/4 !bg-gray-50 border !border-gray-300 !text-gray-900 text-sm rounded-lg !focus:ring-gray-500 focus:!border-gray-500 block p-2.5  dark:!border-gray-600 dark:!placeholder-gray-400 dark:text-white dark:!focus:ring-gray-500 dark:!focus:border-gray-500"
                 label={"Hospital/Clinic Address"}
                 onChange={(e) => setHospitalAddress(e.target.value)}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-900">
+                Municipality
+              </label>
+              <input
+                onChange={(e) => setMunicipality(e.target.value)}
+                type="text"
+                className="mt-1 block w-full  border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-900">
+                Ward No.
+              </label>
+              <input
+                onChange={(e) => setWard(e.target.value)}
+                type="number"
+                className="mt-1 block w-full  border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
+                required
               />
             </div>
             <div>
