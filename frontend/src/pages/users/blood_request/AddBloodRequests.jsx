@@ -118,13 +118,13 @@ const AddBloodRequests = () => {
                     Patient Blood Type
                   </option>
                   <option value="A+">A+</option>
-                  <option value="A+">B+</option>
-                  <option value="A+">AB+</option>
-                  <option value="A+">O+</option>
-                  <option value="A+">A-</option>
-                  <option value="A+">AB-</option>
-                  <option value="A+">B-</option>
-                  <option value="A+">O-</option>
+                  <option value="B+">B+</option>
+                  <option value="AB+">AB+</option>
+                  <option value="O+">O+</option>
+                  <option value="A-">A-</option>
+                  <option value="AB-">AB-</option>
+                  <option value="B-">B-</option>
+                  <option value="O-">O-</option>
                 </select>
                 <div className="underline"></div>
               </div>
@@ -312,4 +312,4 @@ const AddBloodRequests = () => {
   );
 };
 
-export default AddBloodRequests;
+export default AddBloodRequests

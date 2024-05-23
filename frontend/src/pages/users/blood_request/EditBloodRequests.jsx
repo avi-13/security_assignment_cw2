@@ -87,7 +87,7 @@ const EditBloodRequests = () => {
           toast.error(res.data.message);
         } else {
           toast.success(res.data.message);
-          navigate("/get_my_request/660b89dc0bce07c59f91ac2d")
+          navigate(`/profile/${user._id}`)
         }
       })
       .catch((e) => {
