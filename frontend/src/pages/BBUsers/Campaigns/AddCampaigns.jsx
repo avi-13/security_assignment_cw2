@@ -291,7 +291,7 @@ export default function AddCampaigns() {
                             className="text-blue-500 hover:text-blue-700 cursor-pointer"
                           />
                         </Link>
-                        <Link
+                        {/* <Link
                           title="Edit Campaign"
                           className="focus:outline-none py-2 px-4"
                           to={`/update_campaign/${item._id}`}
@@ -300,7 +300,7 @@ export default function AddCampaigns() {
                             icon={faEdit}
                             className="text-blue-500 hover:text-blue-700 cursor-pointer"
                           />
-                        </Link>
+                        </Link> */}
                         {/* Delete Button */}
                         <button
                           title="Delete Campaign"
