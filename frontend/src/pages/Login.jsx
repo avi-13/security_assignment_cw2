@@ -1,5 +1,6 @@
 import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
 import React, { useState } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "../../src/style/login.css";
@@ -12,6 +13,8 @@ const Login = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [captcha, setCaptcha] = useState(null);
+  const [showCaptcha, setShowCaptcha] = useState(false);
 
   const changeEmail = (e) => {
     setEmail(e.target.value);
@@ -28,12 +31,18 @@ const Login = () => {
     const data = {
       email: email,
       password: password,
+      captcha: captcha,
     };
 
     loginUserApi(data)
       .then((res) => {
         if (res.data.success == false) {
           toast.error(res.data.message);
+          if (res.data.message.includes("captcha")) {
+            setShowCaptcha(true);
+          } else {
+            setCaptcha(null);
+          }
         } else {
           toast.success(res.data.message);
           localStorage.setItem("token", res.data.userData);
@@ -43,7 +52,10 @@ const Login = () => {
           if (userAdmin.isAdmin == false && userAdmin.isBloodBank == false) {
             navigate("/home");
             return;
-          } else if (userAdmin.isAdmin == false && userAdmin.isBloodBank == true) {
+          } else if (
+            userAdmin.isAdmin == false &&
+            userAdmin.isBloodBank == true
+          ) {
             navigate("/bb/dashboard");
             window.location.reload();
           } else {
@@ -86,6 +98,15 @@ const Login = () => {
               <div className="link">
                 <Link to={"/forgetpassword"}> Forgot Password</Link>
               </div>
+              {showCaptcha && (
+                <div className="mt-5 mb-4">
+                  <ReCAPTCHA
+                    sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
+                    onChange={(value) => setCaptcha(value)}
+                    onExpired={() => setCaptcha(null)}
+                  />
+                </div>
+              )}
               <button
                 className="btn btn-dark text-white border-0 btn-outline-danger"
                 onClick={handleSubmit}

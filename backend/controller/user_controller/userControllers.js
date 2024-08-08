@@ -6,6 +6,8 @@ const nodemailer = require("nodemailer");
 const RequestBlood = require("../../model/RequestBloodModel");
 const { sendEmailController } = require("../sendEmailController");
 const user = require("../../model/userModel");
+const axios = require('axios'); // Import axios
+
 const sendEmail = async (to, subject, text) => {
   let transporter = nodemailer.createTransport({
     service: "gmail",
@@ -27,6 +29,17 @@ const sendEmail = async (to, subject, text) => {
 const sendVerification = async (req, res) => {
   const otp = Math.floor(1000 + Math.random() * 9000);
   const { email } = req.body;
+  console.log(otp)
+
+  // check if email is not valid
+  const isEmailValid = email.includes("@");
+
+  if(!isEmailValid){
+    return res.json({
+      success: false,
+      message: "Invalid email address. Please provide a valid email.",
+    });
+  }
 
   const isAUser = await User.findOne({ email: email });
   if (isAUser) {
@@ -80,7 +93,16 @@ const sendVerification = async (req, res) => {
 
 const createUser = async (req, res) => {
   try {
-    const { fullName, email, number, password, currentAddress, otp, municipality, wardNo } = req.body;
+    const {
+      fullName,
+      email,
+      number,
+      password,
+      currentAddress,
+      otp,
+      municipality,
+      wardNo,
+    } = req.body;
     // Check if req.files and req.files.bbImage exist
     // if (!req.files || !req.files.bbImage) {
     //   return res.json({
@@ -99,7 +121,10 @@ const createUser = async (req, res) => {
           message: "Image size too large. Maximum is 10 MB.",
         });
       }
-      if ((!fullName && !email, !number && !password && !currentAddress && !municipality && !wardNo)) {
+      if (
+        (!fullName && !email,
+        !number && !password && !currentAddress && !municipality && !wardNo)
+      ) {
         return res.json({
           success: false,
           message: "Please fill all the details",
@@ -171,7 +196,7 @@ const createUser = async (req, res) => {
       });
 
       const { userVerificationCode } = req.body;
-
+      
       if (userVerificationCode == otp) {
         await newUser.save();
 
@@ -193,35 +218,102 @@ const createUser = async (req, res) => {
 };
 
 const loginUser = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, captcha } = req.body;
 
   if (!email || !password) {
     return res.json({
       success: false,
-      message: "Please Enter all the fields",
+      message: "Please enter all the fields",
     });
   }
 
   try {
-    const findUser = await User.findOne({ email: email });
+    const findUser = await User.findOne({ email });
 
     if (!findUser) {
       return res.json({
         success: false,
-        message: "User Doesnot Exists",
+        message: "User does not exist",
       });
+    }
+
+    if (findUser.isLocked && new Date() < findUser.lockUntil) {
+      const remainingTime = Math.ceil((findUser.lockUntil - new Date()) / 60000);
+      return res.json({
+        success: false,
+        message: `Your account is locked. Try again in ${remainingTime} minutes.`,
+      });
+    }
+
+    if (findUser.failedLoginAttempts >= 5) {
+      findUser.isLocked = true;
+      findUser.lockUntil = new Date(Date.now() + 5 * 60000); // lock for 5 minutes
+      await findUser.save();
+      return res.json({
+        success: false,
+        message: "Your account is locked due to multiple failed login attempts. Please try again after 5 minutes.",
+      });
+    }
+
+    if (findUser.failedLoginAttempts >= 3) {
+      if (!captcha) {
+        return res.json({
+          success: false,
+          message: "Please complete the captcha.",
+        });
+      }
+
+      const secretKey = process.env.RECAPTCHA_SECRET_KEY;
+      const verificationUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${captcha}`;
+
+      const response = await axios.post(verificationUrl);
+      const { success } = response.data;
+
+      if (!success) {
+        return res.json({
+          success: false,
+          message: "Captcha validation failed.",
+        });
+      }
     }
 
     const passwordToCompare = findUser.password;
-
     const isMatched = await bcrypt.compare(password, passwordToCompare);
 
     if (!isMatched) {
+      findUser.failedLoginAttempts += 1;
+      findUser.lastFailedAttempt = new Date();
+      await findUser.save();
+
+      if (findUser.failedLoginAttempts >= 5) {
+        findUser.isLocked = true;
+        findUser.lockUntil = new Date(Date.now() + 5 * 60000); // lock for 5 minutes
+        await findUser.save();
+
+        setTimeout(async () => {
+          findUser.isLocked = false;
+          findUser.failedLoginAttempts = 0;
+          findUser.lockUntil = null;
+          await findUser.save();
+        }, 5 * 60000); // 5 minutes in milliseconds
+
+        return res.json({
+          success: false,
+          message: "Your account is locked due to multiple failed login attempts. Please try again after 5 minutes.",
+        });
+      }
+
       return res.json({
         success: false,
-        message: "Wrong Password",
+        message: "Wrong password",
       });
     }
+
+    findUser.failedLoginAttempts = 0;
+    findUser.lastFailedAttempt = null;
+    findUser.isLocked = false;
+    findUser.lockUntil = null;
+    await findUser.save();
 
     const token = jwt.sign(
       {
@@ -235,13 +327,18 @@ const loginUser = async (req, res) => {
     return res.status(200).json({
       success: true,
       token: token,
-      userData: findUser,
-      message: "Logged In successfully",
+      userData: findUser,  // Ensure the key matches your frontend's expectation
+      message: "Logged in successfully",
     });
   } catch (error) {
-    res.status(500).json("Server Error \n Please try again");
+    console.error("Server error: ", error);  // Add logging
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
   }
 };
+
 
 const beAdonor = async (req, res) => {
   const { gender, dob, bloodGroup, noPreviousDonation, emergencyNumber } =
@@ -305,11 +402,7 @@ const getAllUsers = async (req, res) => {
       $and: [{ isAdmin: false }, { isBloodBank: false }],
     }).sort({ createdAt: -1 });
     const userListForBloodBank = await User.find({
-      $and: [
-        { isAdmin: false },
-        { isADonor: true },
-        { isBloodBank: false },
-      ],
+      $and: [{ isAdmin: false }, { isADonor: true }, { isBloodBank: false }],
     }).sort({ createdAt: -1 });
 
     res.json({
@@ -362,9 +455,23 @@ const updateUser = async (req, res) => {
       );
 
       if (user.isADonor == false) {
-        const { fullName, email, number, currentAddress,municipality, wardNo } = req.body;
+        const {
+          fullName,
+          email,
+          number,
+          currentAddress,
+          municipality,
+          wardNo,
+        } = req.body;
 
-        if (!fullName || !email || !number || !currentAddress || !municipality || !wardNo) {
+        if (
+          !fullName ||
+          !email ||
+          !number ||
+          !currentAddress ||
+          !municipality ||
+          !wardNo
+        ) {
           return res.json({
             success: false,
             message: "Please Enter all the fields",
@@ -542,9 +649,17 @@ const updateUserWithoutImage = async (req, res) => {
     console.log(req.body);
 
     if (user.isADonor == false) {
-      const { fullName, email, number, currentAddress,municipality, wardNo } = req.body;
+      const { fullName, email, number, currentAddress, municipality, wardNo } =
+        req.body;
 
-      if (!fullName || !email || !number || !currentAddress || !municipality || !wardNo) {
+      if (
+        !fullName ||
+        !email ||
+        !number ||
+        !currentAddress ||
+        !municipality ||
+        !wardNo
+      ) {
         return res.status(404).json({
           success: false,
           message: "Please Enter all the fields",

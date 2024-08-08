@@ -5,7 +5,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CircularProgress } from "@mui/material";
-import "leaflet/dist/leaflet.css";
+import "leaflet/dist/leaflet.css";  
 import React, { useEffect, useState } from "react";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { Link, useParams } from "react-router-dom";
@@ -24,7 +24,6 @@ const SingleBloodbank = () => {
   const [campaign, setCampaign] = useState([]);
   const [fetchedBg, setFetchedBG] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  // campaigns, fullName, email, number, bloodGroup
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [number, setNumber] = useState("");
@@ -76,7 +75,6 @@ const SingleBloodbank = () => {
   }, [id]);
 
   const fetchCampaigns = async () => {
-    console.log(id);
     try {
       const response = await getAllCampaignByBBApi(id);
       setCampaign(response.data.allCampaigns);
@@ -223,7 +221,7 @@ const SingleBloodbank = () => {
                             index * 4
                           }px - ${currentIndexevent * (100 + 4)}%))`,
                           transition: "transform 1s ease-in-out",
-                          backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(${eachCamp.campaignImageUrl})`, // Added semi-transparent overlay
+                          backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(${eachCamp.campaignImageUrl})`, 
                           backgroundSize: "cover",
                           backgroundPosition: "center",
                           color: "white",

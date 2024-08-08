@@ -29,7 +29,8 @@ app.listen(PORT, () => {
 });
 
 const corsPolicy = {
-  origin: true,
+  origin: ["https://localhost:3000", "https://localhost:3001"],
+  methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true,
   optionSuccessStatus: 200,
 };

@@ -75,7 +75,7 @@ const userSchema = mongoose.Schema(
       default:
         "https://res.cloudinary.com/dm7yesms2/image/upload/v1708584317/Users/cq2ndw5yfe3sh4eceleq",
     },
-    isBloodBank : {
+    isBloodBank: {
       type: Boolean,
       default: false,
     },
@@ -117,7 +117,7 @@ const userSchema = mongoose.Schema(
       required: false,
       type: [String],
     },
-    
+
     socialMediaLinks: {
       required: false,
       type: String,
@@ -125,7 +125,6 @@ const userSchema = mongoose.Schema(
     latitude: {
       required: false,
       type: Number,
-
     },
     longitude: {
       required: false,
@@ -136,6 +135,20 @@ const userSchema = mongoose.Schema(
       type: String,
       required: false,
       trim: true, // cuts space and stores in the db
+    },
+    failedLoginAttempts: {
+      type: Number,
+      default: 0,
+    },
+    lastFailedAttempt: {
+      type: Date,
+    },
+    isLocked: {
+      type: Boolean,
+      default: false,
+    },
+    lockUntil: {
+      type: Date,
     },
   },
   { timestamps: true }
