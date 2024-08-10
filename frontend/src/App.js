@@ -6,7 +6,11 @@ import "./App.css";
 import ErrorPage from "./components/ErrorPage";
 import Footer from "./components/Footer";
 import { default as Navbars } from "./components/Navbars";
+import useTokenExpiryCheck from "./components/TokenExpiryCheck";
 import AboutUs from "./pages/AboutUs";
+import BBDashBoard from "./pages/BBUsers/BBDashBoard";
+import EditCampaigns from "./pages/BBUsers/Campaigns/EditCampaigns";
+import InterestedUsers from "./pages/BBUsers/Campaigns/InterestedUsers";
 import EditBloodBank from "./pages/BBUsers/EditBloodBank";
 import ContactUs from "./pages/ContactUs";
 import ForBloodbank from "./pages/ForBloodbank";
@@ -20,6 +24,8 @@ import EditHospital from "./pages/admin/hospitals/EditHospital";
 import BloodBanks from "./pages/users/BloodBanks/BloodBanks";
 import SingleBloodbank from "./pages/users/BloodBanks/SingleBloodBanks";
 import AddBloodRequests from "./pages/users/blood_request/AddBloodRequests";
+import EditBloodRequests from "./pages/users/blood_request/EditBloodRequests";
+import ReqForBB from "./pages/users/blood_request/ReqForBB";
 import SingleBloodRequest from "./pages/users/blood_request/SingleBloodRequest";
 import ViewBloodRequest from "./pages/users/blood_request/ViewBloodRequest";
 import BeADonor from "./pages/users/donor/BeADonor";
@@ -32,11 +38,6 @@ import Profile from "./pages/users/profile/Profile";
 import AdminRoutes from "./protected/AdminRoutes";
 import BloodBankUserRoutes from "./protected/BloodBankUserRoutes";
 import UserRoutes from "./protected/UserRoutes";
-import BBDashBoard from "./pages/BBUsers/BBDashBoard";
-import EditBloodRequests from "./pages/users/blood_request/EditBloodRequests";
-import ReqForBB from "./pages/users/blood_request/ReqForBB";
-import EditCampaigns from "./pages/BBUsers/Campaigns/EditCampaigns";
-import InterestedUsers from "./pages/BBUsers/Campaigns/InterestedUsers";
 
 function App() {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -44,10 +45,14 @@ function App() {
   const updateFullName = (newFullName) => {
     setFullName(newFullName);
   };
+
   return (
     <Router>
+      <TokenExpiryWrapper />
       <ToastContainer />
-      {!user || (user && !user.isAdmin && !user.isBloodBank) ? <Navbars /> : null}
+      {!user || (user && !user.isAdmin && !user.isBloodBank) ? (
+        <Navbars />
+      ) : null}
       <Routes>
         <Route element={<AdminRoutes />}>
           <Route path="/admin/dashboard" element={<AdminPanel />} />
@@ -63,24 +68,32 @@ function App() {
           <Route path="/registered_users/:id" element={<InterestedUsers />} />
         </Route>
 
-        <Route path="/home" element={<HomePage />} />
-        <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/contact-us" element={<ContactUs />} />
-        <Route path="/about-us" element={<AboutUs />} />
-        <Route path="/services" element={<Services />} />
-        <Route path="/view_request/:id" element={<SingleBloodRequest />} />
-        <Route path="/blood_requests" element={<ViewBloodRequest />} />
-        <Route path="/services" element={<Services />} />
-        <Route path="/hospitals" element={<Hospitals />} />
-        <Route path="/single-hospital/:id" element={<SingleHospital />} />
-        <Route path="/bloodbanks" element={<BloodBanks />} />
-        <Route path="/single-bloodbank/:id" element={<SingleBloodbank />} />
-        <Route path="/forgetpassword" element={<ForgetPassword />} />
-        <Route path="/users-list" element={<UsersLists />} />
-        <Route path="/*" element={<ErrorPage />} />
-        <Route path="/bloodbank" element={<ForBloodbank />} />
+        {user?.isAdmin ? (
+          <>
+            <Route path="/*" element={<ErrorPage />} />
+          </>
+        ) : (
+          <>
+            <Route path="/home" element={<HomePage />} />
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/contact-us" element={<ContactUs />} />
+            <Route path="/about-us" element={<AboutUs />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/view_request/:id" element={<SingleBloodRequest />} />
+            <Route path="/blood_requests" element={<ViewBloodRequest />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/hospitals" element={<Hospitals />} />
+            <Route path="/single-hospital/:id" element={<SingleHospital />} />
+            <Route path="/bloodbanks" element={<BloodBanks />} />
+            <Route path="/single-bloodbank/:id" element={<SingleBloodbank />} />
+            <Route path="/forgetpassword" element={<ForgetPassword />} />
+            <Route path="/users-list" element={<UsersLists />} />
+            <Route path="/*" element={<ErrorPage />} />
+            <Route path="/bloodbank" element={<ForBloodbank />} />
+          </>
+        )}
 
         <Route element={<UserRoutes />}>
           <Route path="/view_all_donors" element={<Users />} />
@@ -95,9 +108,16 @@ function App() {
           <Route path="/get_my_request/:id" element={<History />} />
         </Route>
       </Routes>
-      {!user || (user && !user.isAdmin && !user.isBloodBank) ? <Footer /> : null}
+      {!user || (user && !user.isAdmin && !user.isBloodBank) ? (
+        <Footer />
+      ) : null}
     </Router>
   );
 }
+// Wrapper component to ensure useTokenExpiryCheck is called inside the Router context
+const TokenExpiryWrapper = () => {
+  useTokenExpiryCheck();
+  return null;
+};
 
 export default App;

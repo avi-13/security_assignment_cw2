@@ -1,5 +1,5 @@
 import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -45,17 +45,17 @@ const Login = () => {
           }
         } else {
           toast.success(res.data.message);
-          localStorage.setItem("token", res.data.userData);
           const jsonDecode = JSON.stringify(res.data.userData);
           localStorage.setItem("user", jsonDecode);
+          localStorage.setItem("token", res.data.token);
+          const expiryTime = new Date().getTime() + 60 * 1000;
+          localStorage.setItem("tokenExpiry", expiryTime);
+
           const userAdmin = res.data.userData;
-          if (userAdmin.isAdmin == false && userAdmin.isBloodBank == false) {
+          if (!userAdmin.isAdmin && !userAdmin.isBloodBank) {
             navigate("/home");
             return;
-          } else if (
-            userAdmin.isAdmin == false &&
-            userAdmin.isBloodBank == true
-          ) {
+          } else if (!userAdmin.isAdmin && userAdmin.isBloodBank) {
             navigate("/bb/dashboard");
             window.location.reload();
           } else {

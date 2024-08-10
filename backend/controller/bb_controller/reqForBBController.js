@@ -24,7 +24,7 @@ const addRequestsBB = async (req, res) => {
     bloodbank,
   } = req.body;
 
-  console.log(req.body);
+  // console.log(req.body);
 
   if (
     !userId ||
@@ -267,7 +267,7 @@ const getRequestsofUser = async (req, res) => {
   await RequestForBB.find({ userId: userId })
     .populate("bloodbank", "bbName")
     .then((requests) => {
-      console.log(requests);
+      // console.log(requests);
       if (!requests) {
         return res.status(404).json({
           success: false,

@@ -2,7 +2,7 @@ const RegisteredUsers = require("../../model/registeredUsersForCampaign");
 
 const registerUser = async (req, res) => {
   const { campaigns, fullName, email, number, bloodGroup } = req.body;
-  console.log(req.body);
+  // console.log(req.body);
 
   if (!campaigns || !fullName || !email || !number || !bloodGroup) {
     return res.json({
@@ -37,11 +37,11 @@ const registerUser = async (req, res) => {
 const registeredUsersbyCampaign = async (req, res) => {
   const campaignId = req.params.id;
   try {
-    console.log(campaignId);
+    // console.log(campaignId);
     const registeredUsers = await RegisteredUsers.find({
       campaigns: campaignId,
     });
-    console.log(registeredUsers);
+    // console.log(registeredUsers);
     if (!registeredUsers) {
       return res.status(404).json({
         success: false,

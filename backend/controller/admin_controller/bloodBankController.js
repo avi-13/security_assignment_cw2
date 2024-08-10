@@ -20,7 +20,7 @@ const addBloodBanks = async (req, res) => {
     contactEmail,
   } = req.body;
 
-  console.log(req.body)
+  // console.log(req.body)
 
   if (!req.files || !req.files.bbImage) {
     return res.json({
@@ -104,7 +104,7 @@ const addBloodBanks = async (req, res) => {
     const randomPassword = generateRandomPassword(8);
     const generateSalt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(randomPassword, generateSalt);
-    console.log(randomPassword);
+    // console.log(randomPassword);
 
     // Create User Account for BloodBank
     const defaultEmail = `${bName

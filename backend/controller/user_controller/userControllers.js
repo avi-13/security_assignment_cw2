@@ -6,7 +6,7 @@ const nodemailer = require("nodemailer");
 const RequestBlood = require("../../model/RequestBloodModel");
 const { sendEmailController } = require("../sendEmailController");
 const user = require("../../model/userModel");
-const axios = require('axios'); // Import axios
+const axios = require("axios"); // Import axios
 
 const sendEmail = async (to, subject, text) => {
   let transporter = nodemailer.createTransport({
@@ -29,12 +29,12 @@ const sendEmail = async (to, subject, text) => {
 const sendVerification = async (req, res) => {
   const otp = Math.floor(1000 + Math.random() * 9000);
   const { email } = req.body;
-  console.log(otp)
+  console.log(otp);
 
   // check if email is not valid
   const isEmailValid = email.includes("@");
 
-  if(!isEmailValid){
+  if (!isEmailValid) {
     return res.json({
       success: false,
       message: "Invalid email address. Please provide a valid email.",
@@ -196,7 +196,7 @@ const createUser = async (req, res) => {
       });
 
       const { userVerificationCode } = req.body;
-      
+
       if (userVerificationCode == otp) {
         await newUser.save();
 
@@ -238,7 +238,9 @@ const loginUser = async (req, res) => {
     }
 
     if (findUser.isLocked && new Date() < findUser.lockUntil) {
-      const remainingTime = Math.ceil((findUser.lockUntil - new Date()) / 60000);
+      const remainingTime = Math.ceil(
+        (findUser.lockUntil - new Date()) / 60000
+      );
       return res.json({
         success: false,
         message: `Your account is locked. Try again in ${remainingTime} minutes.`,
@@ -251,7 +253,8 @@ const loginUser = async (req, res) => {
       await findUser.save();
       return res.json({
         success: false,
-        message: "Your account is locked due to multiple failed login attempts. Please try again after 5 minutes.",
+        message:
+          "Your account is locked due to multiple failed login attempts. Please try again after 5 minutes.",
       });
     }
 
@@ -299,7 +302,8 @@ const loginUser = async (req, res) => {
 
         return res.json({
           success: false,
-          message: "Your account is locked due to multiple failed login attempts. Please try again after 5 minutes.",
+          message:
+            "Your account is locked due to multiple failed login attempts. Please try again after 5 minutes.",
         });
       }
 
@@ -321,24 +325,29 @@ const loginUser = async (req, res) => {
         isAdmin: findUser.isAdmin,
         isBloodBank: findUser.isBloodBank,
       },
-      process.env.JWT_TOKEN_SECRET
+      process.env.JWT_TOKEN_SECRET,
+      { expiresIn: "1h" } // token expiration
     );
+
+    // Remove password from user data before sending it to the client
+    const userData = { ...findUser._doc };
+    delete userData.password;
+    // console.log(token); 
 
     return res.status(200).json({
       success: true,
       token: token,
-      userData: findUser,  // Ensure the key matches your frontend's expectation
+      userData: userData, // Ensure the key matches your frontend's expectation
       message: "Logged in successfully",
     });
   } catch (error) {
-    console.error("Server error: ", error);  // Add logging
+    console.error("Server error: ", error); // Add logging
     res.status(500).json({
       success: false,
       message: "Internal Server Error",
     });
   }
 };
-
 
 const beAdonor = async (req, res) => {
   const { gender, dob, bloodGroup, noPreviousDonation, emergencyNumber } =
@@ -646,7 +655,7 @@ const updateUserWithoutImage = async (req, res) => {
     const id = req.params.id;
     const user = await User.findById(id);
     // console.log(user.isADonor);
-    console.log(req.body);
+    // console.log(req.body);
 
     if (user.isADonor == false) {
       const { fullName, email, number, currentAddress, municipality, wardNo } =
@@ -797,7 +806,7 @@ const searchUsers = async (req, res) => {
     const users = await User.find({
       $and: [query, { isADonor: true }],
     });
-    console.log(users);
+    // console.log(users);
 
     res.json({
       success: true,
@@ -812,14 +821,14 @@ const searchUsers = async (req, res) => {
 
 const getRequestsByUserId = async (req, res) => {
   const id = req.params.id;
-  console.log(id);
+  // console.log(id);
 
   try {
     const userRequests = await RequestBlood.find({ userId: id }).sort({
       createdAt: -1,
     });
 
-    console.log(userRequests);
+    // console.log(userRequests);
 
     if (!userRequests || userRequests.length === 0) {
       return res.json({

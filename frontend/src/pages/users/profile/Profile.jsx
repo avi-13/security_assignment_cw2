@@ -49,7 +49,7 @@ const Profile = ({ updateFullName }) => {
       setIsAvailable(res.data.user.isAvailable);
       setPrevDonation(res.data.user.noPreviousDonation);
       setUserImageUrl(res.data.user.userImageURL);
-      console.log(res.data.user.bloodGroup)
+      // console.log(res.data.user.bloodGroup)
     });
   }, [id, reloadPage]);
 

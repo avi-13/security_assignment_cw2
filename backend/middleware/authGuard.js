@@ -15,7 +15,7 @@ const authGuard = (req, res, next) => {
   // Format = "Bearer tokenxysdgjslnksjf"
 
   const token = authHeader.split(" ")[1];
-  console.log(`The data is:  ${token}`);
+  // console.log(`The data is:  ${token}`);
   if (!token) {
     return res.json({
       success: false,
@@ -36,8 +36,7 @@ const authGuard = (req, res, next) => {
   }
 };
 const authGuardAdmin = (req, res, next) => {
-
-  const authHeader = req.headers.authorization; 
+  const authHeader = req.headers.authorization;
 
   if (!authHeader) {
     return res.json({
@@ -47,7 +46,7 @@ const authGuardAdmin = (req, res, next) => {
   }
 
   const token = authHeader.split(" ")[1];
-  console.log(`The data is:  ${token[1]}`);
+  // console.log(`The data is:  ${token[1]}`);
   if (!token) {
     return res.json({
       success: false,
@@ -75,4 +74,40 @@ const authGuardAdmin = (req, res, next) => {
     });
   }
 };
-module.exports = { authGuard, authGuardAdmin };
+
+const authGuardBloodBank = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return res.json({
+      success: false,
+      message: "Authorzation header not found!",
+    });
+  }
+
+  const token = authHeader.split(" ")[1];
+  if (!token) {
+    return res.json({
+      success: false,
+      message: "Token not found !!",
+    });
+  }
+
+  try {
+    const decodeUser = jwt.verify(token, process.env.JWT_TOKEN_SECRET);
+    req.user = decodeUser;
+    if (!req.user.isBloodBank) {
+      return res.json({
+        success: false,
+        message: "Permission denied !!",
+      });
+    }
+    next();
+  } catch (error) {
+    res.json({
+      success: false,
+      message: "Invalid Token",
+    });
+  }
+};
+
+module.exports = { authGuard, authGuardAdmin, authGuardBloodBank };

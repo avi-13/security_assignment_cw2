@@ -102,7 +102,7 @@ describe("Mock testing", () => {
       bloodbank_mock
     );
     expect(response.status).toEqual(200);
-    console.log(response.data);
+    // console.log(response.data);
     expect(response.data.success).toEqual(false);
     expect(response.data.message).toEqual("Please upload a valid image");
   });
