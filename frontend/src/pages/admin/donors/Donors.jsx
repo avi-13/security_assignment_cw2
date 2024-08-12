@@ -88,7 +88,7 @@ export default function ViewDonors() {
             type="text"
             placeholder="Full Name"
             name="fullName"
-            value={filters.fullName}
+            value={filters?.fullName}
             onChange={handleFilterChange}
           />
           <input
@@ -159,11 +159,11 @@ export default function ViewDonors() {
             <tbody>
               {filteredUsers.map((item) => (
                 <tr key={item._id}>
-                  <td>{item.fullName || "Null"}</td>
-                  <td>{item.email || "Null"}</td>
-                  <td>{item.number || "Null"}</td>
-                  <td>{item.currentAddress || "Null"}</td>
-                  {item.isAvailable ? (
+                  <td>{item?.fullName || "Null"}</td>
+                  <td>{item?.email || "Null"}</td>
+                  <td>{item?.number || "Null"}</td>
+                  <td>{item?.currentAddress || "Null"}</td>
+                  {item?.isAvailable ? (
                     <td className="!text-green-400">Yes</td>
                   ) : (
                     <td className="!text-red-600">No</td>

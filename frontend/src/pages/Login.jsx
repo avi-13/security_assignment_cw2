@@ -1,5 +1,5 @@
 import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -48,12 +48,16 @@ const Login = () => {
           const jsonDecode = JSON.stringify(res.data.userData);
           localStorage.setItem("user", jsonDecode);
           localStorage.setItem("token", res.data.token);
-          const expiryTime = new Date().getTime() + 60 * 1000;
+          const expiryTime = new Date().getTime() + 3600 * 1000;
           localStorage.setItem("tokenExpiry", expiryTime);
 
           const userAdmin = res.data.userData;
           if (!userAdmin.isAdmin && !userAdmin.isBloodBank) {
-            navigate("/home");
+            if (userAdmin.isPasswordReset) {
+              navigate("/update-password");
+            } else {
+              navigate("/home");
+            }
             return;
           } else if (!userAdmin.isAdmin && userAdmin.isBloodBank) {
             navigate("/bb/dashboard");
@@ -67,6 +71,9 @@ const Login = () => {
       .catch((err) => {
         toast.error("Server Error");
         console.log(err.message);
+      })
+      .finally(() => {
+        setCaptcha(null);
       });
   };
   return (

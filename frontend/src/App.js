@@ -35,6 +35,7 @@ import SingleHospital from "./pages/users/hospitals/SingleHospital";
 import ForgetPassword from "./pages/users/profile/ForgetPassword";
 import History from "./pages/users/profile/History";
 import Profile from "./pages/users/profile/Profile";
+import UpdatePaasswordAfterReset from "./pages/users/profile/UpdatePaasswordAfterReset";
 import AdminRoutes from "./protected/AdminRoutes";
 import BloodBankUserRoutes from "./protected/BloodBankUserRoutes";
 import UserRoutes from "./protected/UserRoutes";
@@ -76,8 +77,6 @@ function App() {
           <>
             <Route path="/home" element={<HomePage />} />
             <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
             <Route path="/contact-us" element={<ContactUs />} />
             <Route path="/about-us" element={<AboutUs />} />
             <Route path="/services" element={<Services />} />
@@ -95,12 +94,16 @@ function App() {
           </>
         )}
 
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+
         <Route element={<UserRoutes />}>
           <Route path="/view_all_donors" element={<Users />} />
           <Route path="/req_for_bb/:id" element={<ReqForBB />} />
           <Route path="/be-a-donor/:id" element={<BeADonor />} />
           <Route path="/edit-request/:id" element={<EditBloodRequests />} />
           <Route path="/add_blood_requests" element={<AddBloodRequests />} />
+          <Route path="/update-password" element={<UpdatePaasswordAfterReset />} />
           <Route
             path="/profile/:id"
             element={<Profile updateFullName={updateFullName} />}

@@ -5,6 +5,7 @@ import ReactSwitch from "react-switch";
 import { toast } from "react-toastify";
 import { getSingleUserApi, updateUser } from "../../../apis/api";
 import "../../../style/profile.css";
+import UpdatePassword from "./UpdatePaassword";
 
 const Profile = ({ updateFullName }) => {
   const { id } = useParams();
@@ -29,6 +30,15 @@ const Profile = ({ updateFullName }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [userImageUrl, setUserImageUrl] = useState(null);
   const [reloadPage, setReloadPage] = useState(false);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+
+  const openUpdateModal = () => {
+    setIsUpdateModalOpen(true);
+  };
+
+  const closeUpdateModal = () => {
+    setIsUpdateModalOpen(false);
+  };
 
   // use effect to fetch product details
   useEffect(() => {
@@ -114,14 +124,16 @@ const Profile = ({ updateFullName }) => {
 
   return (
     <>
-      <div id="profileContainer" className="container-xl px-4 mt-4">
+      <div
+        id="profileContainer"
+        className="container-xl min-h-[58vh] px-4 mt-4"
+      >
         <div className="row">
           <div className="col-xl-3">
             <div className="card mb-4 mb-xl-0">
-              <div className="card-header text-center"> Profile Picture</div>
+              <div className="card-header !bg-gray-200 text-center"> Profile Picture</div>
               <div
-                className="card-body"
-                style={{ display: "grid", justifyItems: "center" }}
+                className="grid justify-items-center"
               >
                 <img
                   className="img-account-profile rounded-circle mb-2"
@@ -130,7 +142,7 @@ const Profile = ({ updateFullName }) => {
                 />
                 <input
                   type="file"
-                  className="btn btn-primary"
+                  className="btn btn-danger mr-5"
                   onChange={handleImageUpload}
                 />
 
@@ -158,6 +170,17 @@ const Profile = ({ updateFullName }) => {
                     />
                   </>
                 )}
+              </div>
+              <div className="mt-8">
+                <h3 className="text-center">Update Password</h3>
+                <div className="flex flex-row justify-center">
+                  <button
+                    onClick={openUpdateModal}
+                    className="w-full text-center bg-[#da3131] hover:bg-[#742828] text-white py-3 mt-2 mx-2 no-underline rounded-xl"
+                  >
+                    Update Password
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -312,9 +335,7 @@ const Profile = ({ updateFullName }) => {
                             className="form-control"
                             required
                           >
-                            <option value={bloodGroup}>
-                              {bloodGroup}
-                            </option>
+                            <option value={bloodGroup}>{bloodGroup}</option>
                             <option value="A+">A+</option>
                             <option value="B+">B+</option>
                             <option value="AB+">AB+</option>
@@ -343,7 +364,7 @@ const Profile = ({ updateFullName }) => {
 
                   <button
                     onClick={handleSubmit}
-                    className="btn btn-primary"
+                    className="btn btn-danger"
                     type="button"
                     disabled={isLoading}
                   >
@@ -354,6 +375,10 @@ const Profile = ({ updateFullName }) => {
                     )}
                   </button>
                 </form>
+                <UpdatePassword
+                  isOpen={isUpdateModalOpen}
+                  onClose={closeUpdateModal}
+                />
               </div>
             </div>
           </div>

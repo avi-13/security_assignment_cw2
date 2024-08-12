@@ -275,9 +275,11 @@ const Register = () => {
               <i>
                 <CustomFaIcons icon={faLocation} className={"m-0"} />
               </i>
-              <DistrictList className="block px-4 py-2 !border border-!gray-300 rounded-md appearance-none focus:!outline-none focus:!ring focus:!border-gray-300" label={" "} onChange={changeCurrentAddress} style={{
-                width: "10rem !important",
-              }} />
+              <DistrictList
+                className="block px-4 py-2 !w-full !border-none rounded-md appearance-none focus:!outline-none focus:!ring focus:!border-gray-300"
+                label={" "}
+                onChange={changeCurrentAddress}
+              />
             </div>
             {addressError && <p className="text-danger">{addressError}</p>}
             <div className="registerInputBox">

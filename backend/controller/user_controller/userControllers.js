@@ -7,6 +7,26 @@ const RequestBlood = require("../../model/RequestBloodModel");
 const { sendEmailController } = require("../sendEmailController");
 const user = require("../../model/userModel");
 const axios = require("axios"); // Import axios
+const winston = require("winston");
+require("winston-mongodb");
+
+const logger = winston.createLogger({
+  level: "info",
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.json()
+  ),
+  transports: [
+    new winston.transports.Console(),
+    new winston.transports.File({ filename: "application.log" }),
+    new winston.transports.MongoDB({
+      db: "mongodb://127.0.0.1:27017/mainTest",
+      collection: "logs",
+      level: "info",
+      options: { useUnifiedTopology: true },
+    }),
+  ],
+});
 
 const sendEmail = async (to, subject, text) => {
   let transporter = nodemailer.createTransport({
@@ -38,6 +58,14 @@ const sendVerification = async (req, res) => {
     return res.json({
       success: false,
       message: "Invalid email address. Please provide a valid email.",
+    });
+  }
+
+  // Validate email and password
+  if (!validateEmail(email)) {
+    return res.json({
+      success: false,
+      message: "Please enter a valid email address",
     });
   }
 
@@ -89,6 +117,30 @@ const sendVerification = async (req, res) => {
       message: errorMessage,
     });
   }
+};
+
+const validateEmail = (email) => {
+  const emailRegex =
+    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return emailRegex.test(email);
+};
+const validatePassword = (password, userInputs = []) => {
+  const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,32}$/;
+
+  if (!passwordRegex.test(password)) {
+    return false;
+  }
+  // Check if password contains any part of the user inputs (like name or email)
+  if (
+    userInputs.some((input) =>
+      password.toLowerCase().includes(input.toLowerCase())
+    )
+  ) {
+    return false;
+  }
+
+  return true;
 };
 
 const createUser = async (req, res) => {
@@ -159,6 +211,12 @@ const createUser = async (req, res) => {
         wardNo: wardNo,
         password: passwordEncrypted,
         userImageURL: uploadedImage.secure_url,
+        previousPasswords: [
+          {
+            passwordHash: passwordEncrypted,
+            date: Date.now(),
+          },
+        ],
       });
       if (userVerificationCode == otp) {
         await newUser.save();
@@ -309,7 +367,7 @@ const loginUser = async (req, res) => {
 
       return res.json({
         success: false,
-        message: "Wrong password",
+        message: "username or password invalid",
       });
     }
 
@@ -329,10 +387,21 @@ const loginUser = async (req, res) => {
       { expiresIn: "1h" } // token expiration
     );
 
+    logger.info({
+      message: {
+        text: "User logged in successfully",
+        userId: user._id,
+        Fullname: user.fullName,
+        sessionId: req.sessionID,
+        url: req.originalUrl,
+        method: req.method,
+      },
+    });
+
     // Remove password from user data before sending it to the client
     const userData = { ...findUser._doc };
     delete userData.password;
-    // console.log(token); 
+    // console.log(token);
 
     return res.status(200).json({
       success: true,
@@ -561,7 +630,14 @@ const updateUser = async (req, res) => {
       }
     } else {
       if (user.isADonor == false) {
-        const { fullName, email, number, currentAddress } = req.body;
+        const {
+          fullName,
+          email,
+          number,
+          currentAddress,
+          municipality,
+          wardNo,
+        } = req.body;
 
         if (!fullName || !email || !number || !currentAddress) {
           return res.json({
@@ -581,7 +657,7 @@ const updateUser = async (req, res) => {
 
         return res.status(200).json({
           success: true,
-          message: "You have been register as a donor",
+          message: "Updated Successfully",
           updateUser: updatedUser,
         });
       } else {
@@ -771,10 +847,13 @@ const forgetPassword = async (req, res) => {
 
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(generatedPassword, salt);
+    user.isPasswordReset = true;
+
     await user.save();
 
     const emailSubject = "Password Reset";
     const emailText = `Your new password is: ${generatedPassword}`;
+    console.log(generatedPassword);
 
     await sendEmail(email, emailSubject, emailText);
 
@@ -852,6 +931,63 @@ const getRequestsByUserId = async (req, res) => {
   }
 };
 
+const updatePassword = async (req, res) => {
+  const { email, newPassword, oldPassword } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    const isMatched = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatched) {
+      return res.json({
+        success: false,
+        message: "Old password is incorrect",
+      });
+    }
+
+    const isPreviousPassword = await Promise.all(
+      user.previousPasswords.map(async (prevPassword) => {
+        return await bcrypt.compare(newPassword, prevPassword.passwordHash);
+      })
+    );
+
+    if (isPreviousPassword.includes(true)) {
+      return res.json({
+        success: false,
+        message: "Password cannot be the same as the previous password",
+      });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
+
+    await user.save();
+
+    user.previousPasswords.push({
+      passwordHash: user.password,
+      date: Date.now(),
+    });
+
+    res.json({
+      success: true,
+      message: "Password updated successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+    });
+  }
+};
+
+
 module.exports = {
   createUser,
   loginUser,
@@ -864,4 +1000,5 @@ module.exports = {
   searchUsers,
   getRequestsByUserId,
   sendVerification,
+  updatePassword,
 };

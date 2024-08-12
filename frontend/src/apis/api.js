@@ -44,6 +44,9 @@ export const searchUsersApi = (district, bloodGroup) =>
     `/api/user/search_user?district=${district}&bloodGroup=${bloodGroup}`
   );
 
+// api to update password
+export const updatePasswordApi = (data) => Api.post("/api/user/update-password", data, config);
+
 // ======================================> Hospitals api <===============================
 
 export const createHospitalApi = (data) =>

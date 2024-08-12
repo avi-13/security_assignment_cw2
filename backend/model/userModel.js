@@ -150,6 +150,19 @@ const userSchema = mongoose.Schema(
     lockUntil: {
       type: Date,
     },
+    previousPasswords: [
+      {
+        passwordHash: String,
+        date: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
+    isPasswordReset: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

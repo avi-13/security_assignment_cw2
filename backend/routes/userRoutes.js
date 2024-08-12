@@ -22,6 +22,8 @@ router.put("/updateUser/:id", authGuard, userController.updateUser);
 
 router.post("/forgetpassword", userController.forgetPassword);
 
+router.post("/update-password", userController.updatePassword);
+
 // for flutter
 router.put(
   "/update_user/:id",
