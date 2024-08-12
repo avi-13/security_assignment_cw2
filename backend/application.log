@@ -18,3 +18,5 @@
 {"level":"info","message":{"method":"POST","sessionId":"ZaDNzinOF-i2CAbS7bbM6ZI7SHcArhP_","text":"User logged in successfully","url":"/api/user/login"},"timestamp":"2024-08-12T15:20:57.556Z"}
 {"level":"info","message":{"method":"POST","sessionId":"csVHIflheuLng7CqF5hCzkQSFLeZBmkD","text":"User logged in successfully","url":"/api/user/login"},"timestamp":"2024-08-12T15:21:44.846Z"}
 {"level":"info","message":{"method":"POST","sessionId":"oIxbB9ViYvZ8saDh2CUxXgLamVa-qe6l","text":"User logged in successfully","url":"/api/user/login"},"timestamp":"2024-08-12T15:22:38.718Z"}
+{"level":"info","message":{"method":"POST","sessionId":"Sam3TTSC2bOpzm8MuT3slkqCMm9pYdPI","text":"User logged in successfully","url":"/api/user/login"},"timestamp":"2024-08-12T15:26:33.372Z"}
+{"level":"info","message":{"method":"POST","sessionId":"UX7RC0LT0aoiDUn3XdhMM_uZrFneAIo0","text":"User logged in successfully","url":"/api/user/login"},"timestamp":"2024-08-12T15:58:44.764Z"}
