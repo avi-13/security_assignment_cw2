@@ -15,7 +15,7 @@ const authGuard = (req, res, next) => {
   // Format = "Bearer tokenxysdgjslnksjf"
 
   const token = authHeader.split(" ")[1];
-  // console.log(`The data is:  ${token}`);
+  console.log(`The data is:  ${token}`);
   if (!token) {
     return res.json({
       success: false,
@@ -35,6 +35,7 @@ const authGuard = (req, res, next) => {
     });
   }
 };
+
 const authGuardAdmin = (req, res, next) => {
   const authHeader = req.headers.authorization;
 

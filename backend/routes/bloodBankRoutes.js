@@ -4,7 +4,7 @@ const bloodBankController = require("../controller/admin_controller/bloodBankCon
 const { authGuard, authGuardAdmin, authGuardBloodBank } = require("../middleware/authGuard");
 
 
-router.post("/addbloodbank",authGuardAdmin, bloodBankController.addBloodBanks);
+router.post("/addbloodbank", bloodBankController.addBloodBanks);
 
 router.delete("/deletebloodbank/:id", authGuardAdmin,bloodBankController.deleteBloodBank);
 

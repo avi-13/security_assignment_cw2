@@ -112,7 +112,10 @@ const userSchema = mongoose.Schema(
       required: false,
       type: String,
     },
-
+    isNewUser: {
+      type: Boolean,
+      default: false,
+    },
     availableBloodGroups: {
       required: false,
       type: [String],
@@ -162,6 +165,16 @@ const userSchema = mongoose.Schema(
     isPasswordReset: {
       type: Boolean,
       default: false,
+    },
+
+    passwordChagedAt: {
+      type: Date,
+      default: Date.now,
+    },
+
+    passwordExpiresAt: {
+      type: Date,
+      // default: Date.now().setDate(Date.now().getDate() + 90),
     },
   },
   { timestamps: true }

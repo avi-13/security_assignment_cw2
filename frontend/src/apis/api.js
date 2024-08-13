@@ -17,6 +17,9 @@ const config = {
   },
 };
 
+// printing the token only
+console.log(`The token is: ${localStorage.getItem("token")}`);
+
 // ======================================> user api <===============================
 
 export const createUserApi = (data) => Api.post("/api/user/register", data);

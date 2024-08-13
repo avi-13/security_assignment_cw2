@@ -154,35 +154,47 @@ const createUser = async (req, res) => {
       otp,
       municipality,
       wardNo,
+      userVerificationCode,
     } = req.body;
-    // Check if req.files and req.files.bbImage exist
-    // if (!req.files || !req.files.bbImage) {
-    //   return res.json({
-    //     success: false,
-    //     message: "Please upload a valid image",
-    //   });
-    // }
-    const { userImage } = req.files;
-    const { userVerificationCode } = req.body;
 
+    const { userImage } = req.files;
+
+    // Validate required fields
+    if (
+      !fullName ||
+      !email ||
+      !number ||
+      !password ||
+      !currentAddress ||
+      !municipality ||
+      !wardNo
+    ) {
+      return res.json({
+        success: false,
+        message: "Please fill all the details",
+      });
+    }
+
+    // Check if user already exists
+    const userExists = await User.findOne({ email });
+    if (userExists) {
+      return res.json({
+        success: false,
+        message: "User Already Exists",
+      });
+    }
+
+    // Validate the image if it is uploaded
+    let userImageURL = null;
     if (userImage) {
-      // Validate image size
       if (userImage.size > 10485760) {
         return res.json({
           success: false,
           message: "Image size too large. Maximum is 10 MB.",
         });
       }
-      if (
-        (!fullName && !email,
-        !number && !password && !currentAddress && !municipality && !wardNo)
-      ) {
-        return res.json({
-          success: false,
-          message: "Please fill all the details",
-        });
-      }
 
+      // Upload the image to Cloudinary
       const uploadedImage = await cloudinary.v2.uploader.upload(
         userImage.path,
         {
@@ -191,90 +203,56 @@ const createUser = async (req, res) => {
         }
       );
 
-      const userExists = await User.findOne({ email: email });
-      if (userExists) {
-        return res.json({
-          success: false,
-          message: "User Already Exists",
-        });
-      }
+      userImageURL = uploadedImage.secure_url;
+    }
 
-      const generateSalt = await bcrypt.genSalt(10);
-      const passwordEncrypted = await bcrypt.hash(password, generateSalt);
+    // Encrypt the password
+    const generateSalt = await bcrypt.genSalt(10);
+    const passwordEncrypted = await bcrypt.hash(password, generateSalt);
 
-      const newUser = new User({
-        fullName: fullName,
-        email: email,
-        number: number,
-        currentAddress: currentAddress,
-        municipality: municipality,
-        wardNo: wardNo,
-        password: passwordEncrypted,
-        userImageURL: uploadedImage.secure_url,
-        previousPasswords: [
-          {
-            passwordHash: passwordEncrypted,
-            date: Date.now(),
-          },
-        ],
+    // Create the new user object
+    const newUser = new User({
+      fullName,
+      email,
+      number,
+      currentAddress,
+      municipality,
+      wardNo,
+      password: passwordEncrypted,
+      userImageURL,
+      previousPasswords: [
+        {
+          passwordHash: passwordEncrypted,
+          date: Date.now(),
+        },
+      ],
+    });
+
+    // Set password expiration to 30 days from creation
+    const passwordExpiresAt = new Date();
+    passwordExpiresAt.setDate(passwordExpiresAt.getDate() + 30);
+    newUser.passwordChangedAt = new Date();
+    newUser.passwordExpiresAt = passwordExpiresAt;
+
+    // Check the OTP/verification code
+    if (userVerificationCode == otp) {
+      await newUser.save();
+
+      return res.status(201).json({
+        success: true,
+        message: "Your account has been created",
       });
-      if (userVerificationCode == otp) {
-        await newUser.save();
-
-        return res.status(201).json({
-          success: true,
-          message: "Your account has been created",
-        });
-      } else {
-        return res.json({
-          success: false,
-          message: "Verification code did not match",
-        });
-      }
     } else {
-      const userExists = await User.findOne({ email: email });
-      if (userExists) {
-        return res.json({
-          success: false,
-          message: "User Already Exists",
-        });
-      }
-
-      const generateSalt = await bcrypt.genSalt(10);
-      const passwordEncrypted = await bcrypt.hash(password, generateSalt);
-
-      const newUser = new User({
-        fullName: fullName,
-        email: email,
-        number: number,
-        currentAddress: currentAddress,
-        municipality: municipality,
-        wardNo: wardNo,
-        password: passwordEncrypted,
+      return res.json({
+        success: false,
+        message: "Verification code did not match",
       });
-
-      const { userVerificationCode } = req.body;
-
-      if (userVerificationCode == otp) {
-        await newUser.save();
-
-        return res.status(201).json({
-          success: true,
-          message: "Your account has been created",
-        });
-      } else {
-        return res.json({
-          success: false,
-          message: "Verification code did not match",
-        });
-      }
     }
   } catch (e) {
-    console.log(e);
+    console.error(e);
     res.status(500).json("Server Error!! \n Please Try Again");
   }
 };
-
 const loginUser = async (req, res) => {
   const { email, password, captcha } = req.body;
 
@@ -291,7 +269,7 @@ const loginUser = async (req, res) => {
     if (!findUser) {
       return res.json({
         success: false,
-        message: "User does not exist",
+        message: "Username or password invalid",
       });
     }
 
@@ -307,7 +285,7 @@ const loginUser = async (req, res) => {
 
     if (findUser.failedLoginAttempts >= 5) {
       findUser.isLocked = true;
-      findUser.lockUntil = new Date(Date.now() + 5 * 60000); // lock for 5 minutes
+      findUser.lockUntil = new Date(Date.now() + 5 * 60000);
       await findUser.save();
       return res.json({
         success: false,
@@ -338,8 +316,8 @@ const loginUser = async (req, res) => {
       }
     }
 
-    const passwordToCompare = findUser.password;
-    const isMatched = await bcrypt.compare(password, passwordToCompare);
+    // Compare the provided password with the stored password
+    const isMatched = await bcrypt.compare(password, findUser.password);
 
     if (!isMatched) {
       findUser.failedLoginAttempts += 1;
@@ -348,7 +326,7 @@ const loginUser = async (req, res) => {
 
       if (findUser.failedLoginAttempts >= 5) {
         findUser.isLocked = true;
-        findUser.lockUntil = new Date(Date.now() + 5 * 60000); // lock for 5 minutes
+        findUser.lockUntil = new Date(Date.now() + 5 * 60000);
         await findUser.save();
 
         setTimeout(async () => {
@@ -356,7 +334,7 @@ const loginUser = async (req, res) => {
           findUser.failedLoginAttempts = 0;
           findUser.lockUntil = null;
           await findUser.save();
-        }, 5 * 60000); // 5 minutes in milliseconds
+        }, 5 * 60000);
 
         return res.json({
           success: false,
@@ -367,7 +345,7 @@ const loginUser = async (req, res) => {
 
       return res.json({
         success: false,
-        message: "username or password invalid",
+        message: "Username or password invalid",
       });
     }
 
@@ -375,6 +353,15 @@ const loginUser = async (req, res) => {
     findUser.lastFailedAttempt = null;
     findUser.isLocked = false;
     findUser.lockUntil = null;
+
+    const now = new Date();
+    let passwordExpired = false;
+
+    if (findUser.passwordExpiresAt && now > findUser.passwordExpiresAt) {
+      passwordExpired = true;
+      findUser.isPasswordReset = true;
+    }
+
     await findUser.save();
 
     const token = jwt.sign(
@@ -383,34 +370,32 @@ const loginUser = async (req, res) => {
         isAdmin: findUser.isAdmin,
         isBloodBank: findUser.isBloodBank,
       },
-      process.env.JWT_TOKEN_SECRET,
-      { expiresIn: "1h" } // token expiration
+      process.env.JWT_TOKEN_SECRET
     );
 
     logger.info({
       message: {
         text: "User logged in successfully",
-        userId: user._id,
-        Fullname: user.fullName,
+        userId: findUser._id,
+        Fullname: findUser.fullName,
         sessionId: req.sessionID,
         url: req.originalUrl,
         method: req.method,
       },
     });
 
-    // Remove password from user data before sending it to the client
     const userData = { ...findUser._doc };
     delete userData.password;
-    // console.log(token);
 
     return res.status(200).json({
       success: true,
       token: token,
-      userData: userData, // Ensure the key matches your frontend's expectation
+      userData: userData,
+      passwordExpired: passwordExpired,
       message: "Logged in successfully",
     });
   } catch (error) {
-    console.error("Server error: ", error); // Add logging
+    console.error("Server error: ", error);
     res.status(500).json({
       success: false,
       message: "Internal Server Error",
@@ -965,14 +950,24 @@ const updatePassword = async (req, res) => {
     }
 
     const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(newPassword, salt);
-
-    await user.save();
+    const hashedNewPassword = await bcrypt.hash(newPassword, salt);
 
     user.previousPasswords.push({
       passwordHash: user.password,
       date: Date.now(),
     });
+
+    user.password = hashedNewPassword;
+    user.isPasswordReset = false;
+    user.isNewUser = false;
+
+    // Set password expiration to 30 days from now
+    user.passwordChangedAt = new Date();
+    const passwordExpiresAt = new Date();
+    passwordExpiresAt.setDate(passwordExpiresAt.getDate() + 30);
+    user.passwordExpiresAt = passwordExpiresAt;
+
+    await user.save();
 
     res.json({
       success: true,
@@ -986,7 +981,6 @@ const updatePassword = async (req, res) => {
     });
   }
 };
-
 
 module.exports = {
   createUser,

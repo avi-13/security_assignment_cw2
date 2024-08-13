@@ -20,3 +20,12 @@
 {"level":"info","message":{"method":"POST","sessionId":"oIxbB9ViYvZ8saDh2CUxXgLamVa-qe6l","text":"User logged in successfully","url":"/api/user/login"},"timestamp":"2024-08-12T15:22:38.718Z"}
 {"level":"info","message":{"method":"POST","sessionId":"Sam3TTSC2bOpzm8MuT3slkqCMm9pYdPI","text":"User logged in successfully","url":"/api/user/login"},"timestamp":"2024-08-12T15:26:33.372Z"}
 {"level":"info","message":{"method":"POST","sessionId":"UX7RC0LT0aoiDUn3XdhMM_uZrFneAIo0","text":"User logged in successfully","url":"/api/user/login"},"timestamp":"2024-08-12T15:58:44.764Z"}
+{"level":"info","message":{"method":"POST","sessionId":"zRE6lJuftpZrVZZ3Vo26apN8JkCkinYX","text":"User logged in successfully","url":"/api/user/login"},"timestamp":"2024-08-12T16:06:27.697Z"}
+{"level":"info","message":{"method":"POST","sessionId":"kU-1VUkRvbliaXXboLtFx3SkIocds5g3","text":"User logged in successfully","url":"/api/user/login"},"timestamp":"2024-08-12T23:58:49.633Z"}
+{"level":"info","message":{"method":"POST","sessionId":"-0JvlFHatprMlYWMzFkWOGDhsXxvbZix","text":"User logged in successfully","url":"/api/user/login"},"timestamp":"2024-08-13T04:32:30.155Z"}
+{"level":"info","message":{"method":"POST","sessionId":"1b0394_i8tV09d3iT7wN4c-qSTOaQM3M","text":"User logged in successfully","url":"/api/user/login"},"timestamp":"2024-08-13T04:42:49.117Z"}
+{"level":"info","message":{"method":"POST","sessionId":"dYIo8EZIH5FKE1oJ4014XKDxDURQjHMA","text":"User logged in successfully","url":"/api/user/login"},"timestamp":"2024-08-13T04:43:48.148Z"}
+{"level":"info","message":{"method":"POST","sessionId":"hu3q06SIjJbDF0zwsjEQJ4ZH4JtYO5IU","text":"User logged in successfully","url":"/api/user/login"},"timestamp":"2024-08-13T04:45:41.208Z"}
+{"level":"info","message":{"method":"POST","sessionId":"LqkAJ3lpatuNG88prMLZc5nhGfmpoy8o","text":"User logged in successfully","url":"/api/user/login"},"timestamp":"2024-08-13T04:48:11.848Z"}
+{"level":"info","message":{"method":"POST","sessionId":"9isxxOcC_kYi-07ZNwYWd1lkVgBg-6cW","text":"User logged in successfully","url":"/api/user/login"},"timestamp":"2024-08-13T04:49:07.557Z"}
+{"level":"info","message":{"Fullname":"User Three","method":"POST","sessionId":"IvGgtcX7V4aFkeGMHcZL9EkBIwK2Nkl6","text":"User logged in successfully","url":"/api/user/login","userId":"66bb0cad56ea6b0c876d5689"},"timestamp":"2024-08-13T07:35:31.609Z"}

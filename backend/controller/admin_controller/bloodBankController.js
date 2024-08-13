@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const { sendEmailController } = require("../sendEmailController");
 
 const addBloodBanks = async (req, res) => {
+  console.log(req.body);
   const {
     bName,
     bAddress,
@@ -17,6 +18,8 @@ const addBloodBanks = async (req, res) => {
     socialLinks,
     latitude,
     longitude,
+    municipality,
+    wardNo,
     contactEmail,
   } = req.body;
 
@@ -42,12 +45,14 @@ const addBloodBanks = async (req, res) => {
     !specialInstructions ||
     !additionalNotes ||
     !socialLinks ||
+    !municipality ||
+    !wardNo ||
     !latitude ||
     !longitude
   ) {
     return res.json({
       success: false,
-      message: "Please Enter all fields ",
+      message: "Please Enter all fields",
     });
   }
 
@@ -64,6 +69,8 @@ const addBloodBanks = async (req, res) => {
       operatingHours: oHours,
       serviceOffered: serviceOffered,
       specialInstructions: specialInstructions,
+      municipality: municipality,
+      wardNo: wardNo,
       additionalNotes: additionalNotes,
       availableBloodGroups: bgavailable,
       socialMediaLinks: socialLinks,
@@ -73,9 +80,6 @@ const addBloodBanks = async (req, res) => {
       bbImageUrl: uploadedImage.secure_url,
     });
 
-    await newBloodBank.save();
-
-    const { fullName, email, number, password, currentAddress } = req.body;
     const { userImage } = bbImage;
     if (userImage) {
       // Validate image size
@@ -129,6 +133,8 @@ const addBloodBanks = async (req, res) => {
       bbName: bName,
       bbAddress: bAddress,
       bbContact: bContact,
+      wardNo: wardNo,
+      municipality: municipality,
       operatingHours: oHours,
       serviceOffered: serviceOffered,
       specialInstructions: specialInstructions,
@@ -138,6 +144,7 @@ const addBloodBanks = async (req, res) => {
       latitude: latitude,
       longitude: longitude,
       contactEmail: contactEmail,
+      isNewUser : true
     });
 
     await sendEmailController(
@@ -146,17 +153,16 @@ const addBloodBanks = async (req, res) => {
       `Your BloodBank email is: ${defaultEmail} and Password is: ${randomPassword}`
     ).then(async (success) => {
       if (success) {
+        await newBloodBank.save();
         await newUser.save();
-
         res.status(200).json({
           success: true,
-          message: "BloodBank has been added",
+          message: "Bloodbank added Please check your email for login details",
         });
       } else {
         console.log("Failed to send email.");
       }
     });
-
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -165,7 +171,8 @@ const addBloodBanks = async (req, res) => {
   }
 };
 function generateRandomPassword(length) {
-  const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+{}[]|;:,.<>?";
+  const charset =
+    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+{}[]|;:,.<>?";
   let password = "";
   for (let i = 0; i < length; i++) {
     const randomIndex = Math.floor(Math.random() * charset.length);
@@ -213,11 +220,13 @@ const getAllBloodBanks = async (req, res) => {
       };
     }
 
-    const bloodBankList = await User.find({$and:[query,{isBloodBank: true}]}).sort({
+    const bloodBankList = await User.find({
+      $and: [query, { isBloodBank: true }],
+    }).sort({
       [sortBy]: sortOrder,
     });
 
-    const mobbank = await User.find({isBloodBank : true});
+    const mobbank = await User.find({ isBloodBank: true });
     const fewBloodBanks = bloodBankList.slice(0, 5);
 
     // console.log("BloodBanks List:", bloodBankList);

@@ -48,17 +48,20 @@ const Login = () => {
           const jsonDecode = JSON.stringify(res.data.userData);
           localStorage.setItem("user", jsonDecode);
           localStorage.setItem("token", res.data.token);
-          const expiryTime = new Date().getTime() + 3600 * 1000;
+          const expiryTime = new Date().getTime() + 60 * 60 * 1000;
           localStorage.setItem("tokenExpiry", expiryTime);
 
           const userAdmin = res.data.userData;
-          if (!userAdmin.isAdmin && !userAdmin.isBloodBank) {
-            if (userAdmin.isPasswordReset) {
-              navigate("/update-password");
-            } else {
-              navigate("/home");
-            }
-            return;
+          
+
+          if (
+            userAdmin.isPasswordReset ||
+            userAdmin.isNewUser ||
+            res.data.passwordExpired
+          ) {
+            navigate("/update-password");
+          } else if (!userAdmin.isAdmin && !userAdmin.isBloodBank) {
+            navigate("/home");
           } else if (!userAdmin.isAdmin && userAdmin.isBloodBank) {
             navigate("/bb/dashboard");
             window.location.reload();
@@ -76,6 +79,7 @@ const Login = () => {
         setCaptcha(null);
       });
   };
+
   return (
     <>
       <div className="loginSecondBody">

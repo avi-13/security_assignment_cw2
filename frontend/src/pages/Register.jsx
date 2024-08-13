@@ -15,35 +15,39 @@ import "../../src/style/register.css";
 import { createUserApi, sendOtpApi } from "../apis/api";
 import CustomFaIcons from "../components/CustomFaIcons";
 
+import { CircularProgress } from "@mui/material";
 import { Label, Modal, TextInput } from "flowbite-react";
 import DistrictList from "../components/DistrictsList.jsx";
 
 const Register = () => {
   const navigate = useNavigate();
-  // useState (setting input value)
   const [fullName, setFullName] = useState("");
   const [openModal, setOpenModal] = useState(false);
-
   const [otp, setOtp] = useState("");
+  const [passwordStrength, setPasswordStrength] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const sendOtp = async () => {
+    setIsLoading(true);
     const data = { email: email };
     sendOtpApi(data)
       .then((res) => {
-        // console.log(data);
-        if (res.data.success == false) {
+        if (res.data.success === false) {
+          setIsLoading(false);
           toast.error(res.data.message);
         } else {
           setOpenModal(true);
           toast.success(res.data.message);
           setOtp(res?.data?.otp);
-
-          // console.log("OTP:", res.data.otp);
+          setIsLoading(false);
         }
       })
       .catch((err) => {
         toast.error("Server Error");
         console.log(err.message);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
 
@@ -60,6 +64,7 @@ const Register = () => {
   function onCloseModal() {
     setOpenModal(false);
   }
+
   const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
   const [email, setEmail] = useState("");
   const [number, setContact] = useState("");
@@ -69,19 +74,15 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [userVerificationCode, setUserVerificationCode] = useState("");
-
   const [userImage, setUserImage] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
-  const [userImageUrl, setUserImageUrl] = useState(null);
 
-  // functio for image upload
   const handleImageUpload = (event) => {
-    const file = event.target.files[0]; //files not file
+    const file = event.target.files[0];
     setUserImage(file);
     setPreviewImage(URL?.createObjectURL(file));
   };
 
-  //usestate(setting error message)
   const [fnameerror, setFullnameError] = useState("");
   const [addressError, setCurrentAddressError] = useState("");
   const [municipalityError, setMunicipalityError] = useState("");
@@ -91,12 +92,9 @@ const Register = () => {
   const [passworderror, setPasswordError] = useState("");
   const [cpassworderror, setCpasswordError] = useState("");
 
-  // validate input value
-
   const Validate = () => {
     let isValid = true;
 
-    // reset error message
     setFullnameError("");
     setCurrentAddressError("");
     setMunicipalityError("");
@@ -120,7 +118,7 @@ const Register = () => {
     }
 
     if (number.trim() === "" || number.length !== 10) {
-      setNumberError("Number is Invalid (Must be 10 word) ");
+      setNumberError("Number is Invalid (Must be 10 digits) ");
       isValid = false;
     }
 
@@ -150,18 +148,16 @@ const Register = () => {
       isValid = false;
     }
     if (confirmPassword.trim() === "") {
-      setCpasswordError("Password doesnot match");
+      setCpasswordError("Password does not match");
       isValid = false;
     }
 
     if (password.trim() !== confirmPassword.trim()) {
-      setCpasswordError("Password doesnot match");
+      setCpasswordError("Password does not match");
       isValid = false;
     }
     return isValid;
   };
-
-  // function for changing input value
 
   const changeFullName = (e) => {
     setFullName(e.target.value);
@@ -178,22 +174,42 @@ const Register = () => {
   const changeContact = (e) => {
     setContact(e.target.value);
   };
+
   const changeCurrentAddress = (e) => {
     setCurrentAddress(e.target.value);
   };
 
   const changePassword = (e) => {
-    setPassword(e.target.value);
+    const newPassword = e.target.value;
+    setPassword(newPassword);
+    const strength = calculatePasswordStrength(newPassword);
+    setPasswordStrength(strength);
   };
 
   const changeConfirmPassword = (e) => {
     setConfirmPassword(e.target.value);
   };
 
-  // function for button
+  const calculatePasswordStrength = (password) => {
+    if (password.length < 6) {
+      return "Weak";
+    }
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasNumbers = /\d/.test(password);
+    const hasSymbols = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+    if (hasLowerCase && hasUpperCase && hasNumbers && hasSymbols) {
+      return "Strong";
+    } else if ((hasLowerCase || hasUpperCase) && hasNumbers) {
+      return "Normal";
+    } else {
+      return "Weak";
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-
     const data = {
       fullName: fullName,
       email: email,
@@ -207,11 +223,9 @@ const Register = () => {
       otp: otp,
     };
 
-    // making API call
     createUserApi(data)
       .then((res) => {
-        // console.log(data);
-        if (res.data.success == false) {
+        if (res.data.success === false) {
           toast.error(res.data.message);
         } else {
           navigate("/login");
@@ -235,7 +249,7 @@ const Register = () => {
                 <CustomFaIcons icon={faUser} className={"m-0"} />
               </i>
               <input
-                style={{ boxSshadow: "none" }}
+                style={{ boxShadow: "none" }}
                 onChange={changeFullName}
                 type="text"
                 required
@@ -248,7 +262,7 @@ const Register = () => {
                 <CustomFaIcons icon={faEnvelope} className={"m-0"} />
               </i>
               <input
-                style={{ boxSshadow: "none" }}
+                style={{ boxShadow: "none" }}
                 onChange={changeEmail}
                 type="text"
                 maxLength="26"
@@ -262,7 +276,7 @@ const Register = () => {
                 <CustomFaIcons icon={faPhone} className={"m-0"} />
               </i>
               <input
-                style={{ boxSshadow: "none" }}
+                style={{ boxShadow: "none" }}
                 onChange={changeContact}
                 type="number"
                 maxLength="10"
@@ -297,7 +311,6 @@ const Register = () => {
             {municipalityError && (
               <p className="text-danger">{municipalityError}</p>
             )}
-
             <div className="registerInputBox">
               <i>
                 <CustomFaIcons icon={faAddressBook} className={"m-0"} />
@@ -316,7 +329,7 @@ const Register = () => {
                 <CustomFaIcons icon={faLock} className={"m-0"} />
               </i>
               <input
-                style={{ boxSshadow: "none" }}
+                style={{ boxShadow: "none" }}
                 onChange={changePassword}
                 type="password"
                 maxLength="26"
@@ -324,13 +337,37 @@ const Register = () => {
               />
               <label>Enter Your Password</label>
             </div>
+            <div className="password-strength mt-2">
+              <div
+                className={`h-2 rounded ${
+                  passwordStrength === "Strong"
+                    ? "bg-green-500"
+                    : passwordStrength === "Normal"
+                    ? "bg-yellow-500"
+                    : "bg-red-500"
+                }`}
+              ></div>
+              {passwordStrength && (
+                <span
+                  className={`text-${
+                    passwordStrength === "Strong"
+                      ? "green-500"
+                      : passwordStrength === "Normal"
+                      ? "yellow-500"
+                      : "red-500"
+                  }`}
+                >
+                  {passwordStrength} Password
+                </span>
+              )}
+            </div>
             {passworderror && <p className="text-danger">{passworderror}</p>}
             <div className="registerInputBox">
               <i>
                 <CustomFaIcons icon={faLock} className={"m-0"} />
               </i>
               <input
-                style={{ boxSshadow: "none" }}
+                style={{ boxShadow: "none" }}
                 onChange={changeConfirmPassword}
                 type="password"
                 maxLength="26"
@@ -343,7 +380,11 @@ const Register = () => {
               className="btn btn-dark text-white border-0 btn-outline-danger"
               onClick={(e) => validatein(e)}
             >
-              Sign Up
+              {isLoading ? (
+                <CircularProgress size={20} color="inherit" />
+              ) : (
+                "Sign Up"
+              )}
             </button>
             <Modal show={openModal} size="md" onClose={onCloseModal} popup>
               <Modal.Header />

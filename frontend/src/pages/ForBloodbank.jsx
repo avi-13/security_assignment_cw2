@@ -1,5 +1,6 @@
 import { CircularProgress } from "@mui/material";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { createBloodBankApi } from "../apis/api";
 import DistrictList from "../components/DistrictsList";
@@ -7,11 +8,12 @@ import MultiSelectBG from "../components/MultiSeletctBG";
 
 export default function ForBloodbank() {
   // useEffect for fetching all the products and showing in table
+  const navigate = useNavigate();
 
   const [bbName, setbbName] = useState("");
   const [bbAddress, setbbAddress] = useState("");
   const [municipality, setMunicipality] = useState("");
-  const [ward, setWard] = useState("");
+  const [wardNo, setWardNo] = useState("");
   const [bbContact, setbbContact] = useState("");
   const [operatingHours, setOperatingHours] = useState("");
   const [serviceOffered, setServiceOffered] = useState("");
@@ -63,7 +65,7 @@ export default function ForBloodbank() {
     formData.append("bName", bbName);
     formData.append("bAddress", bbAddress);
     formData.append("municipality", municipality);
-    formData.append("ward", ward);
+    formData.append("wardNo", wardNo);
     formData.append("bContact", bbContact);
     formData.append("oHours", operatingHours);
     formData.append("bgavailable", availableBloodGroups);
@@ -78,12 +80,11 @@ export default function ForBloodbank() {
 
     createBloodBankApi(formData)
       .then((res) => {
-        // console.log(res.data);
-
         if (res.data.success == false) {
           toast.error(res.data.message);
         } else {
           toast.success(res.data.message);
+          navigate("/login");
         }
       })
       .catch((e) => {
@@ -135,7 +136,7 @@ export default function ForBloodbank() {
                 Ward No.
               </label>
               <input
-                onChange={changebbContact}
+                onChange={(e) => setWardNo(e.target.value)}
                 type="number"
                 className="mt-1 block w-full  border border-solid border-gray-300 text-gray-900 rounded-lg shadow-sm"
                 required

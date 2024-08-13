@@ -1,11 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { updatePasswordApi } from "../../../apis/api";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
-const UpdatePaasswordAfterReset= ({ isOpen, onClose }) => {
+const UpdatePaasswordAfterReset = () => {
   const user = JSON.parse(localStorage.getItem("user"));
+  const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [oldPassword, setOldPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -86,13 +86,17 @@ const UpdatePaasswordAfterReset= ({ isOpen, onClose }) => {
 
       if (res.data.success) {
         toast.success(res.data.message);
-        onClose();
         setPassword("");
         setOldPassword("");
         setConfirmPassword("");
         setConfirmPasswordError("");
         setPasswordError("");
         setOldPasswordError("");
+        if (user.isBloodBank) {
+          navigate("/bb/dashboard");
+        } else {
+          navigate("/");
+        }
       } else {
         toast.error(res.data.message);
       }
@@ -119,18 +123,11 @@ const UpdatePaasswordAfterReset= ({ isOpen, onClose }) => {
     setOldPasswordError("");
   };
 
-  if (!isOpen) return null;
-
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
       <div className="bg-white relative p-8 rounded-lg shadow-lg max-w-md w-full">
         <h1 className="text-xl font-bold text-red-600 mb-4">Update Password</h1>
-        <FontAwesomeIcon
-          icon={faTimes}
-          onClick={onClose}
-          className="absolute cursor-pointer p-2 px-4 top-5 right-8 py-2 bg-red-600 hover:bg-red-800"
-          aria-label="Close modal"
-        />
+
         <form onSubmit={handleSubmit}>
           <div className="col-md-12 mb-3">
             <label className="small mb-1" htmlFor="oldPassword">
@@ -145,7 +142,9 @@ const UpdatePaasswordAfterReset= ({ isOpen, onClose }) => {
               value={oldPassword}
             />
           </div>
-          {oldpasswordError && <p className="text-red-600">{oldpasswordError}</p>}
+          {oldpasswordError && (
+            <p className="text-red-600">{oldpasswordError}</p>
+          )}
           <div className="col-md-12 mb-3">
             <label className="small mb-1" htmlFor="newPassword">
               New Password
