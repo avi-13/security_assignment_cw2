@@ -1,31 +1,24 @@
-const AuditLog = require('./models/AuditLog');
+const AuditLog = require("../model/auditModel");
 
-const auditTrailMiddleware = (action) => {
-  return async (req, res, next) => {
-    const user = req.user; 
-    const collection = req.baseUrl.split('/')[1]; 
-    const documentId = req.params.id;
+function logAction(
+  action,
+  user,
+  previousData = null,
+  newData = null,
+  route = "",
+  req = null
+) {
+  const log = new AuditLog({
+    user,
+    action,
+    previousData,
+    newData,
+    route,
+    ipAddress: req ? req.ip : "", // Extract IP address from request if available
+    userAgent: req ? req.headers["user-agent"] : "", // Extract User-Agent from request if available
+  });
 
-    let previousData = null;
-    if (action === 'UPDATE' || action === 'DELETE') {
-      previousData = await mongoose.model(collection).findById(documentId);
-    }
+  return log.save();
+}
 
-    const newAuditLog = new AuditLog({
-      user: user._id,
-      action,
-      collection,
-      documentId,
-      previousData,
-      newData: req.body, 
-    });
-
-    await newAuditLog.save();
-
-    next();
-  };
-};
-
-app.post('/users', auditTrailMiddleware('CREATE'), userController.createUser);
-app.put('/users/:id', auditTrailMiddleware('UPDATE'), userController.updateUser);
-app.delete('/users/:id', auditTrailMiddleware('DELETE'), userController.deleteUser);
+module.exports = logAction;

@@ -210,3 +210,6 @@ export const registerForCampaignApi = (data) =>
 
 export const getRegisteredUsersApi = (id) =>
   Api.get(`/api/registered_users/registered_users/${id}`);
+
+export const fetchAuditLogsApi = (page = 1, limit = 10) =>
+  Api.get(`/api/logs/get-all-logs?page=${page}&limit=${limit}`,config);

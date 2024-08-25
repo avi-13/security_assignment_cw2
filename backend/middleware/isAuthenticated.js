@@ -1,5 +1,5 @@
 const isAuthenticated = (req, res, next) => {
-  console.log("isAuthenticated Middleware Check: ", req.session.isAuthenticated);
+  // console.log("isAuthenticated Middleware Check: ", req.session.isAuthenticated);
   if (req.session.isAuthenticated) {
     return next();
   } else {

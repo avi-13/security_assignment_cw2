@@ -15,7 +15,6 @@ const authGuard = (req, res, next) => {
   // Format = "Bearer tokenxysdgjslnksjf"
 
   const token = authHeader.split(" ")[1];
-  console.log(`The data is:  ${token}`);
   if (!token) {
     return res.json({
       success: false,
@@ -58,7 +57,6 @@ const authGuardAdmin = (req, res, next) => {
   try {
     const decodeUser = jwt.verify(token, process.env.JWT_TOKEN_SECRET);
     req.user = decodeUser;
-    console.log(req.user.isAdmin);
 
     if (!req.user.isAdmin) {
       return res.json({

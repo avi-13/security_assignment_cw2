@@ -26,6 +26,8 @@ const Register = () => {
   const [otp, setOtp] = useState("");
   const [passwordStrength, setPasswordStrength] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isResendDisabled, setIsResendDisabled] = useState(false);
+  const [resendTimer, setResendTimer] = useState(0);
 
   const sendOtp = async () => {
     setIsLoading(true);
@@ -40,6 +42,7 @@ const Register = () => {
           toast.success(res.data.message);
           setOtp(res?.data?.otp);
           setIsLoading(false);
+          startResendTimer();
         }
       })
       .catch((err) => {
@@ -64,6 +67,21 @@ const Register = () => {
   function onCloseModal() {
     setOpenModal(false);
   }
+
+  const startResendTimer = () => {
+    setIsResendDisabled(true);
+    setResendTimer(60);
+    const interval = setInterval(() => {
+      setResendTimer((prevTimer) => {
+        if (prevTimer <= 1) {
+          clearInterval(interval);
+          setIsResendDisabled(false);
+          return 0;
+        }
+        return prevTimer - 1;
+      });
+    }, 1000);
+  };
 
   const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
   const [email, setEmail] = useState("");
@@ -411,6 +429,22 @@ const Register = () => {
                     >
                       Create your account
                     </button>
+                  </div>
+                  <div className="flex flex-row justify-end">
+                    <span>
+                      Resend the otp from here :{" "}
+                      {isLoading ? (
+                        <CircularProgress size={20} color="inherit" />
+                      ) : (
+                        <>
+                          {isResendDisabled ? (
+                            <span>{resendTimer} seconds</span>
+                          ) : (
+                            <Link onClick={validatein}>Resend OTP</Link>
+                          )}
+                        </>
+                      )}
+                    </span>
                   </div>
                 </div>
               </Modal.Body>

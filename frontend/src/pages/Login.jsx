@@ -48,11 +48,10 @@ const Login = () => {
           const jsonDecode = JSON.stringify(res.data.userData);
           localStorage.setItem("user", jsonDecode);
           localStorage.setItem("token", res.data.token);
-          const expiryTime = new Date().getTime() + 60 * 60 * 1000;
+          const expiryTime = new Date().getTime() + 2 * 60 * 1000;
           localStorage.setItem("tokenExpiry", expiryTime);
 
           const userAdmin = res.data.userData;
-          
 
           if (
             userAdmin.isPasswordReset ||

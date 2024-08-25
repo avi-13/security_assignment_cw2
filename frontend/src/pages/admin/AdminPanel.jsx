@@ -14,6 +14,7 @@ import AddBloodBanks from "./bloodbanks/AddBloodbanks";
 import ViewDonors from "./donors/Donors";
 import AddHospitals from "./hospitals/AddHospitals";
 import AddNews from "./news/AddNews";
+import SeeLogs from "./SeeLogs";
 function AdminPanel() {
   const storedPage = localStorage.getItem("currentPage");
   // Initialize the current page with the stored value or the default value
@@ -71,6 +72,9 @@ function AdminPanel() {
       break;
     case "AddNews":
       content = <AddNews />;
+      break;
+    case "SeeLogs":
+      content = <SeeLogs />;
       break;
     default: {
       users.isAdmin
@@ -193,6 +197,18 @@ function AdminPanel() {
                     tabIndex="5"
                   >
                     Campaigns
+                  </button>
+                </li>
+                <li
+                  className={`adminLi ${
+                    currentPage === "SeeLogs" ? "active" : ""
+                  }`}
+                >
+                  <button
+                    onClick={() => setCurrentPage("SeeLogs")}
+                    tabIndex="5"
+                  >
+                    See Logs
                   </button>
                 </li>
               </>

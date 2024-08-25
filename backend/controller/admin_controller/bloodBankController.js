@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 const { sendEmailController } = require("../sendEmailController");
 
 const addBloodBanks = async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   const {
     bName,
     bAddress,

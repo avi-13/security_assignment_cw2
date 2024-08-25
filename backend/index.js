@@ -49,12 +49,12 @@ app.use(session({
     }
 }));
 
-// const limiter = rateLimit({
-//   windowMs: 15 * 60 * 1000,
-//   max: 100,
-//   message: 'Too many requests from this IP, please try again later'
-// });
-// app.use(limiter);
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  message: 'Too many requests from this IP, please try again later'
+});
+app.use(limiter);
 
 
 app.use(xssClean());
@@ -102,6 +102,8 @@ app.use("/api/contact", require("./routes/contactRoutes"));
 app.use("/api/campaign", require("./routes/campaignRoutes"));
 
 app.use("/api/registered_users", require("./routes/registeredUsersRoutes"));
+
+app.use("/api/logs", require("./routes/auditRoute"));
 
 const logger = winston.createLogger({
     level: 'info',

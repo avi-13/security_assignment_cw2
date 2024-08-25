@@ -5,9 +5,10 @@ const cloudinary = require("cloudinary");
 const nodemailer = require("nodemailer");
 const RequestBlood = require("../../model/RequestBloodModel");
 const { sendEmailController } = require("../sendEmailController");
-const user = require("../../model/userModel");
-const axios = require("axios"); // Import axios
+const axios = require("axios");
 const winston = require("winston");
+const logAction = require("../../middleware/AuditLog");
+const user = require("../../model/userModel");
 require("winston-mongodb");
 
 const logger = winston.createLogger({
@@ -46,22 +47,25 @@ const sendEmail = async (to, subject, text) => {
   });
 };
 
+// In-memory store for OTPs (for demonstration purposes; consider using Redis or a database in production)
+const otpStore = {};
+
 const sendVerification = async (req, res) => {
   const otp = Math.floor(1000 + Math.random() * 9000);
+  const otpExpiry = Date.now() + 2 * 60 * 1000;
+
   const { email } = req.body;
   console.log(otp);
 
-  // check if email is not valid
-  const isEmailValid = email.includes("@");
-
-  if (!isEmailValid) {
+  // Check if email is not valid
+  if (!email || !email.includes("@")) {
     return res.json({
       success: false,
       message: "Invalid email address. Please provide a valid email.",
     });
   }
 
-  // Validate email and password
+  // Validate email format
   if (!validateEmail(email)) {
     return res.json({
       success: false,
@@ -77,24 +81,19 @@ const sendVerification = async (req, res) => {
     });
   }
 
-  if (!email || !email.includes("@")) {
-    return res.status(400).json({
-      success: false,
-      message: "Invalid email address. Please provide a valid email.",
-    });
-  }
   try {
     const emailSent = await sendEmailController(
       email,
       "Welcome to BloodBank",
-      `Your verification code is: ${otp}`
+      `Your verification code is: ${otp}. This code will expire in 2 minutes.`
     );
 
     if (emailSent) {
+      otpStore[email] = { otp, otpExpiry };
+
       res.status(200).json({
         success: true,
-        message: "Otp has been Sent to your email.",
-        otp: otp,
+        message: "OTP has been sent to your email.",
       });
     } else {
       res.status(500).json({
@@ -151,7 +150,6 @@ const createUser = async (req, res) => {
       number,
       password,
       currentAddress,
-      otp,
       municipality,
       wardNo,
       userVerificationCode,
@@ -184,7 +182,30 @@ const createUser = async (req, res) => {
       });
     }
 
-    // Validate the image if it is uploaded
+    // Validate the OTP
+    const otpRecord = otpStore[email];
+    if (!otpRecord) {
+      return res.json({
+        success: false,
+        message: "OTP has expired.",
+      });
+    }
+
+    if (Date.now() > otpRecord.otpExpiry) {
+      delete otpStore[email];
+      return res.json({
+        success: false,
+        message: "OTP has expired.",
+      });
+    }
+
+    if (parseInt(userVerificationCode) !== parseInt(otpRecord.otp)) {
+      return res.json({
+        success: false,
+        message: "Invalid OTP.",
+      });
+    }
+
     let userImageURL = null;
     if (userImage) {
       if (userImage.size > 10485760) {
@@ -194,7 +215,6 @@ const createUser = async (req, res) => {
         });
       }
 
-      // Upload the image to Cloudinary
       const uploadedImage = await cloudinary.v2.uploader.upload(
         userImage.path,
         {
@@ -234,25 +254,21 @@ const createUser = async (req, res) => {
     newUser.passwordChangedAt = new Date();
     newUser.passwordExpiresAt = passwordExpiresAt;
 
-    // Check the OTP/verification code
-    if (userVerificationCode == otp) {
-      await newUser.save();
+    // Save the new user
+    await newUser.save();
 
-      return res.status(201).json({
-        success: true,
-        message: "Your account has been created",
-      });
-    } else {
-      return res.json({
-        success: false,
-        message: "Verification code did not match",
-      });
-    }
+    delete otpStore[email];
+
+    return res.status(201).json({
+      success: true,
+      message: "Your account has been created",
+    });
   } catch (e) {
     console.error(e);
     res.status(500).json("Server Error!! \n Please Try Again");
   }
 };
+
 const loginUser = async (req, res) => {
   const { email, password, captcha } = req.body;
 
@@ -271,6 +287,13 @@ const loginUser = async (req, res) => {
         success: false,
         message: "Username or password invalid",
       });
+    }
+
+    if (findUser.isLocked && new Date() > findUser.lockUntil) {
+      findUser.isLocked = false;
+      findUser.failedLoginAttempts = 0;
+      findUser.lockUntil = null;
+      await findUser.save();
     }
 
     if (findUser.isLocked && new Date() < findUser.lockUntil) {
@@ -336,12 +359,30 @@ const loginUser = async (req, res) => {
           await findUser.save();
         }, 5 * 60000);
 
+        await logAction(
+          "ACCOUNT_LOCKED",
+          findUser._id,
+          null,
+          null,
+          req.route.path,
+          req
+        );
+
         return res.json({
           success: false,
           message:
             "Your account is locked due to multiple failed login attempts. Please try again after 5 minutes.",
         });
       }
+
+      await logAction(
+        "LOGIN_FAILED",
+        findUser._id,
+        null,
+        null,
+        req.route.path,
+        req
+      );
 
       return res.json({
         success: false,
@@ -371,6 +412,15 @@ const loginUser = async (req, res) => {
         isBloodBank: findUser.isBloodBank,
       },
       process.env.JWT_TOKEN_SECRET
+    );
+
+    await logAction(
+      "LOGIN_SUCCESS",
+      findUser._id,
+      null,
+      null,
+      req.route.path,
+      req
     );
 
     logger.info({
@@ -506,6 +556,15 @@ const updateUser = async (req, res) => {
     const id = req.params.id;
     const user = await User.findById(id);
     // console.log(user.isADonor);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User does not exist",
+      });
+    }
+    let previousData = user.toObject(); // Store previous data for logging purposes
+    let updatedUser;
+
     const { userImage } = req.files;
     // console.log(userImage);
     if (userImage) {
@@ -540,7 +599,7 @@ const updateUser = async (req, res) => {
             message: "Please Enter all the fields",
           });
         }
-        const updatedUser = {
+        updatedUser = {
           fullName: fullName,
           email: email,
           number: number,
@@ -549,13 +608,6 @@ const updateUser = async (req, res) => {
           wardNo: wardNo,
           userImageURL: uploadedImage.secure_url,
         };
-        await User.findByIdAndUpdate(id, updatedUser);
-
-        return res.status(200).json({
-          success: true,
-          message: "You have been register as a donor",
-          updateUser: updatedUser,
-        });
       } else {
         const {
           fullName,
@@ -590,7 +642,7 @@ const updateUser = async (req, res) => {
             message: "Please Enter all the fields",
           });
         }
-        const updatedDonor = {
+        updateUser = {
           fullName: fullName,
           email: email,
           number: number,
@@ -605,13 +657,6 @@ const updateUser = async (req, res) => {
           isAvailable: isAvailable,
           userImageURL: uploadedImage.secure_url,
         };
-        await User.findByIdAndUpdate(id, updatedDonor);
-
-        return res.status(200).json({
-          success: true,
-          message: "You Account has been successfully Updated ",
-          updateUser: updatedDonor,
-        });
       }
     } else {
       if (user.isADonor == false) {
@@ -630,7 +675,7 @@ const updateUser = async (req, res) => {
             message: "Please Enter all the fields",
           });
         }
-        const updatedUser = {
+        updatedUser = {
           fullName: fullName,
           email: email,
           number: number,
@@ -638,13 +683,6 @@ const updateUser = async (req, res) => {
           municipality: municipality,
           wardNo: wardNo,
         };
-        await User.findByIdAndUpdate(id, updatedUser);
-
-        return res.status(200).json({
-          success: true,
-          message: "Updated Successfully",
-          updateUser: updatedUser,
-        });
       } else {
         const {
           fullName,
@@ -679,7 +717,7 @@ const updateUser = async (req, res) => {
             message: "Please Enter all the fields",
           });
         }
-        const updatedDonor = {
+        updateUser = {
           fullName: fullName,
           email: email,
           number: number,
@@ -693,20 +731,40 @@ const updateUser = async (req, res) => {
           emergencyNumber: emergencyNumber,
           isAvailable: isAvailable,
         };
-        await User.findByIdAndUpdate(id, updatedDonor);
-
-        return res.status(200).json({
-          success: true,
-          message: "You Account has been successfully Updated without image",
-          updateUser: updatedDonor,
-        });
       }
     }
+
+    await User.findByIdAndUpdate(id, updatedUser);
+    // Log the update action
+    await logAction(
+      "UPDATE_USER",
+      user._id,
+      previousData,
+      updatedUser,
+      req.route.path,
+      req
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "You Account has been successfully Updated without image",
+      updateUser: updatedUser,
+    });
   } catch (error) {
     console.log(error);
+    // Log the error
+    await logAction(
+      "UPDATE_USER_FAILED",
+      user._id,
+      null,
+      null,
+      null,
+      req.route.path,
+      req
+    );
     return res.status(500).json({
       success: false,
-      message: "User Doesnot exists",
+      message: "Internal server error !!",
     });
   }
 };
